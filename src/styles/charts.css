@@ -1,0 +1,54 @@
+.chart-height {
+    height: 320px;
+  }
+  
+  .chart-title p {
+    margin-top: 4px;
+    color: var(--text-secondary);
+    font-size: 14px;
+  }
+  
+  .chart-title span {
+    color: var(--text-muted);
+    font-size: 13px;
+    font-weight: 700;
+  }
+  
+  @media (max-width: 600px) {
+    .chart-height {
+      height: 260px;
+    }
+  }
+
+  .donut-wrapper {
+    height: 320px;
+    position: relative;
+  }
+  
+  .donut-center {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    pointer-events: none;
+  }
+  
+  .donut-center span {
+    color: var(--text-muted);
+    font-size: 13px;
+    margin-bottom: 4px;
+  }
+  
+  .donut-center strong {
+    font-size: 26px;
+    font-family: var(--font-heading);
+  }
+  
+  .donut-center {
+    text-align: center;
+  }
+  
+  .donut-center span,
+  .donut-center strong {
+    display: block;
+  }
