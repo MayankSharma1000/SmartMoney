@@ -1,31 +1,54 @@
-import React from "react";
-import { useState } from "react";
-import { FaPlus, FaTrash, FaPiggyBank } from "react-icons/fa6";
+import React, { useEffect, useState } from "react";
+import { FaPlus, FaTrash, FaPiggyBank } from "react-icons/fa";
 
 import Sidebar from "../components/Sidebar.jsx";
 import Navbar from "../components/Navbar.jsx";
 
+import {
+  getSavingsGoals,
+  createSavingsGoal,
+  deleteSavingsGoal
+} from "../services/savingsService.js";
+
 function Savings() {
-  const [goals, setGoals] = useState([
-    {
-      id: 1,
-      title: "Emergency Fund",
-      target: 100000,
-      saved: 74200
-    },
-    {
-      id: 2,
-      title: "Car Maintenance Fund",
-      target: 30000,
-      saved: 8500
-    }
-  ]);
+  const [goals, setGoals] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [submitLoading, setSubmitLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const [formData, setFormData] = useState({
     title: "",
-    target: "",
-    saved: ""
+    targetAmount: "",
+    currentAmount: "",
+    category: "Emergency Fund",
+    targetDate: "",
+    notes: ""
   });
+
+  const loadGoals = async () => {
+    try {
+      setLoading(true);
+      setError("");
+
+      const data = await getSavingsGoals();
+      setGoals(data.goals || []);
+    } catch (err) {
+      setError(
+        err.response?.data?.message || "Failed to load savings goals."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadGoals();
+  }, []);
+
+  const totalSaved = goals.reduce(
+    (sum, goal) => sum + Number(goal.currentAmount || 0),
+    0
+  );
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -34,27 +57,52 @@ function Savings() {
     }));
   };
 
-  const handleAddGoal = (e) => {
+  const handleAddGoal = async (e) => {
     e.preventDefault();
 
-    const newGoal = {
-      id: Date.now(),
-      title: formData.title,
-      target: Number(formData.target),
-      saved: Number(formData.saved)
-    };
+    try {
+      setSubmitLoading(true);
+      setError("");
 
-    setGoals((prev) => [newGoal, ...prev]);
+      const payload = {
+        ...formData,
+        targetAmount: Number(formData.targetAmount),
+        currentAmount: Number(formData.currentAmount || 0)
+      };
 
-    setFormData({
-      title: "",
-      target: "",
-      saved: ""
-    });
+      const data = await createSavingsGoal(payload);
+
+      setGoals((prev) => [data.goal, ...prev]);
+
+      setFormData({
+        title: "",
+        targetAmount: "",
+        currentAmount: "",
+        category: "Emergency Fund",
+        targetDate: "",
+        notes: ""
+      });
+    } catch (err) {
+      setError(
+        err.response?.data?.message || "Failed to add savings goal."
+      );
+    } finally {
+      setSubmitLoading(false);
+    }
   };
 
-  const handleDelete = (id) => {
-    setGoals((prev) => prev.filter((goal) => goal.id !== id));
+  const handleDelete = async (id) => {
+    try {
+      setError("");
+
+      await deleteSavingsGoal(id);
+
+      setGoals((prev) => prev.filter((goal) => goal._id !== id));
+    } catch (err) {
+      setError(
+        err.response?.data?.message || "Failed to delete savings goal."
+      );
+    }
   };
 
   return (
@@ -67,10 +115,12 @@ function Savings() {
         <section className="page-header">
           <h1>Savings Goals</h1>
           <p>
-            Plan emergency funds, car funds, travel goals, and long-term savings
-            with progress tracking.
+            Plan emergency funds, car funds, travel goals and long-term savings
+            with real MongoDB progress tracking.
           </p>
         </section>
+
+        {error && <div className="auth-error">{error}</div>}
 
         <section className="expense-layout">
           <form className="expense-form glass-card" onSubmit={handleAddGoal}>
@@ -85,27 +135,55 @@ function Savings() {
               required
             />
 
+            <select
+              name="category"
+              value={formData.category}
+              onChange={handleChange}
+            >
+              <option>Emergency Fund</option>
+              <option>Car</option>
+              <option>House</option>
+              <option>Travel</option>
+              <option>Wedding</option>
+              <option>Education</option>
+              <option>Retirement</option>
+              <option>Other</option>
+            </select>
+
             <input
               type="number"
-              name="target"
+              name="targetAmount"
               placeholder="Target amount ₹"
-              value={formData.target}
+              value={formData.targetAmount}
               onChange={handleChange}
               required
             />
 
             <input
               type="number"
-              name="saved"
+              name="currentAmount"
               placeholder="Already saved ₹"
-              value={formData.saved}
+              value={formData.currentAmount}
               onChange={handleChange}
-              required
             />
 
-            <button className="auth-submit" type="submit">
+            <input
+              type="date"
+              name="targetDate"
+              value={formData.targetDate}
+              onChange={handleChange}
+            />
+
+            <textarea
+              name="notes"
+              placeholder="Optional notes"
+              value={formData.notes}
+              onChange={handleChange}
+            />
+
+            <button className="auth-submit" type="submit" disabled={submitLoading}>
               <FaPlus />
-              Add Goal
+              {submitLoading ? "Adding..." : "Add Goal"}
             </button>
           </form>
 
@@ -113,62 +191,70 @@ function Savings() {
             <div className="expenses-summary">
               <div>
                 <p>Total Saved</p>
-                <h2>
-                  ₹
-                  {goals
-                    .reduce((sum, goal) => sum + goal.saved, 0)
-                    .toLocaleString("en-IN")}
-                </h2>
+                <h2>₹{totalSaved.toLocaleString("en-IN")}</h2>
               </div>
 
               <span>{goals.length} goals</span>
             </div>
 
-            <div className="expense-list">
-              {goals.map((goal) => {
-                const progress = Math.min(
-                  Math.round((goal.saved / goal.target) * 100),
-                  100
-                );
+            {loading ? (
+              <p className="progress-text">Loading savings goals...</p>
+            ) : goals.length === 0 ? (
+              <p className="progress-text">
+                No savings goals yet. Add your first goal.
+              </p>
+            ) : (
+              <div className="expense-list">
+                {goals.map((goal) => {
+                  const target = Number(goal.targetAmount || 0);
+                  const saved = Number(goal.currentAmount || 0);
 
-                return (
-                  <div className="expense-row" key={goal.id}>
-                    <div className="expense-left">
-                      <div className="transaction-icon">
-                        <FaPiggyBank />
-                      </div>
+                  const progress = target
+                    ? Math.min(Math.round((saved / target) * 100), 100)
+                    : 0;
 
-                      <div>
-                        <h4>{goal.title}</h4>
-                        <p>
-                          ₹{goal.saved.toLocaleString("en-IN")} saved of ₹
-                          {goal.target.toLocaleString("en-IN")}
-                        </p>
+                  return (
+                    <div className="expense-row" key={goal._id}>
+                      <div className="expense-left">
+                        <div className="transaction-icon">
+                          <FaPiggyBank />
+                        </div>
 
-                        <div className="progress-container small-progress">
-                          <div className="progress-bar">
-                            <div
-                              className="progress-fill"
-                              style={{ width: `${progress}%` }}
-                            ></div>
+                        <div>
+                          <h4>{goal.title}</h4>
+
+                          <p>
+                            ₹{saved.toLocaleString("en-IN")} saved of ₹
+                            {target.toLocaleString("en-IN")}
+                          </p>
+
+                          <div className="progress-container small-progress">
+                            <div className="progress-bar">
+                              <div
+                                className="progress-fill"
+                                style={{ width: `${progress}%` }}
+                              />
+                            </div>
+
+                            <p className="progress-text">
+                              {progress}% completed
+                            </p>
                           </div>
-
-                          <p className="progress-text">{progress}% completed</p>
                         </div>
                       </div>
-                    </div>
 
-                    <div className="expense-actions">
-                      <strong className="income">{progress}%</strong>
+                      <div className="expense-actions">
+                        <strong className="income">{progress}%</strong>
 
-                      <button onClick={() => handleDelete(goal.id)}>
-                        <FaTrash />
-                      </button>
+                        <button onClick={() => handleDelete(goal._id)}>
+                          <FaTrash />
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                );
-              })}
-            </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
         </section>
       </main>

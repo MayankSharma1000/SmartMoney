@@ -10,8 +10,7 @@ const budgetSchema = new mongoose.Schema(
 
     monthlyBudget: {
       type: Number,
-      required: true,
-      default: 0
+      required: true
     },
 
     month: {

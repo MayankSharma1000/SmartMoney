@@ -9,6 +9,7 @@ import {
   Legend,
   Filler
 } from "chart.js";
+
 import { Line } from "react-chartjs-2";
 
 ChartJS.register(
@@ -22,54 +23,107 @@ ChartJS.register(
 );
 
 function MonthlyOverview({ monthlyChart = [] }) {
+  const totalExpenses = monthlyChart.reduce(
+    (sum, item) => sum + Number(item.expenses || 0),
+    0
+  );
+
+  const highestWeek =
+    monthlyChart.length > 0
+      ? monthlyChart.reduce((prev, current) =>
+          prev.expenses > current.expenses
+            ? prev
+            : current
+        )
+      : null;
+
   const data = {
-    labels: monthlyChart.map((item) => item.month),
+    labels: monthlyChart.map(
+      (item) => item.month
+    ),
+
     datasets: [
       {
-        label: "Expenses",
-        data: monthlyChart.map((item) => item.expenses),
+        label: "Weekly Spending",
+
+        data: monthlyChart.map(
+          (item) => item.expenses
+        ),
+
         tension: 0.45,
+
         fill: true,
-        borderWidth: 3
+
+        borderWidth: 3,
+
+        pointRadius: 5,
+
+        pointHoverRadius: 8,
+
+        backgroundColor:
+          "rgba(59,130,246,0.15)",
+
+        borderColor:
+          "rgb(59,130,246)"
       }
     ]
   };
 
   const options = {
     responsive: true,
+
     maintainAspectRatio: false,
+
     plugins: {
       legend: {
-        labels: {
-          color: getComputedStyle(document.documentElement)
-            .getPropertyValue("--text-secondary")
-        }
+        display: false
       },
+
       tooltip: {
         callbacks: {
           label: (context) =>
-            `Expenses: ₹${context.raw.toLocaleString("en-IN")}`
+            `₹${context.raw.toLocaleString(
+              "en-IN"
+            )}`
         }
       }
     },
+
     scales: {
       x: {
-        ticks: {
-          color: getComputedStyle(document.documentElement)
-            .getPropertyValue("--text-muted")
-        },
         grid: {
-          color: "rgba(148, 163, 184, 0.12)"
+          color:
+            "rgba(148,163,184,0.08)"
+        },
+
+        ticks: {
+          color:
+            getComputedStyle(
+              document.documentElement
+            ).getPropertyValue(
+              "--text-muted"
+            )
         }
       },
+
       y: {
-        ticks: {
-          color: getComputedStyle(document.documentElement)
-            .getPropertyValue("--text-muted"),
-          callback: (value) => `₹${value / 1000}k`
-        },
         grid: {
-          color: "rgba(148, 163, 184, 0.12)"
+          color:
+            "rgba(148,163,184,0.08)"
+        },
+
+        ticks: {
+          color:
+            getComputedStyle(
+              document.documentElement
+            ).getPropertyValue(
+              "--text-muted"
+            ),
+
+          callback: (value) =>
+            `₹${value.toLocaleString(
+              "en-IN"
+            )}`
         }
       }
     }
@@ -79,18 +133,76 @@ function MonthlyOverview({ monthlyChart = [] }) {
     <div className="chart-card">
       <div className="chart-title">
         <div>
-          <h3>Monthly Overview</h3>
-          <p>Real expense trend from MongoDB</p>
+          <h3>
+            Weekly Spending Trend
+          </h3>
+
+          <p>
+            Current month spending
+            movement
+          </p>
         </div>
 
-        <span>Live Data</span>
+        <span>
+          {monthlyChart.length
+            ? "Live Data"
+            : "No Data"}
+        </span>
+      </div>
+
+      <div
+        className="expenses-summary"
+        style={{
+          marginBottom: "18px"
+        }}
+      >
+        <div>
+          <p>Total Tracked</p>
+
+          <h2>
+            ₹
+            {totalExpenses.toLocaleString(
+              "en-IN"
+            )}
+          </h2>
+        </div>
+
+        <div
+          style={{
+            textAlign: "right"
+          }}
+        >
+          <p>Highest Week</p>
+
+          <strong>
+            {highestWeek
+              ? highestWeek.month
+              : "--"}
+          </strong>
+        </div>
       </div>
 
       <div className="chart-height">
         {monthlyChart.length ? (
-          <Line data={data} options={options} />
+          <Line
+            data={data}
+            options={options}
+          />
         ) : (
-          <p className="progress-text">Add expenses to generate chart.</p>
+          <div
+            className="empty-chart-state"
+          >
+            <h4>
+              No spending trend
+              available
+            </h4>
+
+            <p>
+              Add expenses with
+              different dates to
+              generate insights.
+            </p>
+          </div>
         )}
       </div>
     </div>

@@ -1,45 +1,74 @@
 import React from "react";
+import { FaMoneyBillWave } from "react-icons/fa";
 
 function BudgetProgress({
-  monthlyBudget,
-  spent,
-  remaining,
-  percentageUsed
+  monthlyBudget = 0,
+  spent = 0,
+  remaining = 0,
+  percentageUsed = 0
 }) {
+  const safePercentage = Math.min(
+    Math.max(percentageUsed || 0, 0),
+    100
+  );
+
   return (
     <div className="glass-card budget-card">
-      <h3>Monthly Budget</h3>
+      <div className="budget-header">
+        <div className="budget-icon">
+          <FaMoneyBillWave />
+        </div>
 
-      <div className="budget-values">
-        <h2>
-          ₹{monthlyBudget.toLocaleString("en-IN")}
-        </h2>
+        <div>
+          <h3>Monthly Budget</h3>
+          <p className="budget-subtitle">
+            Current month spending limit
+          </p>
+        </div>
+      </div>
 
-        <p>
-          Remaining:
-          ₹{remaining.toLocaleString("en-IN")}
-        </p>
+      <div className="budget-main-value">
+        ₹{monthlyBudget.toLocaleString("en-IN")}
       </div>
 
       <div className="budget-progress">
         <div
           className="budget-progress-fill"
           style={{
-            width: `${Math.min(
-              percentageUsed,
-              100
-            )}%`
+            width: `${safePercentage}%`
           }}
         />
       </div>
 
+      <div className="budget-stats">
+        <div className="budget-stat">
+          <span className="budget-label">
+            Spent
+          </span>
+
+          <strong>
+            ₹{spent.toLocaleString("en-IN")}
+          </strong>
+        </div>
+
+        <div className="budget-stat">
+          <span className="budget-label">
+            Remaining
+          </span>
+
+          <strong>
+            ₹{remaining.toLocaleString("en-IN")}
+          </strong>
+        </div>
+      </div>
+
       <div className="budget-footer">
         <span>
-          Used: {percentageUsed}%
+          Budget Utilized
         </span>
 
-        <span>
-          ₹{spent.toLocaleString("en-IN")}
+        <span className="budget-percent">
+          {safePercentage}%
         </span>
       </div>
     </div>

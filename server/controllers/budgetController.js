@@ -4,50 +4,77 @@ const setBudget = async (req, res) => {
   try {
     const { monthlyBudget, month, year } = req.body;
 
-    const existingBudget =
-      await Budget.findOne({
-        user: req.user._id,
-        month,
-        year
-      });
-
-    if (existingBudget) {
-      existingBudget.monthlyBudget =
-        monthlyBudget;
-
-      await existingBudget.save();
-
-      return res.status(200).json({
-        success: true,
-        budget: existingBudget
+    if (!req.user || !req.user._id) {
+      return res.status(401).json({
+        success: false,
+        message: "User not authorized"
       });
     }
 
-    const budget = await Budget.create({
-      user: req.user._id,
-      monthlyBudget,
-      month,
-      year
-    });
+    const budgetAmount = Number(monthlyBudget);
 
-    res.status(201).json({
+    if (!budgetAmount || budgetAmount <= 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Please enter a valid monthly budget"
+      });
+    }
+
+    const selectedMonth =
+      month ||
+      new Date().toLocaleString("default", {
+        month: "long"
+      });
+
+    const selectedYear =
+      Number(year) || new Date().getFullYear();
+
+    const budget = await Budget.findOneAndUpdate(
+      {
+        user: req.user._id,
+        month: selectedMonth,
+        year: selectedYear
+      },
+      {
+        user: req.user._id,
+        monthlyBudget: budgetAmount,
+        month: selectedMonth,
+        year: selectedYear
+      },
+      {
+        new: true,
+        upsert: true,
+        runValidators: true
+      }
+    );
+
+    return res.status(200).json({
       success: true,
+      message: "Budget saved successfully",
       budget
     });
   } catch (error) {
-    res.status(500).json({
+    console.error("Budget Save Error:", error);
+
+    return res.status(500).json({
       success: false,
-      message: error.message
+      message: "Budget could not be saved"
     });
   }
 };
 
 const getBudget = async (req, res) => {
   try {
-    const month =
-      new Date().toLocaleString("default", {
-        month: "long"
+    if (!req.user || !req.user._id) {
+      return res.status(401).json({
+        success: false,
+        message: "User not authorized"
       });
+    }
+
+    const month = new Date().toLocaleString("default", {
+      month: "long"
+    });
 
     const year = new Date().getFullYear();
 
@@ -57,14 +84,16 @@ const getBudget = async (req, res) => {
       year
     });
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       budget
     });
   } catch (error) {
-    res.status(500).json({
+    console.error("Budget Fetch Error:", error);
+
+    return res.status(500).json({
       success: false,
-      message: error.message
+      message: "Budget could not be fetched"
     });
   }
 };

@@ -33,7 +33,8 @@ export const loginUser = async (userData) => {
 /* ========================= */
 
 export const getAuthHeader = () => {
-  const token = localStorage.getItem("token");
+  const token =
+    localStorage.getItem("token");
 
   return {
     headers: {

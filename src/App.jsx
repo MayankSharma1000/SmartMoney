@@ -11,6 +11,8 @@ import Analytics from "./pages/Analytics.jsx";
 import Profile from "./pages/Profile.jsx";
 import NotFound from "./pages/NotFound.jsx";
 import RecurringExpenses from "./pages/RecurringExpenses";
+import Budget from "./pages/Budget.jsx";
+import Support from "./pages/Support.jsx";
 
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
@@ -36,6 +38,15 @@ function App() {
         element={
           <ProtectedRoute>
             <Expenses />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/budget"
+        element={
+          <ProtectedRoute>
+            <Budget />
           </ProtectedRoute>
         }
       />
@@ -80,6 +91,15 @@ function App() {
         element={
           <ProtectedRoute>
             <Profile />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/support"
+        element={
+          <ProtectedRoute>
+            <Support />
           </ProtectedRoute>
         }
       />

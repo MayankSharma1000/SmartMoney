@@ -1,56 +1,78 @@
-import React from "react";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   FaPlus,
   FaTrash,
-  FaArrowTrendUp,
+  FaChartLine,
   FaCoins,
-  FaBitcoinSign,
-  FaBuildingColumns
-} from "react-icons/fa6";
+  FaBitcoin,
+  FaUniversity
+} from "react-icons/fa";
 
 import Sidebar from "../components/Sidebar.jsx";
 import Navbar from "../components/Navbar.jsx";
 
+import {
+  getInvestments,
+  createInvestment,
+  deleteInvestment
+} from "../services/investmentService.js";
+
 function Investments() {
-  const [investments, setInvestments] = useState([
-    {
-      id: 1,
-      name: "Nifty 50 Index Fund",
-      type: "Mutual Fund",
-      invested: 60000,
-      current: 68400
-    },
-    {
-      id: 2,
-      name: "Gold ETF",
-      type: "Gold",
-      invested: 25000,
-      current: 27800
-    }
-  ]);
+  const [investments, setInvestments] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [submitLoading, setSubmitLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const [formData, setFormData] = useState({
     name: "",
     type: "Mutual Fund",
-    invested: "",
-    current: ""
+    investedAmount: "",
+    currentValue: "",
+    purchaseDate: "",
+    platform: "",
+    notes: ""
   });
 
   const typeIcons = {
-    "Mutual Fund": <FaBuildingColumns />,
-    Stock: <FaArrowTrendUp />,
+    "Mutual Fund": <FaUniversity />,
+    Stock: <FaChartLine />,
+    ETF: <FaChartLine />,
     Gold: <FaCoins />,
-    Crypto: <FaBitcoinSign />
+    Crypto: <FaBitcoin />,
+    Bond: <FaUniversity />,
+    "Fixed Deposit": <FaUniversity />,
+    PPF: <FaUniversity />,
+    NPS: <FaUniversity />,
+    Other: <FaChartLine />
   };
 
+  const loadInvestments = async () => {
+    try {
+      setLoading(true);
+      setError("");
+
+      const data = await getInvestments();
+      setInvestments(data.investments || []);
+    } catch (err) {
+      setError(
+        err.response?.data?.message || "Failed to load investments."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadInvestments();
+  }, []);
+
   const totalInvested = investments.reduce(
-    (sum, item) => sum + item.invested,
+    (sum, item) => sum + Number(item.investedAmount || 0),
     0
   );
 
   const currentValue = investments.reduce(
-    (sum, item) => sum + item.current,
+    (sum, item) => sum + Number(item.currentValue || 0),
     0
   );
 
@@ -63,29 +85,53 @@ function Investments() {
     }));
   };
 
-  const handleAddInvestment = (e) => {
+  const handleAddInvestment = async (e) => {
     e.preventDefault();
 
-    const newInvestment = {
-      id: Date.now(),
-      name: formData.name,
-      type: formData.type,
-      invested: Number(formData.invested),
-      current: Number(formData.current)
-    };
+    try {
+      setSubmitLoading(true);
+      setError("");
 
-    setInvestments((prev) => [newInvestment, ...prev]);
+      const payload = {
+        ...formData,
+        investedAmount: Number(formData.investedAmount),
+        currentValue: Number(formData.currentValue)
+      };
 
-    setFormData({
-      name: "",
-      type: "Mutual Fund",
-      invested: "",
-      current: ""
-    });
+      const data = await createInvestment(payload);
+
+      setInvestments((prev) => [data.investment, ...prev]);
+
+      setFormData({
+        name: "",
+        type: "Mutual Fund",
+        investedAmount: "",
+        currentValue: "",
+        purchaseDate: "",
+        platform: "",
+        notes: ""
+      });
+    } catch (err) {
+      setError(
+        err.response?.data?.message || "Failed to add investment."
+      );
+    } finally {
+      setSubmitLoading(false);
+    }
   };
 
-  const handleDelete = (id) => {
-    setInvestments((prev) => prev.filter((item) => item.id !== id));
+  const handleDelete = async (id) => {
+    try {
+      setError("");
+
+      await deleteInvestment(id);
+
+      setInvestments((prev) => prev.filter((item) => item._id !== id));
+    } catch (err) {
+      setError(
+        err.response?.data?.message || "Failed to delete investment."
+      );
+    }
   };
 
   return (
@@ -99,9 +145,11 @@ function Investments() {
           <h1>Investment Tracker</h1>
           <p>
             Track mutual funds, stocks, gold, crypto, SIPs, invested amount,
-            current value, and profit/loss.
+            current value and profit/loss from MongoDB.
           </p>
         </section>
+
+        {error && <div className="auth-error">{error}</div>}
 
         <section className="stats-grid" style={{ marginBottom: "24px" }}>
           <div className="stat-card">
@@ -149,38 +197,62 @@ function Investments() {
               required
             />
 
-            <select
-              name="type"
-              value={formData.type}
-              onChange={handleChange}
-            >
-              <option>Mutual Fund</option>
+            <select name="type" value={formData.type} onChange={handleChange}>
               <option>Stock</option>
+              <option>Mutual Fund</option>
+              <option>ETF</option>
               <option>Gold</option>
               <option>Crypto</option>
+              <option>Bond</option>
+              <option>Fixed Deposit</option>
+              <option>PPF</option>
+              <option>NPS</option>
+              <option>Other</option>
             </select>
 
             <input
               type="number"
-              name="invested"
+              name="investedAmount"
               placeholder="Invested amount ₹"
-              value={formData.invested}
+              value={formData.investedAmount}
               onChange={handleChange}
               required
             />
 
             <input
               type="number"
-              name="current"
+              name="currentValue"
               placeholder="Current value ₹"
-              value={formData.current}
+              value={formData.currentValue}
               onChange={handleChange}
               required
             />
 
-            <button className="auth-submit" type="submit">
+            <input
+              type="date"
+              name="purchaseDate"
+              value={formData.purchaseDate}
+              onChange={handleChange}
+            />
+
+            <input
+              type="text"
+              name="platform"
+              placeholder="Platform e.g. Groww, Zerodha"
+              value={formData.platform}
+              onChange={handleChange}
+            />
+
+            <textarea
+              name="notes"
+              placeholder="Optional notes"
+              value={formData.notes}
+              onChange={handleChange}
+            />
+
+            <button className="auth-submit" type="submit" disabled={submitLoading}>
               <FaPlus />
-              Add Investment
+              {submitLoading ? "Adding..." : "Add Investment"}
             </button>
           </form>
 
@@ -194,42 +266,52 @@ function Investments() {
               <span>Active investments</span>
             </div>
 
-            <div className="expense-list">
-              {investments.map((item) => {
-                const itemProfit = item.current - item.invested;
-                const itemReturn = item.invested
-                  ? ((itemProfit / item.invested) * 100).toFixed(2)
-                  : 0;
+            {loading ? (
+              <p className="progress-text">Loading investments...</p>
+            ) : investments.length === 0 ? (
+              <p className="progress-text">
+                No investments yet. Add your first investment.
+              </p>
+            ) : (
+              <div className="expense-list">
+                {investments.map((item) => {
+                  const invested = Number(item.investedAmount || 0);
+                  const current = Number(item.currentValue || 0);
+                  const itemProfit = current - invested;
+                  const itemReturn = invested
+                    ? ((itemProfit / invested) * 100).toFixed(2)
+                    : 0;
 
-                return (
-                  <div className="expense-row" key={item.id}>
-                    <div className="expense-left">
-                      <div className="transaction-icon">
-                        {typeIcons[item.type]}
+                  return (
+                    <div className="expense-row" key={item._id}>
+                      <div className="expense-left">
+                        <div className="transaction-icon">
+                          {typeIcons[item.type] || typeIcons.Other}
+                        </div>
+
+                        <div>
+                          <h4>{item.name}</h4>
+                          <p>
+                            {item.type} • Invested ₹
+                            {invested.toLocaleString("en-IN")}
+                          </p>
+                        </div>
                       </div>
 
-                      <div>
-                        <h4>{item.name}</h4>
-                        <p>
-                          {item.type} • Invested ₹
-                          {item.invested.toLocaleString("en-IN")}
-                        </p>
+                      <div className="expense-actions">
+                        <strong className={itemProfit >= 0 ? "income" : "expense"}>
+                          ₹{current.toLocaleString("en-IN")} ({itemReturn}%)
+                        </strong>
+
+                        <button onClick={() => handleDelete(item._id)}>
+                          <FaTrash />
+                        </button>
                       </div>
                     </div>
-
-                    <div className="expense-actions">
-                      <strong className={itemProfit >= 0 ? "income" : "expense"}>
-                        ₹{item.current.toLocaleString("en-IN")} ({itemReturn}%)
-                      </strong>
-
-                      <button onClick={() => handleDelete(item.id)}>
-                        <FaTrash />
-                      </button>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
         </section>
       </main>

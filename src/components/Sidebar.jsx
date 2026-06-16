@@ -7,14 +7,12 @@ import {
   FaPiggyBank,
   FaChartLine,
   FaUser,
-  FaSignOutAlt
+  FaCalendarAlt,
+  FaMoneyBillWave,
+  FaHeadset
 } from "react-icons/fa";
 
-import { useAuth } from "../context/AuthContext.jsx";
-
 function Sidebar() {
-  const { logout } = useAuth();
-
   const navItems = [
     {
       name: "Dashboard",
@@ -42,14 +40,19 @@ function Sidebar() {
       icon: <FaChartLine />
     },
     {
+      name: "Recurring",
+      path: "/recurring",
+      icon: <FaCalendarAlt />
+    },
+    {
       name: "Profile",
       path: "/profile",
       icon: <FaUser />
     },
     {
-        name: "Recurring",
-        path: "/recurring",
-        icon: <FaWallet />
+      name: "Support",
+      path: "/support",
+      icon: <FaHeadset />
     }
   ];
 
@@ -80,11 +83,6 @@ function Sidebar() {
           </NavLink>
         ))}
       </nav>
-
-      <button className="sidebar-logout" onClick={logout}>
-        <FaSignOutAlt />
-        <span>Logout</span>
-      </button>
     </aside>
   );
 }

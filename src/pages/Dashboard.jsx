@@ -24,22 +24,23 @@ import { useExpenses } from "../hooks/useExpenses";
 
 import { calculateBudgetStats } from "../utils/calculateBudgetStats";
 import { generateInsights } from "../utils/generateInsights";
+import { exportPDFReport, exportExcelReport } from "../utils/exportReports";
 
-
-import {
-  exportPDFReport,
-  exportExcelReport
-} from "../utils/exportReports";
+import AIAdvisor from "../components/DashboardWidgets/AIAdvisor";
+import { useFinancialAdvice } from "../hooks/useFinancialAdvice";
 
 function Dashboard() {
   const { dashboardData, loading, error } = useDashboard();
   const { budget } = useBudget();
   const { expenses } = useExpenses();
+  const { advice, loading: adviceLoading } = useFinancialAdvice();
 
+  // Show loader while dashboard data is coming from backend
   if (loading) {
     return (
       <div className="app-layout">
         <Sidebar />
+
         <main className="main-content">
           <Navbar />
           <h2>Loading Dashboard...</h2>
@@ -48,10 +49,12 @@ function Dashboard() {
     );
   }
 
+  // Show error if dashboard API fails
   if (error) {
     return (
       <div className="app-layout">
         <Sidebar />
+
         <main className="main-content">
           <Navbar />
           <h2>{error}</h2>
@@ -60,73 +63,100 @@ function Dashboard() {
     );
   }
 
+  /* =========================
+     DASHBOARD CALCULATIONS
+  ========================= */
+
+  const safeDashboardData = dashboardData || {};
+
   const budgetStats = calculateBudgetStats(
     budget?.monthlyBudget || 0,
-    dashboardData.totalExpenses
+    safeDashboardData.totalExpenses || 0
   );
 
-  const insights = generateInsights(expenses, budget, dashboardData);
+  const insights = generateInsights(
+    expenses || [],
+    budget,
+    safeDashboardData
+  );
 
   const reportData = {
-    dashboardData,
+    dashboardData: safeDashboardData,
     budget,
     budgetStats,
-    expenses,
+    expenses: expenses || [],
     insights
   };
+
+  /* =========================
+     SUMMARY CARDS
+  ========================= */
 
   const stats = [
     {
       title: "Total Expenses",
-      value: `₹${dashboardData.totalExpenses.toLocaleString("en-IN")}`,
-      growth: `${dashboardData.expenseCount} transactions`,
+      value: `₹${(safeDashboardData.totalExpenses || 0).toLocaleString(
+        "en-IN"
+      )}`,
+      growth: `${safeDashboardData.expenseCount || 0} transactions`,
       icon: <FaWallet />
     },
     {
       title: "Total Savings",
-      value: `₹${dashboardData.totalSavings.toLocaleString("en-IN")}`,
-      growth: `${dashboardData.savingsRate}% savings rate`,
+      value: `₹${(safeDashboardData.totalSavings || 0).toLocaleString(
+        "en-IN"
+      )}`,
+      growth: `${safeDashboardData.savingsRate || 0}% savings rate`,
       icon: <FaPiggyBank />
     },
     {
       title: "Investments",
-      value: `₹${dashboardData.currentInvestmentValue.toLocaleString("en-IN")}`,
-      growth: `Profit ₹${dashboardData.investmentProfit.toLocaleString(
+      value: `₹${(
+        safeDashboardData.currentInvestmentValue || 0
+      ).toLocaleString("en-IN")}`,
+      growth: `Profit ₹${(safeDashboardData.investmentProfit || 0).toLocaleString(
         "en-IN"
       )}`,
       icon: <FaChartLine />
     },
     {
       title: "Health Score",
-      value: `${dashboardData.financialHealthScore}/100`,
+      value: `${safeDashboardData.financialHealthScore || 0}/100`,
       growth: "Calculated from live data",
       icon: <FaChartLine />
     }
   ];
 
-  const transactions = [
-    {
-      name: "Zomato Dinner",
-      date: "Today",
-      amount: "-₹640",
-      icon: <FaUtensils />,
-      type: "expense"
-    },
-    {
-      name: "Fuel Refill",
-      date: "Yesterday",
-      amount: "-₹2,000",
-      icon: <FaCar />,
-      type: "expense"
-    },
-    {
-      name: "Clothing",
-      date: "2 days ago",
-      amount: "-₹1,850",
-      icon: <FaShoppingCart />,
-      type: "expense"
-    }
-  ];
+  /* =========================
+     RECENT TRANSACTIONS
+  ========================= */
+
+  const transactions =
+    expenses?.slice(0, 5).map((expense) => {
+      const expenseAmount = Number(expense.amount || 0);
+      const expenseDate = expense.date
+        ? new Date(expense.date).toLocaleDateString("en-IN")
+        : "No date";
+
+      return {
+        id: expense._id,
+        name: expense.title || "Untitled Expense",
+        date: expenseDate,
+        amount: `-₹${expenseAmount.toLocaleString("en-IN")}`,
+        category: expense.category || "Other",
+        type: "expense"
+      };
+    }) || [];
+
+  const getTransactionIcon = (category) => {
+    if (category === "Food") return <FaUtensils />;
+    if (category === "Transport") return <FaCar />;
+
+    return <FaShoppingCart />;
+  };
+
+  console.log("Dashboard Data:", dashboardData);
+  console.log("Category Chart:", dashboardData?.categoryChart);
 
   return (
     <div className="app-layout">
@@ -134,6 +164,10 @@ function Dashboard() {
 
       <main className="main-content dashboard-page">
         <Navbar />
+
+        {/* =========================
+            DASHBOARD HEADER
+        ========================= */}
 
         <section className="page-header">
           <h1>Financial Command Center</h1>
@@ -143,6 +177,10 @@ function Dashboard() {
             monitor investments from one place.
           </p>
         </section>
+
+        {/* =========================
+            REPORT EXPORT BUTTONS
+        ========================= */}
 
         <div className="report-actions">
           <button onClick={() => exportPDFReport(reportData)}>
@@ -155,6 +193,10 @@ function Dashboard() {
         </div>
 
         <section className="dashboard-grid">
+          {/* =========================
+              SUMMARY CARDS
+          ========================= */}
+
           <div className="stats-grid">
             {stats.map((stat, index) => (
               <motion.div
@@ -177,10 +219,23 @@ function Dashboard() {
             ))}
           </div>
 
+          {/* =========================
+              CHARTS
+          ========================= */}
+
           <div className="charts-grid">
-            <MonthlyOverview monthlyChart={dashboardData.monthlyChart || []} />
-            <TopSpending categoryChart={dashboardData.categoryChart || []} />
+            <MonthlyOverview
+              monthlyChart={safeDashboardData.monthlyChart || []}
+            />
+
+            <TopSpending
+              categoryChart={safeDashboardData.categoryChart || []}
+            />
           </div>
+
+          {/* =========================
+              BUDGET, SAVINGS, INVESTMENTS, INSIGHTS
+          ========================= */}
 
           <div className="goal-grid">
             <BudgetProgress
@@ -189,8 +244,14 @@ function Dashboard() {
               remaining={budgetStats.remaining}
               percentageUsed={budgetStats.percentageUsed}
             />
-
+            
+            <AIAdvisor
+              advice={advice}
+              loading={adviceLoading}
+            />
+            
             <SavingsProgress />
+
             <InvestmentSummary />
 
             <div className="insight-card">
@@ -210,30 +271,38 @@ function Dashboard() {
             </div>
           </div>
 
+          {/* =========================
+              RECENT TRANSACTIONS
+          ========================= */}
+
           <div className="transactions-card">
             <div className="chart-title">
               <h3>Recent Transactions</h3>
-
-              <span>View all</span>
+              <span>Live from MongoDB</span>
             </div>
 
-            {transactions.map((item) => (
-              <div className="transaction-item" key={item.name}>
-                <div className="transaction-left">
-                  <div className="transaction-icon">{item.icon}</div>
+            {transactions.length === 0 ? (
+              <p className="empty-state">No transactions added yet.</p>
+            ) : (
+              transactions.map((item) => (
+                <div className="transaction-item" key={item.id}>
+                  <div className="transaction-left">
+                    <div className="transaction-icon">
+                      {getTransactionIcon(item.category)}
+                    </div>
 
-                  <div>
-                    <p className="transaction-name">{item.name}</p>
-
-                    <p className="transaction-date">{item.date}</p>
+                    <div>
+                      <p className="transaction-name">{item.name}</p>
+                      <p className="transaction-date">{item.date}</p>
+                    </div>
                   </div>
-                </div>
 
-                <p className={`transaction-amount ${item.type}`}>
-                  {item.amount}
-                </p>
-              </div>
-            ))}
+                  <p className={`transaction-amount ${item.type}`}>
+                    {item.amount}
+                  </p>
+                </div>
+              ))
+            )}
           </div>
         </section>
       </main>

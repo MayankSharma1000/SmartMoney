@@ -1,10 +1,21 @@
-import React from "react";
-import { FaBell, FaMagnifyingGlass } from "react-icons/fa6";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+import {
+  FaBell,
+  FaMagnifyingGlass,
+  FaUser
+} from "react-icons/fa6";
+
 import ThemeToggle from "./ThemeToggle.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
 
 function Navbar() {
   const { user } = useAuth();
+
+  const navigate = useNavigate();
+
+  const [searchText, setSearchText] = useState("");
 
   const currentHour = new Date().getHours();
 
@@ -15,15 +26,30 @@ function Navbar() {
       ? "Good Afternoon"
       : "Good Evening";
 
+  const handleSearch = () => {
+    if (!searchText.trim()) return;
+
+    navigate(
+      `/expenses?search=${encodeURIComponent(
+        searchText
+      )}`
+    );
+  };
+
   return (
     <header className="navbar">
       <div className="navbar-left">
         <h2>
           {greeting}
-          {user?.name ? `, ${user.name}` : ""}
+          {user?.name
+            ? `, ${user.name}`
+            : ""}
         </h2>
 
-        <p>Let's grow your wealth and eliminate wasteful spending.</p>
+        <p>
+          Let's grow your wealth and
+          eliminate wasteful spending.
+        </p>
       </div>
 
       <div className="navbar-right">
@@ -32,22 +58,49 @@ function Navbar() {
 
           <input
             type="text"
-            placeholder="Search transactions..."
+            placeholder="Search expenses..."
+            value={searchText}
+            onChange={(e) =>
+              setSearchText(
+                e.target.value
+              )
+            }
+            onKeyDown={(e) => {
+              if (
+                e.key === "Enter"
+              ) {
+                handleSearch();
+              }
+            }}
           />
         </div>
 
-        <button className="notification-btn">
+        <button
+          className="notification-btn"
+          title="Notifications"
+        >
           <FaBell />
+
           <span className="notification-dot"></span>
         </button>
 
         <ThemeToggle />
 
-        <div className="user-avatar">
-          {user?.name
-            ? user.name.charAt(0).toUpperCase()
-            : "M"}
-        </div>
+        <button
+          className="user-avatar profile-avatar-btn"
+          onClick={() =>
+            navigate("/profile")
+          }
+          title="Open Profile"
+        >
+          {user?.name ? (
+            user.name
+              .charAt(0)
+              .toUpperCase()
+          ) : (
+            <FaUser />
+          )}
+        </button>
       </div>
     </header>
   );

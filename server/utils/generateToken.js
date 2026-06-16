@@ -5,7 +5,7 @@ const generateToken = (userId) => {
     { id: userId },
     process.env.JWT_SECRET,
     {
-      expiresIn: "30d"
+      expiresIn: "12h"
     }
   );
 };
