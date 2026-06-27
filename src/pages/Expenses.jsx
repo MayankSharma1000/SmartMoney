@@ -19,8 +19,8 @@ import {
   FaQuestionCircle
 } from "react-icons/fa";
 
-import Sidebar from "../components/Sidebar.jsx";
-import Navbar from "../components/Navbar.jsx";
+import Sidebar from "../components/Sidebar/Sidebar.jsx";
+import Navbar from "../components/Navbar/Navbar.jsx";
 
 import {
   getExpenses,
@@ -36,12 +36,21 @@ function Expenses() {
   const [submitLoading, setSubmitLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const [searchText, setSearchText] = useState(searchParams.get("search") || "");
-  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [searchText, setSearchText] = useState(
+    searchParams.get("search") || ""
+  );
+  
+  const [selectedCategory, setSelectedCategory] =
+    useState("All");
+  
+  const [currentPage, setCurrentPage] =
+    useState(1);
+  
+  const ITEMS_PER_PAGE = 10;
 
   const [formData, setFormData] = useState({
     title: "",
-    category: "Food",
+    category: "",
     amount: "",
     date: "",
     note: "",
@@ -127,7 +136,17 @@ function Expenses() {
     0
   );
 
+  const totalPages = Math.ceil(
+    filteredExpenses.length / ITEMS_PER_PAGE
+  );
+  
+  const currentExpenses = filteredExpenses.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
+
   const handleSearchChange = (value) => {
+    setCurrentPage(1);
     setSearchText(value);
 
     if (value.trim()) {
@@ -168,7 +187,7 @@ function Expenses() {
 
       setFormData({
         title: "",
-        category: "Food",
+        category: "",
         amount: "",
         date: "",
         note: "",
@@ -216,102 +235,141 @@ function Expenses() {
                 category-level clarity.
               </p>
             </div>
-
-            <button
-              className="auth-submit"
-              onClick={() =>
-                document.querySelector(".expense-form")?.scrollIntoView({
-                  behavior: "smooth"
-                })
-              }
-            >
-              <FaPlus />
-              Add Expense
-            </button>
           </div>
         </section>
 
         {error && <div className="auth-error">{error}</div>}
 
-        <section className="expense-layout">
-          <form className="expense-form glass-card" onSubmit={handleAddExpense}>
+        <section
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "24px"
+          }}
+        >
+        <form
+          className="expense-form glass-card"
+          onSubmit={handleAddExpense}
+          style={{
+            width: "100%",
+            padding: "24px"
+          }}
+        >
+        <div className="chart-title">
+          <div>
             <h3>Add New Expense</h3>
+            <p>Quickly record a transaction</p>
+          </div>
+        </div>
 
-            <input
-              type="text"
-              name="title"
-              placeholder="Expense title"
-              value={formData.title}
-              onChange={handleChange}
-              required
-            />
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns:
+              "2fr 1fr 1fr 1fr 1fr auto",
+            gap: "16px",
+            alignItems: "center",
+            marginTop: "20px"
+          }}
+        >
+          <input
+            type="text"
+            name="title"
+            placeholder="Expense title"
+            value={formData.title}
+            onChange={handleChange}
+            required
+          />
 
-            <select
-              name="category"
-              value={formData.category}
-              onChange={handleChange}
-            >
-              <option>Food</option>
-              <option>Transport</option>
-              <option>Shopping</option>
-              <option>Bills</option>
-              <option>Entertainment</option>
-              <option>Health</option>
-              <option>Education</option>
-              <option>Travel</option>
-              <option>Other</option>
-            </select>
+          <input
+            type="number"
+            name="amount"
+            placeholder="Amount"
+            value={formData.amount}
+            onChange={handleChange}
+            required
+          />
 
-            <input
-              type="number"
-              name="amount"
-              placeholder="Amount in ₹"
-              value={formData.amount}
-              onChange={handleChange}
-              required
-            />
+          <select
+            name="category"
+            value={formData.category}
+            onChange={handleChange}
+            required
+          >
+            <option value="" disabled>
+              Select Category
+            </option>
 
-            <input
-              type="date"
-              name="date"
-              value={formData.date}
-              onChange={handleChange}
-            />
+            <option value="Food">Food</option>
+            <option value="Transport">Transport</option>
+            <option value="Shopping">Shopping</option>
+            <option value="Bills">Bills</option>
+            <option value="Entertainment">Entertainment</option>
+            <option value="Health">Health</option>
+            <option value="Education">Education</option>
+            <option value="Travel">Travel</option>
+            <option value="Other">Other</option>
+          </select>
 
-            <select
-              name="paymentMethod"
-              value={formData.paymentMethod}
-              onChange={handleChange}
-            >
-              <option>UPI</option>
-              <option>Cash</option>
-              <option>Credit Card</option>
-              <option>Debit Card</option>
-              <option>Net Banking</option>
-              <option>Other</option>
-            </select>
+          <input
+            type="date"
+            name="date"
+            value={formData.date}
+            onChange={handleChange}
+          />
 
-            <textarea
-              name="note"
-              placeholder="Optional note"
-              value={formData.note}
-              onChange={handleChange}
-            />
+          <select
+            name="paymentMethod"
+            value={formData.paymentMethod}
+            onChange={handleChange}
+          >
+            <option>UPI</option>
+            <option>Cash</option>
+            <option>Credit Card</option>
+            <option>Debit Card</option>
+            <option>Net Banking</option>
+          </select>
 
-            <button className="auth-submit" type="submit" disabled={submitLoading}>
-              <FaPlus />
-              {submitLoading ? "Adding..." : "Save Expense"}
-            </button>
-          </form>
+          <button
+            className="auth-submit"
+            type="submit"
+            disabled={submitLoading}
+            style={{
+              minWidth: "180px",
+              height: "54px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "10px"
+            }}
+          >
+            <FaPlus />
 
+            {submitLoading
+              ? "Adding..."
+              : "Add Expense"}
+          </button>
+        </div>
+      </form>
           <div className="expenses-panel glass-card">
-            <div className="expenses-summary">
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: "20px"
+              }}
+            >
               <div>
-                <p>Total Spent</p>
-                <h2>₹{totalExpense.toLocaleString("en-IN")}</h2>
+                <h2>Transaction History</h2>
+                <p>
+                  Complete record of all expenses
+                </p>
               </div>
 
-              <span>{expenses.length} transactions</span>
+              <h2>
+                ₹{totalExpense.toLocaleString("en-IN")}
+              </h2>
             </div>
 
             <div className="expense-filter-bar">
@@ -328,7 +386,10 @@ function Expenses() {
 
               <select
                 value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
+                onChange={(e) => {
+                  setSelectedCategory(e.target.value);
+                  setCurrentPage(1);
+                }}
               >
                 {categories.map((category) => (
                   <option key={category}>{category}</option>
@@ -357,43 +418,80 @@ function Expenses() {
                 No matching expenses found. Try clearing filters.
               </p>
             ) : (
-              <div className="expense-list">
-                {filteredExpenses.map((expense) => (
-                  <div className="expense-row" key={expense._id}>
-                    <div className="expense-left">
-                      <div className="transaction-icon">
-                        {categoryIcons[expense.category] || categoryIcons.Other}
+              <>
+                <div className="expense-list">
+                  {currentExpenses.map((expense) => (
+                    <div className="expense-row" key={expense._id}>
+                      <div className="expense-left">
+                        <div className="transaction-icon">
+                          {categoryIcons[expense.category] || categoryIcons.Other}
+                        </div>
+
+                        <div>
+                          <h4>{expense.title}</h4>
+
+                          <p>
+                            {expense.category} •{" "}
+                            {expense.date
+                              ? new Date(expense.date).toLocaleDateString("en-IN")
+                              : "No date"}{" "}
+                            • {expense.paymentMethod || "UPI"}
+                          </p>
+
+                          {expense.note && (
+                            <p className="expense-note">{expense.note}</p>
+                          )}
+                        </div>
                       </div>
 
-                      <div>
-                        <h4>{expense.title}</h4>
+                      <div className="expense-actions">
+                        <strong>
+                          -₹{Number(expense.amount || 0).toLocaleString("en-IN")}
+                        </strong>
 
-                        <p>
-                          {expense.category} •{" "}
-                          {expense.date
-                            ? new Date(expense.date).toLocaleDateString("en-IN")
-                            : "No date"}{" "}
-                          • {expense.paymentMethod || "UPI"}
-                        </p>
-
-                        {expense.note && (
-                          <p className="expense-note">{expense.note}</p>
-                        )}
+                        <button onClick={() => handleDelete(expense._id)}>
+                          <FaTrash />
+                        </button>
                       </div>
                     </div>
-
-                    <div className="expense-actions">
-                      <strong>
-                        -₹{Number(expense.amount || 0).toLocaleString("en-IN")}
-                      </strong>
-
-                      <button onClick={() => handleDelete(expense._id)}>
-                        <FaTrash />
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              
+                <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      gap: "10px",
+                      marginTop: "24px"
+                    }}
+                  >
+                    {Array.from(
+                      { length: totalPages },
+                      (_, index) => (
+                        <button
+                          key={index}
+                          onClick={() =>
+                            setCurrentPage(index + 1)
+                          }
+                          style={{
+                            width: "40px",
+                            height: "40px",
+                            borderRadius: "10px",
+                            border: "none",
+                            cursor: "pointer",
+                            background:
+                              currentPage === index + 1
+                                ? "#3b82f6"
+                                : "#1f2937",
+                            color: "#fff"
+                          }}
+                        >
+                          {index + 1}
+                        </button>
+                      )
+                    )}
+                </div>
+              </>
             )}
           </div>
         </section>

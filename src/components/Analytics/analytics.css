@@ -1,0 +1,984 @@
+.analytics-page{
+
+    padding:34px;
+    
+    background:#070b14;
+    
+    min-height:100vh;
+    
+    }
+    
+    .analytics-main-grid{
+    
+    display:grid;
+    
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    
+    gap:28px;
+    
+    align-items:start;
+    
+    margin-top:32px;
+    
+    }
+    
+    .analytics-card{
+    
+    border-radius:28px;
+    
+    padding:32px;
+    
+    background:rgba(18,25,39,.82);
+    
+    border:1px solid rgba(255,255,255,.05);
+    
+    backdrop-filter:blur(28px);
+    
+    transition:.35s ease;
+    
+    overflow:hidden;
+    
+    position:relative;
+    
+    }
+    
+    .analytics-card:hover{
+    
+    transform:translateY(-6px);
+    
+    border-color:rgba(59,130,246,.25);
+    
+    box-shadow:
+    
+    0 20px 50px rgba(0,0,0,.45);
+    
+    }
+    
+    .analytics-card h1{
+    
+    font-size:48px;
+    
+    font-weight:700;
+    
+    }
+    
+    .analytics-card h2{
+    
+    font-size:28px;
+    
+    margin-bottom:8px;
+    
+    }
+    
+    .analytics-card h3{
+    
+    font-size:20px;
+    
+    }
+    
+    .analytics-card p{
+    
+    color:#94a3b8;
+    
+    line-height:1.6;
+    
+    }
+    
+    .analytics-card::before{
+    
+    content:"";
+    
+    position:absolute;
+    
+    top:0;
+    
+    left:0;
+    
+    height:4px;
+    
+    width:100%;
+    
+    background:linear-gradient(
+    
+    90deg,
+    
+    #3b82f6,
+    
+    #22c55e,
+    
+    #a855f7
+    
+    );
+    
+    opacity:.75;
+    
+    }
+
+/* ========================================= */
+/* ANALYTICS HEADER */
+/* ========================================= */
+
+.page-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:40px;
+
+    gap:40px;
+}
+
+/* LEFT */
+
+.page-header-content{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:10px;
+}
+
+.page-greeting{
+
+    color:#60a5fa;
+
+    font-size:14px;
+
+    font-weight:600;
+
+    letter-spacing:.3px;
+}
+
+.page-title{
+
+    font-size:38px;
+
+    font-weight:700;
+
+    color:#ffffff;
+
+    margin:0;
+}
+
+.page-subtitle{
+
+    color:#94a3b8;
+
+    font-size:15px;
+
+    line-height:1.7;
+
+    max-width:650px;
+}
+
+/* RIGHT */
+
+.page-header-actions{
+
+    display:flex;
+
+    align-items:center;
+}
+
+/* DATE BUTTON */
+
+.analytics-date-btn{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:16px;
+
+    background:#151d33;
+
+    border:1px solid rgba(255,255,255,.06);
+
+    border-radius:18px;
+
+    padding:14px 20px;
+
+    color:white;
+
+    cursor:pointer;
+
+    transition:.25s ease;
+
+    min-width:250px;
+}
+
+.analytics-date-btn:hover{
+
+    transform:translateY(-2px);
+
+    background:#1b2542;
+
+    border-color:rgba(96,165,250,.25);
+
+    box-shadow:
+    0 12px 35px rgba(0,0,0,.35);
+}
+
+.date-content{
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:flex-start;
+
+    flex:1;
+}
+
+.date-content small{
+
+    color:#94a3b8;
+
+    font-size:11px;
+
+    text-transform:uppercase;
+
+    letter-spacing:.8px;
+}
+
+.date-content strong{
+
+    color:white;
+
+    font-size:14px;
+
+    margin-top:2px;
+}
+
+.dropdown-icon{
+
+    color:#94a3b8;
+
+    font-size:12px;
+}
+
+/* ========================================= */
+/* INSIGHT CARDS */
+/* ========================================= */
+
+.analytics-insights-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(4,1fr);
+
+    gap:22px;
+
+    margin-bottom:32px;
+}
+
+.insight-card{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:22px;
+
+    background:#151d33;
+
+    border:1px solid rgba(255,255,255,.05);
+
+    border-radius:20px;
+
+    transition:.25s ease;
+
+    cursor:pointer;
+}
+
+.insight-card:hover{
+
+    transform:translateY(-4px);
+
+    border-color:rgba(255,255,255,.12);
+
+    box-shadow:
+    0 15px 40px rgba(0,0,0,.35);
+}
+
+.insight-left{
+
+    display:flex;
+
+    gap:16px;
+
+    align-items:center;
+}
+
+.insight-icon{
+
+    width:54px;
+
+    height:54px;
+
+    border-radius:50%;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:24px;
+
+    color:white;
+
+    flex-shrink:0;
+}
+
+.insight-card h3{
+
+    font-size:16px;
+
+    color:white;
+
+    margin-bottom:6px;
+}
+
+.insight-card p{
+
+    color:#94a3b8;
+
+    font-size:13px;
+
+    line-height:1.5;
+}
+
+.insight-change{
+
+    font-size:22px;
+
+    font-weight:700;
+}
+
+
+/* ========================================= */
+/* FINANCIAL HEALTH */
+/* ========================================= */
+
+.financial-health-card{
+
+    padding:32px;
+    
+    min-height:500px;
+    
+    }
+    
+    .card-header{
+    
+    display:flex;
+    
+    justify-content:space-between;
+    
+    align-items:center;
+    
+    margin-bottom:32px;
+    
+    }
+    
+    .health-badge{
+    
+    background:#163f27;
+    
+    color:#22c55e;
+    
+    padding:8px 16px;
+    
+    border-radius:999px;
+    
+    font-size:13px;
+    
+    font-weight:600;
+    
+    }
+    
+    .financial-body{
+    
+    display:grid;
+    
+    grid-template-columns:280px 1fr;
+    
+    gap:36px;
+    
+    align-items:center;
+    
+    }
+    
+    .health-score{
+    
+    display:flex;
+    
+    justify-content:center;
+    
+    }
+    
+    .score-ring{
+    
+    width:220px;
+    
+    height:220px;
+    
+    border-radius:50%;
+    
+    background:
+    
+    conic-gradient(
+    
+    #22c55e 0deg,
+    
+    #22c55e 262deg,
+    
+    #1b2338 262deg,
+    
+    #1b2338 360deg
+    
+    );
+    
+    display:flex;
+    
+    justify-content:center;
+    
+    align-items:center;
+    
+    }
+    
+    .score-inner{
+    
+    width:165px;
+    
+    height:165px;
+    
+    background:#0b1220;
+    
+    border-radius:50%;
+    
+    display:flex;
+    
+    flex-direction:column;
+    
+    justify-content:center;
+    
+    align-items:center;
+    
+    }
+    
+    .score-inner h1{
+    
+    font-size:62px;
+    
+    margin:0;
+    
+    color:white;
+    
+    }
+    
+    .score-inner p{
+    
+    margin:0;
+    
+    color:#94a3b8;
+    
+    }
+    
+    .health-metrics{
+    
+    display:flex;
+    
+    flex-direction:column;
+    
+    gap:24px;
+    
+    }
+    
+    .metric-row{
+    
+    display:flex;
+    
+    flex-direction:column;
+    
+    gap:10px;
+    
+    }
+    
+    .metric-header{
+    
+    display:flex;
+    
+    justify-content:space-between;
+    
+    font-size:15px;
+    
+    }
+    
+    .metric-progress{
+    
+    height:10px;
+    
+    background:#1d2437;
+    
+    border-radius:999px;
+    
+    overflow:hidden;
+    
+    }
+    
+    .metric-fill{
+    
+    height:100%;
+    
+    border-radius:999px;
+    
+    transition:.5s ease;
+    
+    }
+
+    .analytics-mini-card{
+        padding:18px;
+        border-radius:18px;
+    
+        background:rgba(255,255,255,.04);
+    
+        border:1px solid rgba(255,255,255,.06);
+    
+        transition:.35s;
+    }
+    
+    .analytics-mini-card:hover{
+    
+        transform:translateY(-4px);
+    
+        border-color:#3b82f6;
+    
+        background:rgba(59,130,246,.08);
+    }
+
+    .goal-badge{
+
+        background:#1d4ed8;
+        
+        padding:8px 16px;
+        
+        border-radius:999px;
+        
+        font-weight:700;
+        
+        color:white;
+        
+        }
+        
+        .analytics-hero-card{
+        
+        display:flex;
+        
+        justify-content:space-between;
+        
+        align-items:center;
+        
+        padding:24px;
+        
+        border-radius:24px;
+        
+        margin-bottom:24px;
+        
+        background:linear-gradient(135deg,#111827,#1e293b);
+        
+        }
+        
+        .analytics-hero-card h1{
+        
+        font-size:44px;
+        
+        margin:10px 0;
+        
+        }
+        
+        .goal-circle{
+        
+        width:140px;
+        
+        height:140px;
+        
+        border-radius:50%;
+        
+        background:conic-gradient(#22c55e 68%,#1e293b 0);
+        
+        display:flex;
+        
+        align-items:center;
+        
+        justify-content:center;
+        
+        }
+        
+        .goal-circle-inner{
+        
+        width:105px;
+        
+        height:105px;
+        
+        border-radius:50%;
+        
+        background:#0b1220;
+        
+        display:flex;
+        
+        align-items:center;
+        
+        justify-content:center;
+        
+        font-size:24px;
+        
+        font-weight:700;
+        
+        }
+        
+        .goal-progress{
+        
+        height:12px;
+        
+        border-radius:999px;
+        
+        overflow:hidden;
+        
+        background:#1f2937;
+        
+        margin-bottom:24px;
+        
+        }
+        
+        .goal-progress-fill{
+        
+        height:100%;
+        
+        background:linear-gradient(90deg,#22c55e,#3b82f6);
+        
+        border-radius:999px;
+        
+        }
+        
+        .goal-info-grid{
+        
+        display:grid;
+        
+        grid-template-columns:repeat(3,1fr);
+        
+        gap:18px;
+        
+        }
+        
+        .goal-info-grid>div{
+        
+        padding:18px;
+        
+        border-radius:18px;
+        
+        background:rgba(255,255,255,.04);
+        
+        transition:.35s;
+        
+        }
+        
+        .goal-info-grid>div:hover{
+        
+        transform:translateY(-4px);
+        
+        background:rgba(59,130,246,.08);
+        
+        }
+
+        .investment-header{
+
+            display:flex;
+            
+            justify-content:space-between;
+            
+            align-items:center;
+            
+            margin-bottom:30px;
+            
+            }
+            
+            .investment-header p{
+            
+            color:#94a3b8;
+            
+            margin-top:6px;
+            
+            }
+            
+            .live-dot{
+            
+            color:#22c55e;
+            
+            font-weight:700;
+            
+            }
+            
+            .portfolio-grid{
+            
+            display:grid;
+            
+            grid-template-columns:repeat(3,1fr);
+            
+            gap:18px;
+            
+            margin-bottom:30px;
+            
+            }
+            
+            .portfolio-stat{
+            
+            padding:22px;
+            
+            border-radius:18px;
+            
+            background:rgba(255,255,255,.04);
+            
+            transition:.35s;
+            
+            }
+            
+            .portfolio-stat:hover{
+            
+            transform:translateY(-5px);
+            
+            background:rgba(59,130,246,.08);
+            
+            }
+            
+            .networth-card{
+            
+            display:grid;
+            
+            grid-template-columns:1fr 300px;
+            
+            gap:30px;
+            
+            align-items:center;
+            
+            margin-bottom:30px;
+            
+            }
+            
+            .networth-left h1{
+            
+            font-size:48px;
+            
+            margin:15px 0 30px;
+            
+            }
+            
+            .asset-row{
+            
+            display:flex;
+            
+            justify-content:space-between;
+            
+            padding:12px 0;
+            
+            border-bottom:1px solid rgba(255,255,255,.06);
+            
+            }
+            
+            .projection-grid{
+            
+            display:grid;
+            
+            grid-template-columns:repeat(4,1fr);
+            
+            gap:18px;
+            
+            margin-top:15px;
+            
+            }
+            
+            .projection-grid>div{
+            
+            padding:20px;
+            
+            border-radius:18px;
+            
+            background:rgba(255,255,255,.04);
+            
+            transition:.35s;
+            
+            }
+            
+            .projection-grid>div:hover{
+            
+            transform:translateY(-5px);
+            
+            background:rgba(34,197,94,.08);
+            
+            }
+
+            .analytics-footer{
+
+                margin-top:40px;
+                
+                padding:28px 34px;
+                
+                border-radius:28px;
+                
+                display:flex;
+                
+                justify-content:space-between;
+                
+                align-items:center;
+                
+                background:rgba(255,255,255,.03);
+                
+                border:1px solid rgba(255,255,255,.05);
+                
+                backdrop-filter:blur(20px);
+                
+                }
+                
+                .footer-profile{
+                
+                display:flex;
+                
+                align-items:center;
+                
+                gap:18px;
+                
+                }
+                
+                .profile-avatar{
+                
+                width:64px;
+                
+                height:64px;
+                
+                border-radius:50%;
+                
+                background:linear-gradient(135deg,#2563eb,#22c55e);
+                
+                display:flex;
+                
+                align-items:center;
+                
+                justify-content:center;
+                
+                font-size:22px;
+                
+                font-weight:700;
+                
+                color:white;
+                
+                box-shadow:0 15px 40px rgba(37,99,235,.35);
+                
+                }
+                
+                .footer-profile h3{
+                
+                margin:0;
+                
+                font-size:20px;
+                
+                }
+                
+                .footer-profile p{
+                
+                margin-top:4px;
+                
+                color:#94a3b8;
+                
+                }
+                
+                .footer-center{
+                
+                display:flex;
+                
+                gap:16px;
+                
+                }
+                
+                .footer-pill{
+                
+                padding:12px 18px;
+                
+                border-radius:999px;
+                
+                font-weight:600;
+                
+                font-size:14px;
+                
+                transition:.3s;
+                
+                cursor:default;
+                
+                }
+                
+                .footer-pill:hover{
+                
+                transform:translateY(-3px);
+                
+                }
+                
+                .premium{
+                
+                background:rgba(250,204,21,.12);
+                
+                color:#facc15;
+                
+                }
+                
+                .secure{
+                
+                background:rgba(34,197,94,.12);
+                
+                color:#22c55e;
+                
+                }
+                
+                .cloud{
+                
+                background:rgba(59,130,246,.12);
+                
+                color:#60a5fa;
+                
+                }
+                
+                .footer-right{
+                
+                text-align:right;
+                
+                }
+                
+                .footer-right p{
+                
+                margin:0;
+                
+                color:#94a3b8;
+                
+                font-size:13px;
+                
+                }
+                
+                .footer-right strong{
+                
+                display:block;
+                
+                margin:6px 0;
+                
+                }
+                
+                .footer-right span{
+                
+                color:#64748b;
+                
+                font-size:13px;
+                
+                }

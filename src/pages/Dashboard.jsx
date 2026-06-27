@@ -4,14 +4,11 @@ import {
   FaWallet,
   FaPiggyBank,
   FaChartLine,
-  FaUtensils,
-  FaCar,
-  FaShoppingCart,
   FaLightbulb
 } from "react-icons/fa";
 
-import Sidebar from "../components/Sidebar.jsx";
-import Navbar from "../components/Navbar.jsx";
+import Sidebar from "../components/Sidebar/Sidebar.jsx";
+import Navbar from "../components/Navbar/Navbar.jsx";
 import MonthlyOverview from "../components/DashboardWidgets/MonthlyOverview.jsx";
 import SavingsProgress from "../components/DashboardWidgets/SavingsProgress.jsx";
 import InvestmentSummary from "../components/DashboardWidgets/InvestmentSummary.jsx";
@@ -24,23 +21,22 @@ import { useExpenses } from "../hooks/useExpenses";
 
 import { calculateBudgetStats } from "../utils/calculateBudgetStats";
 import { generateInsights } from "../utils/generateInsights";
-import { exportPDFReport, exportExcelReport } from "../utils/exportReports";
 
-import AIAdvisor from "../components/DashboardWidgets/AIAdvisor";
-import { useFinancialAdvice } from "../hooks/useFinancialAdvice";
+
+import {
+  exportPDFReport,
+  exportExcelReport
+} from "../utils/exportReports";
 
 function Dashboard() {
   const { dashboardData, loading, error } = useDashboard();
   const { budget } = useBudget();
   const { expenses } = useExpenses();
-  const { advice, loading: adviceLoading } = useFinancialAdvice();
 
-  // Show loader while dashboard data is coming from backend
   if (loading) {
     return (
       <div className="app-layout">
         <Sidebar />
-
         <main className="main-content">
           <Navbar />
           <h2>Loading Dashboard...</h2>
@@ -49,12 +45,10 @@ function Dashboard() {
     );
   }
 
-  // Show error if dashboard API fails
   if (error) {
     return (
       <div className="app-layout">
         <Sidebar />
-
         <main className="main-content">
           <Navbar />
           <h2>{error}</h2>
@@ -63,100 +57,66 @@ function Dashboard() {
     );
   }
 
-  /* =========================
-     DASHBOARD CALCULATIONS
-  ========================= */
-
-  const safeDashboardData = dashboardData || {};
-
   const budgetStats = calculateBudgetStats(
     budget?.monthlyBudget || 0,
-    safeDashboardData.totalExpenses || 0
+    dashboardData.totalExpenses
   );
 
-  const insights = generateInsights(
-    expenses || [],
-    budget,
-    safeDashboardData
-  );
+  const insights = generateInsights(expenses, budget, dashboardData);
 
   const reportData = {
-    dashboardData: safeDashboardData,
+    dashboardData,
     budget,
     budgetStats,
-    expenses: expenses || [],
+    expenses,
     insights
   };
-
-  /* =========================
-     SUMMARY CARDS
-  ========================= */
 
   const stats = [
     {
       title: "Total Expenses",
-      value: `₹${(safeDashboardData.totalExpenses || 0).toLocaleString(
+      value: `₹${dashboardData.totalExpenses.toLocaleString(
         "en-IN"
       )}`,
-      growth: `${safeDashboardData.expenseCount || 0} transactions`,
+      growth: `${dashboardData.expenseCount} transactions`,
       icon: <FaWallet />
     },
+  
     {
       title: "Total Savings",
-      value: `₹${(safeDashboardData.totalSavings || 0).toLocaleString(
+      value: `₹${dashboardData.totalSavings.toLocaleString(
         "en-IN"
       )}`,
-      growth: `${safeDashboardData.savingsRate || 0}% savings rate`,
+      growth:
+        dashboardData.totalSavings >= 100000
+          ? "Strong Savings Position"
+          : dashboardData.totalSavings >= 50000
+          ? "Growing Emergency Fund"
+          : "Building Savings",
       icon: <FaPiggyBank />
     },
+  
     {
       title: "Investments",
-      value: `₹${(
-        safeDashboardData.currentInvestmentValue || 0
-      ).toLocaleString("en-IN")}`,
-      growth: `Profit ₹${(safeDashboardData.investmentProfit || 0).toLocaleString(
+      value: `₹${dashboardData.currentInvestmentValue.toLocaleString(
+        "en-IN"
+      )}`,
+      growth: `Profit ₹${dashboardData.investmentProfit.toLocaleString(
         "en-IN"
       )}`,
       icon: <FaChartLine />
     },
+  
     {
       title: "Health Score",
-      value: `${safeDashboardData.financialHealthScore || 0}/100`,
-      growth: "Calculated from live data",
+      value: `${dashboardData.financialHealthScore}/100`,
+      growth: `${dashboardData.financialHealthLabel} Financial Health`,
       icon: <FaChartLine />
     }
   ];
 
-  /* =========================
-     RECENT TRANSACTIONS
-  ========================= */
-
   const transactions =
-    expenses?.slice(0, 5).map((expense) => {
-      const expenseAmount = Number(expense.amount || 0);
-      const expenseDate = expense.date
-        ? new Date(expense.date).toLocaleDateString("en-IN")
-        : "No date";
-
-      return {
-        id: expense._id,
-        name: expense.title || "Untitled Expense",
-        date: expenseDate,
-        amount: `-₹${expenseAmount.toLocaleString("en-IN")}`,
-        category: expense.category || "Other",
-        type: "expense"
-      };
-    }) || [];
-
-  const getTransactionIcon = (category) => {
-    if (category === "Food") return <FaUtensils />;
-    if (category === "Transport") return <FaCar />;
-
-    return <FaShoppingCart />;
-  };
-
-  console.log("Dashboard Data:", dashboardData);
-  console.log("Category Chart:", dashboardData?.categoryChart);
+    dashboardData.recentTransactions || [];
 
   return (
     <div className="app-layout">
@@ -164,10 +124,6 @@ function Dashboard() {
 
       <main className="main-content dashboard-page">
         <Navbar />
-
-        {/* =========================
-            DASHBOARD HEADER
-        ========================= */}
 
         <section className="page-header">
           <h1>Financial Command Center</h1>
@@ -177,10 +133,6 @@ function Dashboard() {
             monitor investments from one place.
           </p>
         </section>
-
-        {/* =========================
-            REPORT EXPORT BUTTONS
-        ========================= */}
 
         <div className="report-actions">
           <button onClick={() => exportPDFReport(reportData)}>
@@ -193,10 +145,6 @@ function Dashboard() {
         </div>
 
         <section className="dashboard-grid">
-          {/* =========================
-              SUMMARY CARDS
-          ========================= */}
-
           <div className="stats-grid">
             {stats.map((stat, index) => (
               <motion.div
@@ -219,23 +167,10 @@ function Dashboard() {
             ))}
           </div>
 
-          {/* =========================
-              CHARTS
-          ========================= */}
-
           <div className="charts-grid">
-            <MonthlyOverview
-              monthlyChart={safeDashboardData.monthlyChart || []}
-            />
-
-            <TopSpending
-              categoryChart={safeDashboardData.categoryChart || []}
-            />
+            <MonthlyOverview monthlyChart={dashboardData.monthlyChart || []} />
+            <TopSpending categoryChart={dashboardData.categoryChart || []} />
           </div>
-
-          {/* =========================
-              BUDGET, SAVINGS, INVESTMENTS, INSIGHTS
-          ========================= */}
 
           <div className="goal-grid">
             <BudgetProgress
@@ -244,65 +179,77 @@ function Dashboard() {
               remaining={budgetStats.remaining}
               percentageUsed={budgetStats.percentageUsed}
             />
-            
-            <AIAdvisor
-              advice={advice}
-              loading={adviceLoading}
-            />
-            
+
             <SavingsProgress />
 
             <InvestmentSummary />
 
-            <div className="insight-card">
-              <div className="stat-icon">
-                <FaLightbulb />
-              </div>
+            <div className="glass-card budget-card">
+              <div className="budget-header">
+                <div className="budget-icon">
+                  <FaLightbulb />
+                </div>
 
-              <h3 className="insight-title">Smart Insights</h3>
+                <div>
+                  <h3>Smart Insights</h3>
 
-              <div>
-                {insights.map((insight, index) => (
-                  <p key={index} className="insight-text">
-                    • {insight}
-                  </p>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* =========================
-              RECENT TRANSACTIONS
-          ========================= */}
-
-          <div className="transactions-card">
-            <div className="chart-title">
-              <h3>Recent Transactions</h3>
-              <span>Live from MongoDB</span>
-            </div>
-
-            {transactions.length === 0 ? (
-              <p className="empty-state">No transactions added yet.</p>
-            ) : (
-              transactions.map((item) => (
-                <div className="transaction-item" key={item.id}>
-                  <div className="transaction-left">
-                    <div className="transaction-icon">
-                      {getTransactionIcon(item.category)}
-                    </div>
-
-                    <div>
-                      <p className="transaction-name">{item.name}</p>
-                      <p className="transaction-date">{item.date}</p>
-                    </div>
-                  </div>
-
-                  <p className={`transaction-amount ${item.type}`}>
-                    {item.amount}
+                  <p className="budget-subtitle">
+                    AI-powered financial observations
                   </p>
                 </div>
-              ))
-            )}
+              </div>
+
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "14px",
+                  marginTop: "20px"
+                }}
+              >
+                {insights.length === 0 ? (
+                  <div
+                    style={{
+                      opacity: 0.8
+                    }}
+                  >
+                    Add more transactions to generate
+                    personalized insights.
+                  </div>
+                ) : (
+                  insights.map((insight, index) => (
+                    <div
+                      key={index}
+                      style={{
+                        display: "flex",
+                        alignItems: "flex-start",
+                        gap: "12px",
+                        padding: "12px 14px",
+                        borderRadius: "12px",
+                        background:
+                          "rgba(255,255,255,0.04)"
+                      }}
+                    >
+                      <span
+                        style={{
+                          fontSize: "1.1rem"
+                        }}
+                      >
+                        💡
+                      </span>
+
+                      <span
+                        style={{
+                          lineHeight: "1.5"
+                        }}
+                      >
+                        {insight}
+                      </span>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
           </div>
         </section>
       </main>

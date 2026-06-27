@@ -13,5 +13,10 @@ export const getDashboardSummary = async () => {
     getAuthHeader()
   );
 
+  console.log(
+    "Dashboard API Response:",
+    response.data
+  );
+  
   return response.data;
 };

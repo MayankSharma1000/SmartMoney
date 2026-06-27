@@ -62,49 +62,88 @@ const getDashboardSummary = async (req, res) => {
 
     const investmentProfit = currentInvestmentValue - totalInvested;
 
-    /* ========================= */
-    /* FINANCIAL HEALTH SCORE */
-    /* ========================= */
+      /* ========================= */
+      /* FINANCIAL HEALTH SCORE */
+      /* ========================= */
 
-    const savingsRate =
-      totalSavings + totalExpenses === 0
-        ? 0
-        : Math.round((totalSavings / (totalSavings + totalExpenses)) * 100);
+      const savingsRate =
+        totalSavings + totalExpenses === 0
+          ? 0
+          : Math.round(
+              (totalSavings /
+                (totalSavings + totalExpenses)) *
+                100
+            );
 
-    const savingsScore =
-      savingsRate >= 40
-        ? 35
-        : savingsRate >= 25
-        ? 28
-        : savingsRate >= 15
-        ? 20
-        : savingsRate > 0
-        ? 12
-        : 5;
+      let financialHealthScore = 0;
 
-    const expenseScore =
-      totalExpenses === 0
-        ? 20
-        : totalExpenses <= 20000
-        ? 30
-        : totalExpenses <= 35000
-        ? 22
-        : 12;
+      let budgetDiscipline = 0;
+      let savingsStrength = 0;
+      let investmentStrength = 0;
+      let profitabilityScore = 0;
 
-    const investmentScore =
-      currentInvestmentValue > 0
-        ? 25
-        : totalSavings > 0
-        ? 10
-        : 0;
+      /* Savings Strength (40) */
 
-    const profitScore =
-      investmentProfit > 0 ? 10 : currentInvestmentValue > 0 ? 5 : 0;
+      if (totalSavings >= 100000) {
+        savingsStrength = 40;
+      } else if (totalSavings >= 50000) {
+        savingsStrength = 30;
+      } else if (totalSavings >= 10000) {
+        savingsStrength = 20;
+      } else if (totalSavings > 0) {
+        savingsStrength = 10;
+      }
 
-    const financialHealthScore = Math.min(
-      100,
-      savingsScore + expenseScore + investmentScore + profitScore
-    );
+      financialHealthScore += savingsStrength;
+
+      /* Investment Strength (30) */
+
+      if (currentInvestmentValue >= 100000) {
+        investmentStrength = 30;
+      } else if (currentInvestmentValue >= 50000) {
+        investmentStrength = 20;
+      } else if (currentInvestmentValue >= 10000) {
+        investmentStrength = 10;
+      }
+
+      financialHealthScore += investmentStrength;
+
+      /* Profitability (15) */
+
+      if (investmentProfit >= 10000) {
+        profitabilityScore = 15;
+      } else if (investmentProfit > 0) {
+        profitabilityScore = 8;
+      }
+
+      financialHealthScore += profitabilityScore;
+
+      /* Expense Discipline (15) */
+
+      if (totalExpenses <= 15000) {
+        budgetDiscipline = 15;
+      } else if (totalExpenses <= 30000) {
+        budgetDiscipline = 10;
+      } else if (totalExpenses <= 50000) {
+        budgetDiscipline = 5;
+      }
+
+      financialHealthScore += budgetDiscipline;
+
+      financialHealthScore = Math.min(
+        financialHealthScore,
+        100
+      );
+
+      let financialHealthLabel = "Poor";
+
+      if (financialHealthScore >= 85) {
+        financialHealthLabel = "Excellent";
+      } else if (financialHealthScore >= 70) {
+        financialHealthLabel = "Good";
+      } else if (financialHealthScore >= 50) {
+        financialHealthLabel = "Average";
+      }
 
     /* ========================= */
     /* CATEGORY CHART */
@@ -116,7 +155,8 @@ const getDashboardSummary = async (req, res) => {
       const category = expense.category || "Other";
 
       categoryTotals[category] =
-        (categoryTotals[category] || 0) + Number(expense.amount || 0);
+        (categoryTotals[category] || 0) +
+        Number(expense.amount || 0);
     });
 
     const categoryChart = Object.entries(categoryTotals)
@@ -161,6 +201,14 @@ const getDashboardSummary = async (req, res) => {
       })
     );
 
+    console.log("========== DASHBOARD ==========");
+    console.log("Expenses:", totalExpenses);
+    console.log("Savings:", totalSavings);
+    console.log("Investments:", currentInvestmentValue);
+    console.log("Profit:", investmentProfit);
+    console.log("Health Score:", financialHealthScore);
+    console.log("Health Label:", financialHealthLabel);
+
     /* ========================= */
     /* RESPONSE */
     /* ========================= */
@@ -174,7 +222,17 @@ const getDashboardSummary = async (req, res) => {
         currentInvestmentValue,
         investmentProfit,
         savingsRate,
+    
         financialHealthScore,
+        financialHealthLabel,
+    
+        healthBreakdown: {
+          budgetDiscipline,
+          savingsStrength,
+          investmentStrength,
+          profitabilityScore
+        },
+    
         expenseCount: expenses.length,
         savingsGoalsCount: savings.length,
         investmentsCount: investments.length,
@@ -183,6 +241,7 @@ const getDashboardSummary = async (req, res) => {
         recentTransactions: expenses.slice(0, 5)
       }
     });
+    
   } catch (error) {
     console.error("Dashboard Summary Error:", error);
 

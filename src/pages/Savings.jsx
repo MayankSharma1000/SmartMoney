@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { FaPlus, FaTrash, FaPiggyBank } from "react-icons/fa";
 
-import Sidebar from "../components/Sidebar.jsx";
-import Navbar from "../components/Navbar.jsx";
+import Sidebar from "../components/Sidebar/Sidebar.jsx";
+import Navbar from "../components/Navbar/Navbar.jsx";
 
 import {
   getSavingsGoals,

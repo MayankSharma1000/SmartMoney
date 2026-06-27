@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import Sidebar from "../components/Sidebar.jsx";
-import Navbar from "../components/Navbar.jsx";
+import Sidebar from "../components/Sidebar/Sidebar.jsx";
+import Navbar from "../components/Navbar/Navbar.jsx";
 import { setBudget } from "../services/budgetService.js";
 
 function Budget() {
