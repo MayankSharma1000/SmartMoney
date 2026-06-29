@@ -1,20 +1,15 @@
-const Expense = require("../models/Expense");
-const Savings = require("../models/Savings");
-const Investment = require("../models/Investment");
-
-const {
-  generateAnalytics
-} = require(
-  "../services/analyticsService"
-);
+const {generateAnalytics} = require("../services/analyticsService");
 
 const getDashboardSummary = async (req, res) => {
   try {
     const userId = req.user._id;
 
-    const expenses = await Expense.find({ user: userId }).sort({ date: -1 });
-    const savings = await Savings.find({ user: userId });
-    const investments = await Investment.find({ user: userId });
+    const [expenses, savings, investments] =
+    await Promise.all([
+      Expense.find({ user: userId }).sort({ date: -1 }),
+      Savings.find({ user: userId }),
+      Investment.find({ user: userId })
+    ]);
 
     /* ========================= */
     /* BASIC TOTALS */
@@ -130,8 +125,8 @@ const getDashboardSummary = async (req, res) => {
     console.log("Savings:", totalSavings);
     console.log("Investments:", currentInvestmentValue);
     console.log("Profit:", investmentProfit);
-    console.log("Health Score:", financialHealthScore);
-    console.log("Health Label:", financialHealthLabel);
+    console.log("Health Score:", analytics.financialHealthScore);
+    console.log("Health Label:", analytics.financialHealthLabel);
 
     /* ========================= */
     /* RESPONSE */
@@ -145,16 +140,13 @@ const getDashboardSummary = async (req, res) => {
         totalInvested,
         currentInvestmentValue,
         investmentProfit,
-        savingsRate,
     
-        financialHealthScore:
-        analytics.financialHealthScore,
-
-        financialHealthLabel:
-        analytics.financialHealthLabel,
-
-        healthBreakdown:
-        analytics.healthBreakdown,
+        savingsRate: analytics.healthBreakdown.savingsStrength,
+        financialHealthScore: analytics.financialHealthScore,
+        financialHealthLabel: analytics.financialHealthLabel,
+        healthBreakdown: analytics.healthBreakdown,
+        categoryChart,
+        monthlyChart
       }
     });
     
