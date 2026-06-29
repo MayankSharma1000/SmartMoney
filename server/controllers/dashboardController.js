@@ -2,6 +2,12 @@ const Expense = require("../models/Expense");
 const Savings = require("../models/Savings");
 const Investment = require("../models/Investment");
 
+const {
+  generateAnalytics
+} = require(
+  "../services/analyticsService"
+);
+
 const getDashboardSummary = async (req, res) => {
   try {
     const userId = req.user._id;
@@ -61,89 +67,7 @@ const getDashboardSummary = async (req, res) => {
     }, 0);
 
     const investmentProfit = currentInvestmentValue - totalInvested;
-
-      /* ========================= */
-      /* FINANCIAL HEALTH SCORE */
-      /* ========================= */
-
-      const savingsRate =
-        totalSavings + totalExpenses === 0
-          ? 0
-          : Math.round(
-              (totalSavings /
-                (totalSavings + totalExpenses)) *
-                100
-            );
-
-      let financialHealthScore = 0;
-
-      let budgetDiscipline = 0;
-      let savingsStrength = 0;
-      let investmentStrength = 0;
-      let profitabilityScore = 0;
-
-      /* Savings Strength (40) */
-
-      if (totalSavings >= 100000) {
-        savingsStrength = 40;
-      } else if (totalSavings >= 50000) {
-        savingsStrength = 30;
-      } else if (totalSavings >= 10000) {
-        savingsStrength = 20;
-      } else if (totalSavings > 0) {
-        savingsStrength = 10;
-      }
-
-      financialHealthScore += savingsStrength;
-
-      /* Investment Strength (30) */
-
-      if (currentInvestmentValue >= 100000) {
-        investmentStrength = 30;
-      } else if (currentInvestmentValue >= 50000) {
-        investmentStrength = 20;
-      } else if (currentInvestmentValue >= 10000) {
-        investmentStrength = 10;
-      }
-
-      financialHealthScore += investmentStrength;
-
-      /* Profitability (15) */
-
-      if (investmentProfit >= 10000) {
-        profitabilityScore = 15;
-      } else if (investmentProfit > 0) {
-        profitabilityScore = 8;
-      }
-
-      financialHealthScore += profitabilityScore;
-
-      /* Expense Discipline (15) */
-
-      if (totalExpenses <= 15000) {
-        budgetDiscipline = 15;
-      } else if (totalExpenses <= 30000) {
-        budgetDiscipline = 10;
-      } else if (totalExpenses <= 50000) {
-        budgetDiscipline = 5;
-      }
-
-      financialHealthScore += budgetDiscipline;
-
-      financialHealthScore = Math.min(
-        financialHealthScore,
-        100
-      );
-
-      let financialHealthLabel = "Poor";
-
-      if (financialHealthScore >= 85) {
-        financialHealthLabel = "Excellent";
-      } else if (financialHealthScore >= 70) {
-        financialHealthLabel = "Good";
-      } else if (financialHealthScore >= 50) {
-        financialHealthLabel = "Average";
-      }
+    const analytics = generateAnalytics({totalExpenses, totalSavings, currentInvestmentValue});
 
     /* ========================= */
     /* CATEGORY CHART */
@@ -223,22 +147,14 @@ const getDashboardSummary = async (req, res) => {
         investmentProfit,
         savingsRate,
     
-        financialHealthScore,
-        financialHealthLabel,
-    
-        healthBreakdown: {
-          budgetDiscipline,
-          savingsStrength,
-          investmentStrength,
-          profitabilityScore
-        },
-    
-        expenseCount: expenses.length,
-        savingsGoalsCount: savings.length,
-        investmentsCount: investments.length,
-        categoryChart,
-        monthlyChart,
-        recentTransactions: expenses.slice(0, 5)
+        financialHealthScore:
+        analytics.financialHealthScore,
+
+        financialHealthLabel:
+        analytics.financialHealthLabel,
+
+        healthBreakdown:
+        analytics.healthBreakdown,
       }
     });
     
