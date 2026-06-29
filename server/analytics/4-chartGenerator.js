@@ -1,74 +1,65 @@
 function generateCategoryChart(expenses) {
-
   const categoryTotals = {};
 
   expenses.forEach((expense) => {
+    const category =
+      expense.category || "Other";
 
-    if (!categoryTotals[expense.category]) {
-      categoryTotals[expense.category] = 0;
-    }
-
-    categoryTotals[expense.category] += expense.amount;
+    categoryTotals[category] =
+      (categoryTotals[category] || 0) +
+      Number(expense.amount || 0);
 
   });
 
   return Object.entries(categoryTotals)
-
-    .map(([name, value]) => ({
-      name,
-      value
+    .map(([category, amount]) => ({
+      category,
+      amount
     }))
-
-    .sort((a, b) => b.value - a.value);
-
+    .sort((a, b) => b.amount - a.amount);
 }
 
-function generateWeeklyChart(expenses) {
-
+function generateMonthlyChart(expenses) {
   const weeklyTotals = {
-    Mon: 0,
-    Tue: 0,
-    Wed: 0,
-    Thu: 0,
-    Fri: 0,
-    Sat: 0,
-    Sun: 0
+    "Week 1": 0,
+    "Week 2": 0,
+    "Week 3": 0,
+    "Week 4": 0
   };
-
-  const days = [
-    "Sun",
-    "Mon",
-    "Tue",
-    "Wed",
-    "Thu",
-    "Fri",
-    "Sat"
-  ];
 
   expenses.forEach((expense) => {
 
+    const date =
+      expense.date
+        ? new Date(expense.date)
+        : new Date();
+
     const day =
-      days[new Date(expense.date).getDay()];
+      date.getDate();
 
-    weeklyTotals[day] += expense.amount;
+    let week = "Week 4";
 
+    if (day <= 7)
+      week = "Week 1";
+
+    else if (day <= 14)
+      week = "Week 2";
+
+    else if (day <= 21)
+      week = "Week 3";
+
+    weeklyTotals[week] +=
+      Number(expense.amount || 0);
   });
 
-  return Object.entries(weeklyTotals).map(
-
-    ([day, amount]) => ({
-      day,
-      amount
-    })
-
-  );
-
+  return Object.entries(weeklyTotals)
+    .map(([month, expenses]) => ({
+      month,
+      expenses
+    }));
 }
 
 module.exports = {
-
   generateCategoryChart,
-
-  generateWeeklyChart
-
+  generateMonthlyChart
 };

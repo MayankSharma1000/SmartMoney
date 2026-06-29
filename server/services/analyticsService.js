@@ -1,6 +1,5 @@
-const {
-    calculateFinancialScore
-  } = require("../analytics/financialScore");
+const {generateCategoryChart, generateMonthlyChart} = require("../analytics/chartGenerator");
+const {calculateFinancialScore} = require("../analytics/financialScore");
 
 const {
     generateCategoryChart,
@@ -8,7 +7,6 @@ const {
   } = require("../analytics/chartGenerator");
   
   function generateAnalytics(data) {
-  
     const financial = calculateFinancialScore({
       income: data.totalIncome,
       expenses: data.totalExpenses,
@@ -20,7 +18,6 @@ const {
     const weeklyChart = generateWeeklyChart(expenses);
   
     return {
-
       financialHealthScore:
         financial.score,
     
@@ -34,57 +31,31 @@ const {
           : "Poor",
     
       healthBreakdown: {
-    
-        savingsStrength:
-          Math.round(financial.savingsRate),
-    
-        investmentStrength:
-          Math.round(financial.investmentRate),
-    
-        budgetDiscipline:
-          Math.round(100 - financial.expenseRate),
-    
-        profitabilityScore:
-          Math.round(financial.investmentRate)
-    
+        savingsStrength: Math.round(financial.savingsRate),
+        investmentStrength: Math.round(financial.investmentRate),
+        budgetDiscipline: Math.round(100 - financial.expenseRate),
+        profitabilityScore: Math.round(financial.investmentRate)
       },
-    
       categoryChart,
-    
       weeklyChart
     };
-  
   }
-  
   module.exports = {
     generateAnalytics
   };
 
-  const {
-    calculateFinancialScore
-  } = require("../analytics/financialScore");
-  
+  const {calculateFinancialScore} = require("../analytics/financialScore");
   function generateAnalytics(summary, expenses) {
-  
     const financial = calculateFinancialScore({
-  
-      income:
-        summary.totalSavings +
-        summary.totalExpenses,
-  
-      expenses:
-        summary.totalExpenses,
-  
-      savings:
-        summary.totalSavings,
-  
-      investments:
-        summary.currentInvestmentValue
-  
+      income: summary.totalSavings + summary.totalExpenses,
+      expenses: summary.totalExpenses,
+      savings: summary.totalSavings,
+      investments: summary.currentInvestmentValue
     });
-  
+    const categoryChart = generateCategoryChart(expenses);
+    const monthlyChart = generateMonthlyChart(expenses);
+
     return {
-  
       financialHealthScore:
         financial.score,
   
@@ -98,32 +69,14 @@ const {
           : "Poor",
   
       healthBreakdown: {
-  
-        savingsStrength:
-          Math.round(financial.savingsRate),
-  
-        investmentStrength:
-          Math.round(financial.investmentRate),
-  
-        budgetDiscipline:
-          Math.round(
-            100 -
-            financial.expenseRate
-          ),
-  
-        profitabilityScore:
-          Math.round(
-            financial.investmentRate
-          )
-  
-      }
-  
+        savingsStrength: Math.round(financial.savingsRate),
+        investmentStrength: Math.round(financial.investmentRate),
+        budgetDiscipline: Math.round(100 - financial.expenseRate),
+        profitabilityScore: Math.round(financial.investmentRate)
+      },
+      categoryChart,
+      monthlyChart
     };
-  
   }
   
-  module.exports = {
-  
-    generateAnalytics
-  
-  };
+  module.exports = {generateAnalytics};
