@@ -982,3 +982,631 @@
                 font-size:13px;
                 
                 }
+
+                /* ==========================================
+   PREMIUM ANALYTICS DESIGN SYSTEM
+========================================== */
+
+.analytics-card{
+
+    background:linear-gradient(
+    180deg,
+    rgba(24,30,49,.96),
+    rgba(17,23,39,.96)
+    );
+    
+    border:1px solid rgba(255,255,255,.06);
+    
+    border-radius:28px;
+    
+    padding:28px;
+    
+    box-shadow:
+    0 12px 40px rgba(0,0,0,.35);
+    
+    transition:
+    transform .35s,
+    box-shadow .35s,
+    border-color .35s;
+    
+    overflow:hidden;
+    
+    position:relative;
+    
+    }
+    
+    .analytics-card::before{
+    
+    content:"";
+    
+    position:absolute;
+    
+    top:0;
+    
+    left:0;
+    
+    width:100%;
+    
+    height:3px;
+    
+    background:linear-gradient(
+    90deg,
+    #3b82f6,
+    #22c55e,
+    #a855f7
+    );
+    
+    opacity:.85;
+    
+    }
+    
+    .analytics-card:hover{
+    
+    transform:translateY(-6px);
+    
+    box-shadow:
+    0 25px 60px rgba(0,0,0,.45);
+    
+    border-color:
+    rgba(59,130,246,.35);
+    
+    }
+
+    .analytics-card h2{
+
+        font-size:32px;
+        
+        font-weight:700;
+        
+        margin-bottom:8px;
+        
+        color:white;
+        
+        }
+        
+        .analytics-card p{
+        
+        color:#94a3b8;
+        
+        line-height:1.7;
+        
+        }
+
+        .activity-card{
+
+            margin-top:28px;
+            
+            }
+            
+            .activity-header{
+            
+            display:flex;
+            
+            justify-content:space-between;
+            
+            align-items:center;
+            
+            margin-bottom:30px;
+            
+            }
+            
+            .activity-header span{
+            
+            background:#16331d;
+            
+            color:#22c55e;
+            
+            padding:8px 16px;
+            
+            border-radius:999px;
+            
+            font-size:13px;
+            
+            font-weight:600;
+            
+            }
+
+            .activity-item{
+
+                display:flex;
+                
+                align-items:center;
+                
+                gap:18px;
+                
+                padding:18px 0;
+                
+                border-bottom:1px solid rgba(255,255,255,.05);
+                
+                transition:.25s;
+                
+                }
+                
+                .activity-item:hover{
+                
+                padding-left:12px;
+                
+                }
+                
+                .activity-dot{
+                
+                width:12px;
+                
+                height:12px;
+                
+                border-radius:50%;
+                
+                flex-shrink:0;
+                
+                }
+                
+                .activity-content{
+                
+                flex:1;
+                
+                }
+                
+                .activity-content h4{
+                
+                margin-bottom:6px;
+                
+                font-size:17px;
+                
+                }
+                
+                .activity-content p{
+                
+                font-size:14px;
+                
+                }
+                
+                .activity-right{
+                
+                text-align:right;
+                
+                }
+                
+                .activity-right strong{
+                
+                display:block;
+                
+                font-size:18px;
+                
+                margin-bottom:4px;
+                
+                }
+                
+                .activity-right span{
+                
+                font-size:13px;
+                
+                color:#94a3b8;
+                
+                }
+
+                .ai-card{
+
+                    margin-top:28px;
+                    
+                    }
+                    
+                    .ai-list{
+                    
+                    display:flex;
+                    
+                    flex-direction:column;
+                    
+                    gap:18px;
+                    
+                    }
+                    
+                    .ai-item{
+                    
+                    display:flex;
+                    
+                    gap:18px;
+                    
+                    align-items:flex-start;
+                    
+                    padding:20px;
+                    
+                    background:rgba(255,255,255,.03);
+                    
+                    border-radius:18px;
+                    
+                    transition:.3s;
+                    
+                    }
+                    
+                    .ai-item:hover{
+                    
+                    background:rgba(255,255,255,.06);
+                    
+                    transform:translateX(8px);
+                    
+                    }
+                    
+                    .ai-bar{
+                    
+                    width:5px;
+                    
+                    border-radius:999px;
+                    
+                    align-self:stretch;
+                    
+                    }
+                    
+                    .ai-item h4{
+                    
+                    margin-bottom:8px;
+                    
+                    font-size:18px;
+                    
+                    color:white;
+                    
+                    }
+                    
+                    .ai-item p{
+                    
+                    font-size:14px;
+                    
+                    line-height:1.7;
+                    
+                    }
+
+                    .analytics-bottom-grid{
+
+                        display:grid;
+                        
+                        grid-template-columns:1fr 1fr;
+                        
+                        gap:28px;
+                        
+                        margin-top:28px;
+                        
+                        }
+
+
+                        .health-change{
+
+                            margin-top:6px;
+                            
+                            font-size:14px;
+                            
+                            font-weight:600;
+                            
+                            color:#22c55e;
+                            
+                            }
+                            
+                            .score-title{
+                            
+                            margin-top:18px;
+                            
+                            font-size:18px;
+                            
+                            font-weight:600;
+                            
+                            color:white;
+                            
+                            text-align:center;
+                            
+                            }
+                            
+                            .health-ai{
+                            
+                            margin-top:30px;
+                            
+                            padding:20px;
+                            
+                            border-radius:18px;
+                            
+                            background:rgba(255,255,255,.04);
+                            
+                            border:1px solid rgba(255,255,255,.06);
+                            
+                            }
+                            
+                            .health-ai h4{
+                            
+                            margin-bottom:12px;
+                            
+                            font-size:17px;
+                            
+                            }
+                            
+                            .health-ai p{
+                            
+                            line-height:1.8;
+                            
+                            font-size:14px;
+                            
+                            color:#94a3b8;
+                            
+                            }
+                            
+                            .health-ai strong{
+                            
+                            color:white;
+                            
+                            }
+
+                            .spending-card{
+
+                                display:flex;
+                                
+                                flex-direction:column;
+                                
+                                gap:28px;
+                                
+                                }
+                                
+                                .section-subtitle{
+                                
+                                margin-top:4px;
+                                
+                                font-size:14px;
+                                
+                                color:#94a3b8;
+                                
+                                }
+                                
+                                .spending-kpi{
+                                
+                                display:flex;
+                                
+                                justify-content:space-between;
+                                
+                                align-items:center;
+                                
+                                }
+                                
+                                .spending-kpi h1{
+                                
+                                font-size:46px;
+                                
+                                font-weight:700;
+                                
+                                margin-bottom:6px;
+                                
+                                }
+                                
+                                .kpi-growth{
+                                
+                                padding:10px 18px;
+                                
+                                background:rgba(34,197,94,.12);
+                                
+                                color:#22c55e;
+                                
+                                border-radius:999px;
+                                
+                                font-weight:700;
+                                
+                                }
+                                
+                                .chart-container{
+                                
+                                height:320px;
+                                
+                                }
+                                
+                                .quick-stats{
+                                
+                                display:grid;
+                                
+                                grid-template-columns:repeat(3,1fr);
+                                
+                                gap:18px;
+                                
+                                }
+                                
+                                .quick-stats>div{
+                                
+                                padding:18px;
+                                
+                                border-radius:18px;
+                                
+                                background:rgba(255,255,255,.03);
+                                
+                                text-align:center;
+                                
+                                }
+                                
+                                .quick-stats h3{
+                                
+                                margin-top:8px;
+                                
+                                font-size:22px;
+                                
+                                }
+                                
+                                .category-chips{
+                                
+                                display:flex;
+                                
+                                flex-wrap:wrap;
+                                
+                                gap:14px;
+                                
+                                }
+                                
+                                .category-chip{
+                                
+                                display:flex;
+                                
+                                justify-content:space-between;
+                                
+                                align-items:center;
+                                
+                                gap:18px;
+                                
+                                padding:12px 18px;
+                                
+                                border-radius:999px;
+                                
+                                background:rgba(255,255,255,.05);
+                                
+                                transition:.3s;
+                                
+                                }
+                                
+                                .category-chip:hover{
+                                
+                                background:rgba(59,130,246,.12);
+                                
+                                transform:translateY(-3px);
+                                
+                                }
+
+
+
+                                .ai-coach{
+
+                                    margin:30px 0;
+                                    
+                                    padding:36px;
+                                    
+                                    background:
+                                    
+                                    linear-gradient(
+                                    135deg,
+                                    #16203d,
+                                    #111827
+                                    );
+                                    
+                                    }
+                                    
+                                    .coach-top{
+                                    
+                                    display:flex;
+                                    
+                                    justify-content:space-between;
+                                    
+                                    align-items:center;
+                                    
+                                    margin-bottom:35px;
+                                    
+                                    }
+                                    
+                                    .coach-tag{
+                                    
+                                    display:inline-block;
+                                    
+                                    padding:8px 16px;
+                                    
+                                    border-radius:999px;
+                                    
+                                    background:rgba(59,130,246,.15);
+                                    
+                                    color:#60a5fa;
+                                    
+                                    font-size:12px;
+                                    
+                                    font-weight:700;
+                                    
+                                    margin-bottom:15px;
+                                    
+                                    }
+                                    
+                                    .coach-score{
+                                    
+                                    text-align:center;
+                                    
+                                    }
+                                    
+                                    .coach-score h1{
+                                    
+                                    font-size:62px;
+                                    
+                                    margin:0;
+                                    
+                                    }
+                                    
+                                    .coach-middle{
+                                    
+                                    display:grid;
+                                    
+                                    grid-template-columns:1fr 1fr;
+                                    
+                                    gap:24px;
+                                    
+                                    margin-bottom:30px;
+                                    
+                                    }
+                                    
+                                    .coach-middle>div{
+                                    
+                                    padding:24px;
+                                    
+                                    border-radius:20px;
+                                    
+                                    background:rgba(255,255,255,.04);
+                                    
+                                    }
+                                    
+                                    .coach-middle h1{
+                                    
+                                    margin:10px 0;
+                                    
+                                    font-size:42px;
+                                    
+                                    }
+                                    
+                                    .coach-suggestions{
+                                    
+                                    display:grid;
+                                    
+                                    grid-template-columns:1fr 1fr;
+                                    
+                                    gap:16px;
+                                    
+                                    margin-bottom:30px;
+                                    
+                                    }
+                                    
+                                    .coach-suggestions div{
+                                    
+                                    padding:18px;
+                                    
+                                    border-radius:16px;
+                                    
+                                    background:rgba(255,255,255,.05);
+                                    
+                                    }
+                                    
+                                    .coach-button{
+                                    
+                                    width:100%;
+                                    
+                                    padding:18px;
+                                    
+                                    font-size:16px;
+                                    
+                                    font-weight:700;
+                                    
+                                    border:none;
+                                    
+                                    border-radius:18px;
+                                    
+                                    cursor:pointer;
+                                    
+                                    background:
+                                    
+                                    linear-gradient(
+                                    90deg,
+                                    #3b82f6,
+                                    #2563eb
+                                    );
+                                    
+                                    color:white;
+                                    
+                                    transition:.3s;
+                                    
+                                    }
+                                    
+                                    .coach-button:hover{
+                                    
+                                    transform:translateY(-3px);
+                                    
+                                    }

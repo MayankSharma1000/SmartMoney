@@ -1,131 +1,156 @@
 import React from "react";
 
 import MonthlyOverview from "../DashboardWidgets/MonthlyOverview";
-import TopSpending from "../DashboardWidgets/TopSpending";
 
 function SpendingOverview({ dashboardData }) {
-  return (
-    <div
-      className="glass-card analytics-card"
-      style={{
-        padding: "32px",
-        minHeight: "520px"
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: "30px"
-        }}
-      >
-        <div>
-          <h2>Spending Overview</h2>
 
-          <p
-            style={{
-              color: "#94a3b8",
-              marginTop: "6px"
-            }}
-          >
-            Where your money goes every month
+  const totalSpent =
+    dashboardData?.totalExpenses || 0;
+
+  const avgWeekly = Math.round(
+    totalSpent / 4
+  );
+
+  const categories =
+    dashboardData?.categoryChart || [];
+
+  return (
+
+    <div className="glass-card analytics-card spending-card">
+
+      <div className="card-header">
+
+        <div>
+
+          <h2>Monthly Spending</h2>
+
+          <p className="section-subtitle">
+
+            Spending Overview
+
           </p>
+
         </div>
 
-        <span
-          style={{
-            color: "#94a3b8",
-            fontWeight: 600
-          }}
-        >
+        <span className="health-badge">
+
           This Month
+
         </span>
+
       </div>
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "2fr 1fr",
-          gap: "28px"
-        }}
-      >
+      {/* BIG KPI */}
+
+      <div className="spending-kpi">
+
         <div>
-          <div
-            style={{
-              height: "320px"
-            }}
-          >
-            <MonthlyOverview
-              monthlyChart={
-                dashboardData?.monthlyChart || []
-              }
-            />
-          </div>
 
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(3,1fr)",
-              gap: "18px",
-              marginTop: "24px"
-            }}
-          >
-            <div className="analytics-mini-card">
-              <p>Avg Weekly</p>
+          <h1>
 
-              <h3>₹5,230</h3>
-            </div>
+            ₹{totalSpent.toLocaleString("en-IN")}
 
-            <div className="analytics-mini-card">
-              <p>Total Spent</p>
+          </h1>
 
-              <h3>
-                ₹
-                {dashboardData?.totalExpenses?.toLocaleString(
-                  "en-IN"
-                ) || "0"}
-              </h3>
-            </div>
+          <p>Total Expenses</p>
 
-            <div className="analytics-mini-card">
-              <p>vs Last Month</p>
-
-              <h3
-                style={{
-                  color: "#22c55e"
-                }}
-              >
-                -12.4%
-              </h3>
-            </div>
-          </div>
         </div>
 
+        <div className="kpi-growth">
+
+          ↓ 12%
+
+        </div>
+
+      </div>
+
+      {/* GRAPH */}
+
+      <div className="chart-container">
+
+        <MonthlyOverview
+          monthlyChart={
+            dashboardData?.monthlyChart || []
+          }
+        />
+
+      </div>
+
+      {/* QUICK STATS */}
+
+      <div className="quick-stats">
+
         <div>
-          <h3
-            style={{
-              marginBottom: "20px"
-            }}
-          >
-            Top Categories
+
+          <p>Weekly Avg</p>
+
+          <h3>
+
+            ₹{avgWeekly.toLocaleString("en-IN")}
+
           </h3>
 
-          <div
-            style={{
-              height: "420px"
-            }}
-          >
-            <TopSpending
-              categoryChart={
-                dashboardData?.categoryChart || []
-              }
-            />
-          </div>
         </div>
+
+        <div>
+
+          <p>Transactions</p>
+
+          <h3>
+
+            {dashboardData?.expenseCount || 0}
+
+          </h3>
+
+        </div>
+
+        <div>
+
+          <p>Categories</p>
+
+          <h3>
+
+            {categories.length}
+
+          </h3>
+
+        </div>
+
       </div>
+
+      {/* CATEGORY CHIPS */}
+
+      <div className="category-chips">
+
+        {categories.map((cat,index)=>(
+
+          <div
+            key={index}
+            className="category-chip"
+          >
+
+            <span>
+
+              {cat.name}
+
+            </span>
+
+            <strong>
+
+              ₹{cat.value}
+
+            </strong>
+
+          </div>
+
+        ))}
+
+      </div>
+
     </div>
+
   );
+
 }
 
 export default SpendingOverview;
