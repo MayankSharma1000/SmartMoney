@@ -2,67 +2,33 @@ const {
   getDashboardData
 } = require("../services/dashboardService");
 
+const ApiResponse = require("../utils/apiResponse");
+
 const getDashboardSummary = async (req, res) => {
 
   try {
 
-    const summary =
-      await getDashboardData(req.user._id);
+    const summary = await getDashboardData(req.user._id);
 
-    res.status(200).json({
+    return ApiResponse.success(
 
-      success: true,
+      res,
 
-      summary: {
+      summary,
 
-        totalExpenses:
-          summary.totalExpenses,
+      "Dashboard loaded successfully"
 
-        totalSavings:
-          summary.totalSavings,
+    );
 
-        totalInvested:
-          summary.totalInvested,
-
-        currentInvestmentValue:
-          summary.currentInvestmentValue,
-
-        investmentProfit:
-          summary.investmentProfit,
-
-        savingsRate:
-          summary.analytics.healthBreakdown.savingsStrength,
-
-        financialHealthScore:
-          summary.analytics.financialHealthScore,
-
-        financialHealthLabel:
-          summary.analytics.financialHealthLabel,
-
-        healthBreakdown:
-          summary.analytics.healthBreakdown,
-
-        categoryChart:
-          summary.analytics.categoryChart,
-
-        monthlyChart:
-          summary.analytics.monthlyChart
-
-      }
-
-    });
-
-  }
-
-  catch (error) {
+  } catch (error) {
 
     console.error("Dashboard Summary Error:", error);
 
-    res.status(500).json({
+    return res.status(500).json({
 
       success: false,
 
-      message: "Dashboard summary could not be loaded"
+      message: "Dashboard could not be loaded"
 
     });
 

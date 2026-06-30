@@ -94,3 +94,12 @@ module.exports = mongoose.model(
   "Investment",
   investmentSchema
 );
+
+
+investmentSchema.index({
+
+  user:1,
+  
+  type:1
+  
+  });

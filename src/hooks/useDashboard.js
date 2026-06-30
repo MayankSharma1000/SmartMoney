@@ -4,7 +4,18 @@ import { getDashboardSummary } from "../services/dashboardService";
 
 export const useDashboard = () => {
   const [dashboardData, setDashboardData] =
-    useState(null);
+  useState({
+    totalExpenses: 0,
+    totalSavings: 0,
+    totalInvested: 0,
+    currentInvestmentValue: 0,
+    investmentProfit: 0,
+    financialHealthScore: 0,
+    financialHealthLabel: "Loading...",
+    categoryChart: [],
+    monthlyChart: [],
+    recentTransactions: []
+  });
 
   const [loading, setLoading] = useState(true);
 
@@ -16,7 +27,8 @@ export const useDashboard = () => {
         const data =
           await getDashboardSummary();
 
-        setDashboardData(data.summary);
+        setDashboardData(data.data);
+
       } catch (err) {
         setError(
           err.response?.data?.message ||

@@ -21,112 +21,124 @@ async function getDashboardData(userId) {
 
     ]);
 
-  const totalExpenses =
-    expenses.reduce(
+  /* ========================= */
+  /* BASIC TOTALS */
+  /* ========================= */
 
-      (sum, item)=>
+  const totalExpenses = expenses.reduce(
 
-      sum+Number(item.amount||0),
+    (sum, item) =>
 
-      0
+      sum + Number(item.amount || 0),
 
-    );
+    0
 
-  const totalSavings =
-    savings.reduce(
+  );
 
-      (sum,item)=>
+  const totalSavings = savings.reduce(
 
-      sum+
+    (sum, item) =>
 
-      Number(
-
-      item.currentAmount||
-
-      item.savedAmount||
-
-      item.saved||
-
-      item.amount||
-
-      0
-
-      ),
-
-      0
-
-    );
-
-  const totalInvested =
-    investments.reduce(
-
-      (sum,item)=>
-
-      sum+
+      sum +
 
       Number(
 
-      item.investedAmount||
+        item.currentAmount ||
 
-      item.amount||
+        item.savedAmount ||
 
-      item.purchaseValue||
+        item.saved ||
 
-      0
+        item.amount ||
+
+        0
 
       ),
 
-      0
+    0
 
-    );
+  );
 
-  const currentInvestmentValue =
-    investments.reduce(
+  const totalInvested = investments.reduce(
 
-      (sum,item)=>
+    (sum, item) =>
 
-      sum+
+      sum +
 
       Number(
 
-      item.currentValue||
+        item.investedAmount ||
 
-      item.marketValue||
+        item.invested ||
 
-      item.amount||
+        item.amount ||
 
-      item.investedAmount||
+        item.purchaseValue ||
 
-      0
+        0
 
       ),
 
-      0
+    0
 
-    );
+  );
+
+  const currentInvestmentValue = investments.reduce(
+
+    (sum, item) =>
+
+      sum +
+
+      Number(
+
+        item.currentValue ||
+
+        item.current ||
+
+        item.marketValue ||
+
+        item.value ||
+
+        item.investedAmount ||
+
+        item.amount ||
+
+        0
+
+      ),
+
+    0
+
+  );
 
   const investmentProfit =
-    currentInvestmentValue-
-    totalInvested;
+    currentInvestmentValue - totalInvested;
 
-  const analytics =
-    generateAnalytics(
+  /* ========================= */
+  /* ANALYTICS */
+  /* ========================= */
 
-      {
+  const analytics = generateAnalytics(
 
-        totalExpenses,
+    {
 
-        totalSavings,
+      totalExpenses,
 
-        currentInvestmentValue
+      totalSavings,
 
-      },
+      currentInvestmentValue
 
-      expenses
+    },
 
-    );
+    expenses
 
-  return{
+  );
+
+  /* ========================= */
+  /* RETURN */
+  /* ========================= */
+
+  return {
 
     totalExpenses,
 
@@ -138,14 +150,32 @@ async function getDashboardData(userId) {
 
     investmentProfit,
 
-    analytics
+    expenseCount: expenses.length,
+
+    financialHealthScore:
+      analytics.financialHealthScore,
+
+    financialHealthLabel:
+      analytics.financialHealthLabel,
+
+    healthBreakdown:
+      analytics.healthBreakdown,
+
+    categoryChart:
+      analytics.categoryChart || [],
+
+    monthlyChart:
+      analytics.monthlyChart || [],
+
+    recentTransactions:
+      expenses.slice(0, 5)
 
   };
 
 }
 
-module.exports={
+module.exports = {
 
-getDashboardData
+  getDashboardData
 
 };

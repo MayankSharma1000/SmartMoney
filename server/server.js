@@ -17,6 +17,7 @@ const investmentRoutes = require("./routes/investmentRoutes");
 const recurringExpenseRoutes = require("./routes/recurringExpenseRoutes");
 const aiRoutes = require("./routes/aiRoutes");
 const feedbackRoutes = require("./routes/feedbackRoutes");
+const adminRoutes = require("./routes/adminRoutes");
 
 const app = express();
 const morgan = require("morgan");
@@ -27,6 +28,8 @@ app.use(
     "dev"
   )
 );
+
+app.use("/api/admin", adminRoutes);
 
 /* ========================= */
 /* DATABASE */

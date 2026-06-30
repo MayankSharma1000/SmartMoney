@@ -60,4 +60,12 @@ const savingsSchema = new mongoose.Schema(
   }
 );
 
+savingsSchema.index({
+
+  user:1,
+  
+  goalName:1
+  
+  });
+
 module.exports = mongoose.model("Savings", savingsSchema);
