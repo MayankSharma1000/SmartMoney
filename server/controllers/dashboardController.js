@@ -1,47 +1,77 @@
-const summary =
-await getDashboardData(
-req.user._id
-);
+const {
+  getDashboardData
+} = require("../services/dashboardService");
 
-res.status(200).json({
+const getDashboardSummary = async (req, res) => {
 
-success:true,
+  try {
 
-summary:{
+    const summary =
+      await getDashboardData(req.user._id);
 
-totalExpenses:
-summary.totalExpenses,
+    res.status(200).json({
 
-totalSavings:
-summary.totalSavings,
+      success: true,
 
-totalInvested:
-summary.totalInvested,
+      summary: {
 
-currentInvestmentValue:
-summary.currentInvestmentValue,
+        totalExpenses:
+          summary.totalExpenses,
 
-investmentProfit:
-summary.investmentProfit,
+        totalSavings:
+          summary.totalSavings,
 
-savingsRate:
-summary.analytics.healthBreakdown.savingsStrength,
+        totalInvested:
+          summary.totalInvested,
 
-financialHealthScore:
-summary.analytics.financialHealthScore,
+        currentInvestmentValue:
+          summary.currentInvestmentValue,
 
-financialHealthLabel:
-summary.analytics.financialHealthLabel,
+        investmentProfit:
+          summary.investmentProfit,
 
-healthBreakdown:
-summary.analytics.healthBreakdown,
+        savingsRate:
+          summary.analytics.healthBreakdown.savingsStrength,
 
-categoryChart:
-summary.analytics.categoryChart,
+        financialHealthScore:
+          summary.analytics.financialHealthScore,
 
-monthlyChart:
-summary.analytics.monthlyChart
+        financialHealthLabel:
+          summary.analytics.financialHealthLabel,
 
-}
+        healthBreakdown:
+          summary.analytics.healthBreakdown,
 
-});
+        categoryChart:
+          summary.analytics.categoryChart,
+
+        monthlyChart:
+          summary.analytics.monthlyChart
+
+      }
+
+    });
+
+  }
+
+  catch (error) {
+
+    console.error("Dashboard Summary Error:", error);
+
+    res.status(500).json({
+
+      success: false,
+
+      message: "Dashboard summary could not be loaded"
+
+    });
+
+  }
+
+};
+
+module.exports = {
+
+  getDashboardSummary
+
+};

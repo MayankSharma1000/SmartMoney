@@ -1,4 +1,8 @@
 const {
+    generatePrediction
+  } = require("./predictionEngine");
+
+const {
     calculateFinancialScore
   } = require("./financialScore");
   
@@ -25,6 +29,20 @@ const {
         investments:
           summary.currentInvestmentValue
   
+      });
+
+      const prediction =
+      generatePrediction({
+    
+        totalSavings:
+          summary.totalSavings,
+    
+        totalExpenses:
+          summary.totalExpenses,
+    
+        currentInvestmentValue:
+          summary.currentInvestmentValue
+    
       });
   
     return {
@@ -58,21 +76,13 @@ const {
           Math.round(
             financial.investmentRate
           )
-  
       },
-  
-      categoryChart:
-        generateCategoryChart(expenses),
-  
-      monthlyChart:
-        generateMonthlyChart(expenses)
-  
+      categoryChart: generateCategoryChart(expenses),
+      monthlyChart: generateMonthlyChart(expenses),
+      prediction
     };
-  
   }
   
   module.exports = {
-  
   generateAnalytics
-  
   };
