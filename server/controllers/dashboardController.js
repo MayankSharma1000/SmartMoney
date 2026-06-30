@@ -1,103 +1,47 @@
-const {generateAnalytics} = require("../services/analyticsService");
+const summary =
+await getDashboardData(
+req.user._id
+);
 
-const getDashboardSummary = async (req, res) => {
-  try {
-    const userId = req.user._id;
+res.status(200).json({
 
-    const [expenses, savings, investments] =
-    await Promise.all([
-      Expense.find({ user: userId }).sort({ date: -1 }),
-      Savings.find({ user: userId }),
-      Investment.find({ user: userId })
-    ]);
+success:true,
 
-    /* ========================= */
-    /* BASIC TOTALS */
-    /* ========================= */
+summary:{
 
-    const totalExpenses = expenses.reduce(
-      (sum, item) => sum + Number(item.amount || 0),
-      0
-    );
+totalExpenses:
+summary.totalExpenses,
 
-    const totalSavings = savings.reduce((sum, item) => {
-      return (
-        sum +
-        Number(
-          item.currentAmount ||
-            item.savedAmount ||
-            item.saved ||
-            item.amount ||
-            0
-        )
-      );
-    }, 0);
+totalSavings:
+summary.totalSavings,
 
-    const totalInvested = investments.reduce((sum, item) => {
-      return (
-        sum +
-        Number(
-          item.investedAmount ||
-            item.invested ||
-            item.amount ||
-            item.purchaseValue ||
-            0
-        )
-      );
-    }, 0);
+totalInvested:
+summary.totalInvested,
 
-    const currentInvestmentValue = investments.reduce((sum, item) => {
-      return (
-        sum +
-        Number(
-          item.currentValue ||
-            item.current ||
-            item.marketValue ||
-            item.value ||
-            item.investedAmount ||
-            item.amount ||
-            0
-        )
-      );
-    }, 0);
+currentInvestmentValue:
+summary.currentInvestmentValue,
 
-    const investmentProfit = currentInvestmentValue - totalInvested;
-    const analytics = generateAnalytics({
-      totalExpenses, totalSavings, currentInvestmentValue
-    }, expenses);
+investmentProfit:
+summary.investmentProfit,
 
-    /* ========================= */
-    /* RESPONSE */
-    /* ========================= */
+savingsRate:
+summary.analytics.healthBreakdown.savingsStrength,
 
-    res.status(200).json({
-      success: true,
-      summary: {
-        totalExpenses,
-        totalSavings,
-        totalInvested,
-        currentInvestmentValue,
-        investmentProfit,
-    
-        savingsRate: analytics.healthBreakdown.savingsStrength,
-        financialHealthScore: analytics.financialHealthScore,
-        financialHealthLabel: analytics.financialHealthLabel,
-        healthBreakdown: analytics.healthBreakdown,
-        categoryChart: analytics.categoryChart,
-        monthlyChart: analytics.monthlyChart
-      }
-    });
-    
-  } catch (error) {
-    console.error("Dashboard Summary Error:", error);
+financialHealthScore:
+summary.analytics.financialHealthScore,
 
-    res.status(500).json({
-      success: false,
-      message: "Dashboard summary could not be loaded"
-    });
-  }
-};
+financialHealthLabel:
+summary.analytics.financialHealthLabel,
 
-module.exports = {
-  getDashboardSummary
-};
+healthBreakdown:
+summary.analytics.healthBreakdown,
+
+categoryChart:
+summary.analytics.categoryChart,
+
+monthlyChart:
+summary.analytics.monthlyChart
+
+}
+
+});

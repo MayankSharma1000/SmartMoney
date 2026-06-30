@@ -4,144 +4,129 @@ const Investment = require("../models/Investment");
 
 const {
   generateAnalytics
-} = require("./analyticsService");
+} = require("../analytics/analyticsEngine");
 
 async function getDashboardData(userId) {
-
-  /* ============================= */
-  /* FETCH DATA (Parallel Queries) */
-  /* ============================= */
 
   const [expenses, savings, investments] =
     await Promise.all([
 
-      Expense.find({
-        user: userId
-      }).sort({
+      Expense.find({ user: userId }).sort({
         date: -1
       }),
 
-      Savings.find({
-        user: userId
-      }),
+      Savings.find({ user: userId }),
 
-      Investment.find({
-        user: userId
-      })
+      Investment.find({ user: userId })
 
     ]);
 
-  /* ============================= */
-  /* TOTALS */
-  /* ============================= */
+  const totalExpenses =
+    expenses.reduce(
 
-  const totalExpenses = expenses.reduce(
-    (sum, item) =>
-      sum + Number(item.amount || 0),
-    0
-  );
+      (sum, item)=>
 
-  const totalSavings = savings.reduce(
+      sum+Number(item.amount||0),
 
-    (sum, item) =>
+      0
 
-      sum +
+    );
 
-      Number(
+  const totalSavings =
+    savings.reduce(
 
-        item.currentAmount ||
+      (sum,item)=>
 
-        item.savedAmount ||
-
-        item.saved ||
-
-        item.amount ||
-
-        0
-
-      ),
-
-    0
-
-  );
-
-  const totalInvested = investments.reduce(
-
-    (sum, item) =>
-
-      sum +
+      sum+
 
       Number(
 
-        item.investedAmount ||
+      item.currentAmount||
 
-        item.invested ||
+      item.savedAmount||
 
-        item.amount ||
+      item.saved||
 
-        item.purchaseValue ||
+      item.amount||
 
-        0
+      0
 
       ),
 
-    0
+      0
 
-  );
+    );
+
+  const totalInvested =
+    investments.reduce(
+
+      (sum,item)=>
+
+      sum+
+
+      Number(
+
+      item.investedAmount||
+
+      item.amount||
+
+      item.purchaseValue||
+
+      0
+
+      ),
+
+      0
+
+    );
 
   const currentInvestmentValue =
     investments.reduce(
 
-      (sum, item) =>
+      (sum,item)=>
 
-        sum +
+      sum+
 
-        Number(
+      Number(
 
-          item.currentValue ||
+      item.currentValue||
 
-          item.current ||
+      item.marketValue||
 
-          item.marketValue ||
+      item.amount||
 
-          item.value ||
+      item.investedAmount||
 
-          item.investedAmount ||
+      0
 
-          item.amount ||
-
-          0
-
-        ),
+      ),
 
       0
 
     );
 
   const investmentProfit =
-    currentInvestmentValue -
+    currentInvestmentValue-
     totalInvested;
 
-  /* ============================= */
-  /* ANALYTICS */
-  /* ============================= */
-
   const analytics =
-    generateAnalytics({
+    generateAnalytics(
 
-      totalExpenses,
+      {
 
-      totalSavings,
+        totalExpenses,
 
-      currentInvestmentValue
+        totalSavings,
 
-    });
+        currentInvestmentValue
 
-  /* ============================= */
-  /* RETURN */
-  /* ============================= */
+      },
 
-  return {
+      expenses
+
+    );
+
+  return{
 
     totalExpenses,
 
@@ -153,16 +138,14 @@ async function getDashboardData(userId) {
 
     investmentProfit,
 
-    analytics,
-
-    expenses
+    analytics
 
   };
 
 }
 
-module.exports = {
+module.exports={
 
-  getDashboardData
+getDashboardData
 
 };
