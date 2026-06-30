@@ -19,6 +19,14 @@ const aiRoutes = require("./routes/aiRoutes");
 const feedbackRoutes = require("./routes/feedbackRoutes");
 
 const app = express();
+const morgan = require("morgan");
+const logger = require("./utils/logger");
+
+app.use(
+  morgan(
+    "dev"
+  )
+);
 
 /* ========================= */
 /* DATABASE */
@@ -106,6 +114,11 @@ app.use((err, req, res, next) => {
 /* ========================= */
 
 const PORT = process.env.PORT || 5500;
+
+const errorHandler =
+require("./middleware/errorHandler");
+
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`🚀 Smart Expense Tracker Server running on port ${PORT}`);

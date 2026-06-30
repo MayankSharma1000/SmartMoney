@@ -54,8 +54,9 @@ function Analytics() {
         <AnalyticsHeader />
   
         <InsightCards />
-        <AIFinancialCoach />
-  
+        
+        <AIFinancialCoach analytics={dashboardData?.analytics}
+/>  
         <section className="analytics-main-grid">
           <FinancialHealth />
           <SpendingOverview

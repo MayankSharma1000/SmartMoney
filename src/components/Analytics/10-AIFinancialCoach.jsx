@@ -1,6 +1,16 @@
 import React from "react";
 
-function AIFinancialCoach() {
+function AIFinancialCoach({ analytics }) {
+
+  const prediction = analytics?.prediction || {};
+
+  const insights = analytics?.insights || [];
+
+  const health =
+    analytics?.financialHealthScore || 0;
+
+  const healthLabel =
+    analytics?.financialHealthLabel || "Unknown";
 
   return (
 
@@ -25,7 +35,7 @@ function AIFinancialCoach() {
           <p>
 
             Based on your latest spending,
-            savings and investments.
+            savings and investment activity.
 
           </p>
 
@@ -33,11 +43,23 @@ function AIFinancialCoach() {
 
         <div className="coach-score">
 
-          <span>Health</span>
+          <span>
 
-          <h1>86</h1>
+            {healthLabel}
 
-          <small>/100</small>
+          </span>
+
+          <h1>
+
+            {health}
+
+          </h1>
+
+          <small>
+
+            /100
+
+          </small>
 
         </div>
 
@@ -47,17 +69,21 @@ function AIFinancialCoach() {
 
         <div>
 
-          <p>Prediction</p>
+          <p>
+
+            Predicted Savings
+
+          </p>
 
           <h1>
 
-            ₹18,450
+            ₹{prediction.predictedSavings?.toLocaleString("en-IN") || 0}
 
           </h1>
 
           <span>
 
-            Expected Monthly Savings
+            Expected Next Month
 
           </span>
 
@@ -65,13 +91,21 @@ function AIFinancialCoach() {
 
         <div>
 
-          <p>Confidence</p>
+          <p>
 
-          <h1>92%</h1>
+            Emergency Fund
+
+          </p>
+
+          <h1>
+
+            {prediction.monthsRemaining ?? "--"}
+
+          </h1>
 
           <span>
 
-            AI Confidence Score
+            Months Remaining
 
           </span>
 
@@ -81,29 +115,49 @@ function AIFinancialCoach() {
 
       <div className="coach-suggestions">
 
-        <div>
+        {insights.length > 0 ? (
 
-          ✓ Food spending increased by 18%
+          insights.map((item, index) => (
 
-        </div>
+            <div key={index}>
 
-        <div>
+              <strong>
 
-          ✓ Fuel spending decreased by 6%
+                {item.title}
 
-        </div>
+              </strong>
 
-        <div>
+              <p>
 
-          ✓ Emergency fund is growing steadily
+                {item.message}
 
-        </div>
+              </p>
 
-        <div>
+            </div>
 
-          ✓ Budget discipline is excellent
+          ))
 
-        </div>
+        ) : (
+
+          <div>
+
+            <strong>
+
+              No Insights Yet
+
+            </strong>
+
+            <p>
+
+              Add more expenses, savings and
+              investments to receive
+              personalized AI recommendations.
+
+            </p>
+
+          </div>
+
+        )}
 
       </div>
 

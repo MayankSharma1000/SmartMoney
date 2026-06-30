@@ -3,10 +3,18 @@ const {
   } = require("./predictionEngine");
 
 const {
+    generateInsights
+  }=require("./insightGenerator");
+
+const {
     calculateFinancialScore
   } = require("./financialScore");
   
-  const {
+const {
+    generateGoalProgress
+  } = require("./goalEngine");
+
+const {
     generateCategoryChart,
     generateMonthlyChart
   } = require("./chartGenerator");
@@ -44,7 +52,37 @@ const {
           summary.currentInvestmentValue
     
       });
-  
+
+      const goal =
+      generateGoalProgress({
+
+        totalSavings:
+          summary.totalSavings,
+
+        monthlySavings:
+          prediction.monthlySavings
+
+      });
+      
+      const insights=
+        generateInsights({
+
+        totalExpenses:
+        summary.totalExpenses,
+
+        totalSavings:
+        summary.totalSavings,
+
+        currentInvestmentValue:
+        summary.currentInvestmentValue,
+
+        prediction,
+
+        financialHealthScore:
+        financial.score
+
+        });
+      
     return {
   
       financialHealthScore:
@@ -79,7 +117,9 @@ const {
       },
       categoryChart: generateCategoryChart(expenses),
       monthlyChart: generateMonthlyChart(expenses),
-      prediction
+      prediction,
+      goal,
+      insights
     };
   }
   
