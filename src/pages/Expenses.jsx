@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import Button from "../components/ui/Button/Button";
 
 import {
   FaPlus,
@@ -330,7 +331,7 @@ function Expenses() {
             <option>Net Banking</option>
           </select>
 
-          <button
+          <Button
             className="auth-submit"
             type="submit"
             disabled={submitLoading}
@@ -348,7 +349,7 @@ function Expenses() {
             {submitLoading
               ? "Adding..."
               : "Add Expense"}
-          </button>
+          </Button>
         </div>
       </form>
           <div className="expenses-panel glass-card">
@@ -396,7 +397,7 @@ function Expenses() {
                 ))}
               </select>
 
-              <button onClick={clearFilters}>Clear</button>
+              <Button onClick={clearFilters}>Clear</Button>
             </div>
 
             <div className="filtered-summary">
@@ -449,9 +450,9 @@ function Expenses() {
                           -₹{Number(expense.amount || 0).toLocaleString("en-IN")}
                         </strong>
 
-                        <button onClick={() => handleDelete(expense._id)}>
+                        <Button onClick={() => handleDelete(expense._id)}>
                           <FaTrash />
-                        </button>
+                        </Button>
                       </div>
                     </div>
                   ))}
@@ -468,7 +469,7 @@ function Expenses() {
                     {Array.from(
                       { length: totalPages },
                       (_, index) => (
-                        <button
+                        <Button
                           key={index}
                           onClick={() =>
                             setCurrentPage(index + 1)
@@ -487,7 +488,7 @@ function Expenses() {
                           }}
                         >
                           {index + 1}
-                        </button>
+                        </Button>
                       )
                     )}
                 </div>

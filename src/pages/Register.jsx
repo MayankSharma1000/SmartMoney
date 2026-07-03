@@ -1,7 +1,7 @@
-import React from "react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import Button from "../components/ui/Button/Button";
 import {
   FaWallet,
   FaUser,
@@ -42,7 +42,7 @@ function Register() {
 
     try {
       await register(formData);
-      navigate("/dashboard");
+      navigate("/onboarding");
     } catch (err) {
       setError(
         err.response?.data?.message || "Registration failed. Try again."
@@ -132,7 +132,7 @@ function Register() {
               <input
                 type="text"
                 name="name"
-                placeholder="Mayank Sharma"
+                placeholder="Enter full name"
                 value={formData.name}
                 onChange={handleChange}
                 required
@@ -147,7 +147,7 @@ function Register() {
               <input
                 type="email"
                 name="email"
-                placeholder="mayank@example.com"
+                placeholder="Enter your email"
                 value={formData.email}
                 onChange={handleChange}
                 required
@@ -171,10 +171,14 @@ function Register() {
             </div>
           </label>
 
-          <button className="auth-submit" type="submit" disabled={loading}>
-            {loading ? "Creating account..." : "Create Account"}
-            {!loading && <FaArrowRight />}
-          </button>
+          <Button
+            type="submit"
+            loading={loading}
+            className="auth-submit"
+            icon={!loading ? <FaArrowRight /> : null}
+          >
+            Create Account
+          </Button>
 
           <p className="auth-switch">
             Already have an account? <Link to="/login">Login</Link>

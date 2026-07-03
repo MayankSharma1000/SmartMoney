@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Button from "../components/ui/Button/Button";
 import Sidebar from "../components/Sidebar/Sidebar.jsx";
 import Navbar from "../components/Navbar/Navbar.jsx";
 import { setBudget } from "../services/budgetService.js";
@@ -66,9 +67,9 @@ function Budget() {
             required
           />
 
-          <button className="auth-submit" type="submit" disabled={saving}>
+          <Button className="auth-submit" type="submit" disabled={saving}>
             {saving ? "Saving..." : "Save Budget"}
-          </button>
+          </Button>
 
           {message && <p className="progress-text">{message}</p>}
         </form>

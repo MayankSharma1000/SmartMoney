@@ -130,7 +130,55 @@ const loginUser = async (req, res) => {
   }
 };
 
+/* ========================= */
+/* COMPLETE ONBOARDING */
+/* ========================= */
+
+const completeOnboarding = async (req, res) => {
+  try {
+
+    const {
+      monthlyIncome,
+      currency,
+      employmentType
+    } = req.body;
+
+    const user = await User.findById(req.user._id);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found"
+      });
+    }
+
+    user.monthlyIncome = monthlyIncome;
+    user.currency = currency;
+    user.employmentType = employmentType;
+    user.onboardingCompleted = true;
+
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Onboarding completed successfully",
+      user
+    });
+
+  } catch (error) {
+
+    console.error(error);
+
+    res.status(500).json({
+      success: false,
+      message: "Internal Server Error"
+    });
+
+  }
+};
+
 module.exports = {
   registerUser,
-  loginUser
+  loginUser,
+  completeOnboarding
 };

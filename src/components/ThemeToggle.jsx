@@ -1,12 +1,13 @@
 import React from "react";
 import { FaMoon, FaSun } from "react-icons/fa";
 import { useTheme } from "../context/ThemeContext";
+import Button from "../components/ui/Button/Button";
 
 function ThemeToggle() {
   const { theme, toggleTheme } = useTheme();
 
   return (
-    <button
+    <Button
       className="theme-toggle"
       onClick={toggleTheme}
       aria-label="Toggle Theme"
@@ -24,7 +25,7 @@ function ThemeToggle() {
           )}
         </div>
       </div>
-    </button>
+    </Button>
   );
 }
 

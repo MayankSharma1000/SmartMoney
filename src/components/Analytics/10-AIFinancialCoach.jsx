@@ -1,4 +1,5 @@
 import React from "react";
+import Button from "../ui/Button/Button";
 
 function AIFinancialCoach({ analytics }) {
 
@@ -161,11 +162,11 @@ function AIFinancialCoach({ analytics }) {
 
       </div>
 
-      <button className="coach-button">
+      <Button className="coach-button">
 
         Generate Full AI Report →
 
-      </button>
+      </Button>
 
     </section>
 

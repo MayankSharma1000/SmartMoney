@@ -19,6 +19,7 @@ import {
 
 import { Doughnut } from "react-chartjs-2";
 
+import Button from "../components/ui/Button/Button";
 import Sidebar from "../components/Sidebar/Sidebar.jsx";
 import Navbar from "../components/Navbar/Navbar.jsx";
 
@@ -411,10 +412,10 @@ function RecurringExpenses() {
               required
             />
 
-            <button className="auth-submit" type="submit">
+            <Button className="auth-submit" type="submit">
               <FaPlus />
               Add Recurring
-            </button>
+            </Button>
           </form>
 
           <div className="glass-card recurring-list-card">
@@ -458,9 +459,9 @@ function RecurringExpenses() {
                       ₹{Number(item.amount).toLocaleString("en-IN")}
                     </strong>
 
-                    <button onClick={() => handleDelete(item.id)}>
+                    <Button onClick={() => handleDelete(item.id)}>
                       <FaTrash />
-                    </button>
+                    </Button>
                   </div>
                 </div>
               ))}

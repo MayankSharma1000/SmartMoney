@@ -6,6 +6,7 @@ import {
   FaSignOutAlt
 } from "react-icons/fa";
 
+import Button from "../components/ui/Button/Button";
 import Sidebar from "../components/Sidebar/Sidebar.jsx";
 import Navbar from "../components/Navbar/Navbar.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
@@ -98,10 +99,10 @@ function Support() {
                 required
               />
 
-              <button className="auth-submit" type="submit" disabled={sending}>
+              <Button className="auth-submit" type="submit" disabled={sending}>
                 <FaPaperPlane />
                 {sending ? "Sending..." : "Send Feedback"}
-              </button>
+              </Button>
 
               {message && <p className="progress-text">{message}</p>}
             </form>
@@ -119,10 +120,10 @@ function Support() {
               </div>
             </div>
 
-            <button className="support-logout-btn" onClick={logout}>
+            <Button className="support-logout-btn" onClick={logout}>
               <FaSignOutAlt />
               Logout Securely
-            </button>
+            </Button>
           </div>
         </section>
 

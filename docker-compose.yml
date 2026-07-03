@@ -1,0 +1,39 @@
+version: "3.9"
+
+services:
+
+  backend:
+    build: .
+    container_name: expense-backend
+
+    ports:
+      - "5500:5500"
+
+    env_file:
+      - .env
+
+    depends_on:
+      - mongodb
+
+    volumes:
+      - .:/app
+
+    working_dir: /app/server
+
+    command: node server.js
+
+  mongodb:
+    image: mongo:8
+
+    container_name: expense-mongodb
+
+    restart: always
+
+    ports:
+      - "27017:27017"
+
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:

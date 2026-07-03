@@ -1,5 +1,5 @@
 import React from "react";
-
+import Button from "../ui/Button/Button";
 /* ========================================= */
 /* COMPONENT */
 /* ========================================= */
@@ -32,7 +32,7 @@ function AnalyticsHeader() {
 
       <div className="page-header-actions">
 
-        <button className="analytics-date-btn">
+        <Button className="analytics-date-btn">
 
           <span>📅</span>
 
@@ -48,7 +48,7 @@ function AnalyticsHeader() {
             ▼
           </span>
 
-        </button>
+        </Button>
 
       </div>
 

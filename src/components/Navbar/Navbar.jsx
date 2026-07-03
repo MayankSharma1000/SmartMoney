@@ -1,4 +1,5 @@
 import React from "react";
+import Button from "../ui/Button/Button";
 import "../../styles/Navbar.css";
 import {
   FaBell,
@@ -47,13 +48,13 @@ function Navbar() {
 
       <div className="navbar-right">
 
-        <button className="notification-btn">
+        <Button className="notification-btn">
 
           <FaBell />
 
           <span className="notification-dot"></span>
 
-        </button>
+        </Button>
 
         <div className="connection-status">
 

@@ -21,11 +21,6 @@ const userSchema = new mongoose.Schema(
       required: [true, "Password is required"]
     },
 
-    monthlyIncome: {
-      type: Number,
-      default: 0
-    },
-
     savingsTarget: {
       type: Number,
       default: 0
@@ -40,7 +35,47 @@ const userSchema = new mongoose.Schema(
       type: String,
       enum: ["user", "admin"],
       default: "user"
+    },
+
+    monthlyIncome: {
+      type: Number,
+      default: null
+    },
+    
+    currency: {
+      type: String,
+      enum: [
+        "INR",
+        "USD",
+        "EUR",
+        "GBP",
+        "AED",
+        "SGD",
+        "CAD",
+        "AUD",
+        "JPY"
+      ],
+      default: "INR"
+    },
+    
+    employmentType: {
+      type: String,
+      enum: [
+        "Student",
+        "Salaried",
+        "Business",
+        "Freelancer",
+        "Retired",
+        "Other"
+      ],
+      default: null
+    },
+    
+    onboardingCompleted: {
+      type: Boolean,
+      default: false
     }
+
   },
   {
     timestamps: true

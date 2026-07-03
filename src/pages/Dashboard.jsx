@@ -7,6 +7,7 @@ import {
   FaLightbulb
 } from "react-icons/fa";
 
+import Button from "../components/ui/Button/Button";
 import Sidebar from "../components/Sidebar/Sidebar.jsx";
 import Navbar from "../components/Navbar/Navbar.jsx";
 import MonthlyOverview from "../components/DashboardWidgets/MonthlyOverview.jsx";
@@ -135,13 +136,19 @@ function Dashboard() {
         </section>
 
         <div className="report-actions">
-          <button onClick={() => exportPDFReport(reportData)}>
-            Download PDF Report
-          </button>
+          <Button
+            variant="secondary"
+            onClick={() => exportPDFReport(reportData)}
+          >
+            Export PDF
+          </Button>
 
-          <button onClick={() => exportExcelReport(reportData)}>
-            Download Excel Report
-          </button>
+          <Button
+            variant="secondary"
+            onClick={() => exportExcelReport(reportData)}
+          >
+            Export Excel
+          </Button>
         </div>
 
         <section className="dashboard-grid">

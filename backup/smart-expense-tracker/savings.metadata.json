@@ -1,0 +1,1 @@
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_"},{"v":{"$numberInt":"2"},"key":{"user":{"$numberInt":"1"},"goalName":{"$numberInt":"1"}},"name":"user_1_goalName_1","background":true}],"uuid":"2e343a6a97c140c496379ccbc4e6ff86","collectionName":"savings","type":"collection"}

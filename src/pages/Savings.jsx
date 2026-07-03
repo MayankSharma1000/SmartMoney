@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FaPlus, FaTrash, FaPiggyBank } from "react-icons/fa";
 
+import Button from "../components/ui/Button/Button";
 import Sidebar from "../components/Sidebar/Sidebar.jsx";
 import Navbar from "../components/Navbar/Navbar.jsx";
 
@@ -181,10 +182,15 @@ function Savings() {
               onChange={handleChange}
             />
 
-            <button className="auth-submit" type="submit" disabled={submitLoading}>
+            <Button
+              type="submit"
+              className="auth-submit"
+              disabled={submitLoading}
+              loading={submitLoading}
+            >
               <FaPlus />
-              {submitLoading ? "Adding..." : "Add Goal"}
-            </button>
+              Add Goal
+            </Button>
           </form>
 
           <div className="expenses-panel glass-card">
@@ -246,9 +252,15 @@ function Savings() {
                       <div className="expense-actions">
                         <strong className="income">{progress}%</strong>
 
-                        <button onClick={() => handleDelete(goal._id)}>
+                        <Button
+                          type="button"
+                          variant="danger"
+                          size="sm"
+                          onClick={() => handleDelete(goal._id)}
+                          aria-label="Delete savings goal"
+                        >
                           <FaTrash />
-                        </button>
+                        </Button>
                       </div>
                     </div>
                   );

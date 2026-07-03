@@ -12,6 +12,7 @@ import {
   FaSave
 } from "react-icons/fa";
 
+import Button from "../components/ui/Button/Button";
 import Sidebar from "../components/Sidebar/Sidebar.jsx";
 import Navbar from "../components/Navbar/Navbar.jsx";
 
@@ -86,13 +87,13 @@ function Profile() {
                 </p>
               </div>
 
-              <button
+              <Button
                 className="auth-submit profile-edit-btn"
                 onClick={isEditing ? handleSave : () => setIsEditing(true)}
               >
                 {isEditing ? <FaSave /> : <FaEdit />}
                 {isEditing ? "Save Profile" : "Edit Profile"}
-              </button>
+              </Button>
             </div>
 
             <div className="profile-details">

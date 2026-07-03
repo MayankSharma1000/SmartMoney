@@ -1,7 +1,7 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import Button from "../components/ui/Button/Button";
 import {
   FaWallet,
   FaChartLine,
@@ -134,7 +134,7 @@ function Login() {
               <input
                 type="email"
                 name="email"
-                placeholder="mayank@example.com"
+                placeholder="Enter your email"
                 value={formData.email}
                 onChange={handleChange}
                 required
@@ -157,15 +157,23 @@ function Login() {
             </div>
           </label>
 
-          <button className="auth-submit" type="submit" disabled={loading}>
-            {loading ? "Logging in..." : "Login"}
-            {!loading && <FaArrowRight />}
-          </button>
+          <Button
+            type="submit"
+            loading={loading}
+            className="auth-submit"
+            icon={!loading ? <FaArrowRight /> : null}
+          >
+            Login
+          </Button>
 
-          <button className="google-btn" type="button">
-            <FaGoogle />
+          <Button
+            variant="ghost"
+            type="button"
+            className="google-btn"
+            icon={<FaGoogle />}
+          >
             Continue with Google
-          </button>
+          </Button>
 
           <p className="auth-switch">
             New here? <Link to="/register">Create an account</Link>

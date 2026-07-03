@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Button from "./ui/Button/Button";
 
 import {
   FaBell,
@@ -75,18 +76,18 @@ function Navbar() {
           />
         </div>
 
-        <button
+        <Button
           className="notification-btn"
           title="Notifications"
         >
           <FaBell />
 
           <span className="notification-dot"></span>
-        </button>
+        </Button>
 
         <ThemeToggle />
 
-        <button
+        <Button
           className="user-avatar profile-avatar-btn"
           onClick={() =>
             navigate("/profile")
@@ -100,7 +101,7 @@ function Navbar() {
           ) : (
             <FaUser />
           )}
-        </button>
+        </Button>
       </div>
     </header>
   );

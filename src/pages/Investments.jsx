@@ -10,6 +10,7 @@ import {
 
 import Sidebar from "../components/Sidebar/Sidebar.jsx";
 import Navbar from "../components/Navbar/Navbar.jsx";
+import Button from "../components/ui/Button/Button";
 
 import {
   getInvestments,
@@ -250,10 +251,15 @@ function Investments() {
               onChange={handleChange}
             />
 
-            <button className="auth-submit" type="submit" disabled={submitLoading}>
+            <Button
+              type="submit"
+              variant="primary"
+              className="auth-submit"
+              disabled={submitLoading}
+            >
               <FaPlus />
               {submitLoading ? "Adding..." : "Add Investment"}
-            </button>
+            </Button>
           </form>
 
           <div className="expenses-panel glass-card">
@@ -303,9 +309,14 @@ function Investments() {
                           ₹{current.toLocaleString("en-IN")} ({itemReturn}%)
                         </strong>
 
-                        <button onClick={() => handleDelete(item._id)}>
+                        <Button
+                          variant="danger"
+                          size="sm"
+                          onClick={() => handleDelete(item._id)}
+                          aria-label="Delete investment"
+                        >
                           <FaTrash />
-                        </button>
+                        </Button>
                       </div>
                     </div>
                   );
