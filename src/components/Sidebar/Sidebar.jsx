@@ -8,11 +8,11 @@ import {
   FaReceipt,
   FaPiggyBank,
   FaChartLine,
-  FaUser,
   FaCalendarAlt,
-  FaHeadset,
-  FaCrown,
-  FaChevronRight
+  FaCog,
+  FaSignOutAlt,
+  FaTrashAlt,
+  FaHeartbeat
 } from "react-icons/fa";
 
 function Sidebar() {
@@ -48,14 +48,9 @@ function Sidebar() {
       icon: <FaCalendarAlt />
     },
     {
-      name: "Profile",
-      path: "/profile",
-      icon: <FaUser />
-    },
-    {
-      name: "Support",
-      path: "/support",
-      icon: <FaHeadset />
+      name: "Settings",
+      path: "/settings",
+      icon: <FaCog />
     }
   ];
 
@@ -72,7 +67,7 @@ function Sidebar() {
 
         <div>
           <h2>SmartMoney</h2>
-          <p>Expense Intelligence</p>
+          <p>Personal Finance OS</p>
         </div>
 
       </div>
@@ -101,55 +96,30 @@ function Sidebar() {
       </nav>
 
       {/* ================= SIDEBAR FOOTER ================= */}
-
       <div className="sidebar-footer">
-
-        {/* Premium Card */}
-
-        <div className="sidebar-premium">
-
-          <div className="premium-icon">
-            <FaCrown />
+        <div className="financial-health-card">
+          <FaHeartbeat className="health-icon" />
+          <div>
+            <span>Financial Health</span>
+            <h3>87 / 100</h3>
+            <small>Excellent</small>
           </div>
-
-          <div className="premium-content">
-
-            <h4>Premium Dashboard</h4>
-
-            <p>
-              AI Reports & Smart Insights
-            </p>
-
-          </div>
-
         </div>
 
-        {/* User Profile */}
+        <div className="sidebar-actions">
+          <button className="sidebar-action-btn">
+            <FaSignOutAlt />
+            <span>Logout</span>
+          </button>
 
-        <div className="sidebar-profile">
-
-          <div className="sidebar-profile-avatar">
-            MS
-          </div>
-
-          <div className="sidebar-profile-info">
-
-            <h4>Mayank Sharma</h4>
-
-            <p>Full Stack Developer</p>
-
-          </div>
-
-          <FaChevronRight
-            className="profile-arrow"
-          />
-
+          <button className="sidebar-action-btn danger">
+            <FaTrashAlt />
+            <span>Delete Account</span>
+          </button>
         </div>
-
       </div>
-
-    </aside>
-  );
+      </aside>
+    );
 }
 
 export default Sidebar;
