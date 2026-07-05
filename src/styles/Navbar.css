@@ -1,163 +1,85 @@
 .navbar{
 
     display:flex;
-    
-    align-items:center;
-    
+
     justify-content:space-between;
-    
-    padding:28px 34px;
-    
-    margin-bottom:35px;
-    
-    }
-    
-    .navbar-left h1{
-    
-    font-size:34px;
-    
-    font-weight:700;
-    
-    color:white;
-    
-    }
-    
-    .navbar-center{
-    
+
+    align-items:center;
+
+    margin-bottom:36px;
+
+}
+
+.navbar-spacer{
+
     flex:1;
-    
+
+}
+
+.navbar-actions{
+
     display:flex;
-    
-    justify-content:center;
-    
-    }
-    
-    .search-box{
-    
-    display:flex;
-    
+
     align-items:center;
-    
-    gap:14px;
-    
-    background:#121826;
-    
-    padding:14px 22px;
-    
-    width:420px;
-    
-    border-radius:16px;
-    
-    border:1px solid rgba(255,255,255,.06);
-    
-    transition:.25s;
-    
-    }
-    
-    .search-box:hover{
-    
-    border-color:#3b82f6;
-    
-    }
-    
-    .search-box input{
-    
-    background:none;
-    
-    border:none;
-    
-    outline:none;
-    
-    color:white;
-    
-    width:100%;
-    
-    font-size:15px;
-    
-    }
-    
-    .navbar-right{
-    
-    display:flex;
-    
-    align-items:center;
-    
-    gap:22px;
-    
-    }
-    
-    .notification-btn{
-    
-    width:46px;
-    
-    height:46px;
-    
-    border:none;
-    
-    border-radius:14px;
-    
-    background:#121826;
-    
-    color:white;
-    
-    cursor:pointer;
-    
+
+    gap:18px;
+
+}
+
+.notification-btn{
+
     position:relative;
-    
-    }
-    
-    .notification-dot{
-    
-    position:absolute;
-    
-    top:11px;
-    
-    right:11px;
-    
-    width:8px;
-    
-    height:8px;
-    
-    background:#22c55e;
-    
-    border-radius:50%;
-    
-    }
-    
-    .connection-status{
-    
+
+    width:50px;
+
+    height:50px;
+
     display:flex;
-    
+
     align-items:center;
-    
-    gap:8px;
-    
-    background:#121826;
-    
-    padding:10px 18px;
-    
-    border-radius:14px;
-    
-    font-weight:600;
-    
-    }
-    
-    .online-dot{
-    
+
+    justify-content:center;
+
+    border:none;
+
+    border-radius:16px;
+
+    cursor:pointer;
+
+    background:rgba(255,255,255,.05);
+
+    border:1px solid rgba(255,255,255,.08);
+
+    color:var(--text-primary);
+
+    transition:.25s;
+
+}
+
+.notification-btn:hover{
+
+    transform:translateY(-3px);
+
+    border-color:rgba(59,130,246,.25);
+
+    background:rgba(59,130,246,.12);
+
+}
+
+.notification-dot{
+
+    position:absolute;
+
+    top:12px;
+
+    right:12px;
+
     width:8px;
-    
+
     height:8px;
-    
+
     border-radius:50%;
-    
-    background:#22c55e;
-    
-    }
-    
-    .navbar-date{
-    
-    color:#94a3b8;
-    
-    font-size:14px;
-    
-    }
+
+    background:#ef4444;
+
+}

@@ -1,13 +1,10 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 
 import {
   FaPlus,
   FaTrash,
   FaCalendarAlt,
-  FaWifi,
-  FaDumbbell,
-  FaHome,
-  FaMoneyBillWave
+  FaHome
 } from "react-icons/fa";
 
 import {
@@ -18,6 +15,7 @@ import {
 } from "chart.js";
 
 import { Doughnut } from "react-chartjs-2";
+import { recurringExpenseIcons } from "../utils/recurringExpenseIcons";
 
 import Button from "../components/ui/Button/Button";
 import Sidebar from "../components/Sidebar/Sidebar.jsx";
@@ -38,7 +36,6 @@ function RecurringExpenses() {
       category: "EMI",
       frequency: "Monthly",
       nextDueDate: "2026-07-05",
-      icon: <FaMoneyBillWave />
     },
     {
       id: 2,
@@ -47,7 +44,6 @@ function RecurringExpenses() {
       category: "Bills",
       frequency: "Monthly",
       nextDueDate: "2026-06-25",
-      icon: <FaWifi />
     },
     {
       id: 3,
@@ -56,7 +52,6 @@ function RecurringExpenses() {
       category: "Health",
       frequency: "Monthly",
       nextDueDate: "2026-07-01",
-      icon: <FaDumbbell />
     }
   ]);
 
@@ -68,51 +63,57 @@ function RecurringExpenses() {
     nextDueDate: ""
   });
 
-  const totalMonthly = items.reduce(
-    (sum, item) => sum + Number(item.amount || 0),
-    0
-  );
+  const totalMonthly = useMemo(() => {
+    return items.reduce(
+      (sum, item) => sum + Number(item.amount || 0),
+      0
+    );
+  }, [items]);
   
-  const nextPayment = [...items].sort(
-    (a, b) =>
-      new Date(a.nextDueDate) -
-      new Date(b.nextDueDate)
-  )[0];
+  const nextPayment = useMemo(() => {
+    return [...items].sort(
+      (a, b) =>
+        new Date(a.nextDueDate) -
+        new Date(b.nextDueDate)
+    )[0];
+  }, [items]);
   
-  const annualCommitment =
-    totalMonthly * 12;
+  const annualCommitment = useMemo(() => {
+    return totalMonthly * 12;
+  }, [totalMonthly]);
 
-  const categoryTotals = {};
-
+  const categoryTotals = useMemo(() => {
+    const totals = {};
+  
     items.forEach((item) => {
-      const category =
-        item.category || "Other";
-    
-      categoryTotals[category] =
-        (categoryTotals[category] || 0) +
+      const category = item.category || "Other";
+  
+      totals[category] =
+        (totals[category] || 0) +
         Number(item.amount || 0);
     });
-    
-    const chartData = {
-      labels: Object.keys(categoryTotals),
-    
-      datasets: [
-        {
-          data: Object.values(
-            categoryTotals
-          ),
-    
-          backgroundColor: [
-            "#3b82f6",
-            "#10b981",
-            "#f59e0b",
-            "#ef4444",
-            "#8b5cf6",
-            "#06b6d4"
-          ]
-        }
-      ]
-    };
+  
+    return totals;
+  }, [items]);
+  
+  const chartData = useMemo(() => ({
+    labels: Object.keys(categoryTotals),
+  
+    datasets: [
+      {
+        data: Object.values(categoryTotals),
+  
+        backgroundColor: [
+          "#3b82f6",
+          "#10b981",
+          "#f59e0b",
+          "#ef4444",
+          "#8b5cf6",
+          "#06b6d4"
+        ]
+      }
+    ]
+  }), [categoryTotals]);
   
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -124,27 +125,12 @@ function RecurringExpenses() {
   const handleAddRecurring = (e) => {
     e.preventDefault();
 
-    let icon = <FaCalendarAlt />;
-
-    if (formData.category === "Bills")
-      icon = <FaWifi />;
-
-    if (formData.category === "Health")
-      icon = <FaDumbbell />;
-
-    if (formData.category === "Rent")
-      icon = <FaHome />;
-
-    if (formData.category === "EMI")
-      icon = <FaMoneyBillWave />;
-
     const newItem = {
       id: Date.now(),
       ...formData,
-      amount: Number(formData.amount),
-      icon
+      amount: Number(formData.amount)
     };
-
+    
     setItems((prev) => [newItem, ...prev]);
 
     setFormData({
@@ -157,7 +143,15 @@ function RecurringExpenses() {
   };
 
   const handleDelete = (id) => {
-    setItems((prev) => prev.filter((item) => item.id !== id));
+    const confirmed = window.confirm(
+      "Delete this recurring expense?"
+    );
+  
+    if (!confirmed) return;
+  
+    setItems((prev) =>
+      prev.filter((item) => item.id !== id)
+    );
   };
 
   return (
@@ -177,9 +171,9 @@ function RecurringExpenses() {
 
         <section className="stats-grid">
           <div className="stat-card">
-            <div className="stat-icon">
-              <FaMoneyBillWave />
-            </div>
+          <div className="stat-icon">
+            {recurringExpenseIcons.Bills}
+          </div>
 
             <h2>
               ₹{totalMonthly.toLocaleString("en-IN")}
@@ -215,7 +209,7 @@ function RecurringExpenses() {
 
           <div className="stat-card">
             <div className="stat-icon">
-              <FaWifi />
+              {recurringExpenseIcons.Bills}
             </div>
 
             <h2>
@@ -231,17 +225,8 @@ function RecurringExpenses() {
           </div>
         </section>
 
-        <div className="glass-card" style={{ marginTop: "30px" ,marginBottom: "24px" }}>
-          <div
-            className="chart-title"
-            style={{
-              marginTop: "40px",
-              marginBottom: "24px",
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center"
-            }}
-          >
+        <div className="glass-card recurring-chart-card">
+          <div className="chart-title recurring-chart-header">
             <div>
               <h3>Recurring Expense Breakdown</h3>
               <p>Monthly commitments grouped by category</p>
@@ -252,12 +237,7 @@ function RecurringExpenses() {
             </span>
           </div>
 
-          <div
-            style={{
-              maxWidth: "420px",
-              margin: "0 auto"
-            }}
-          >
+          <div className="recurring-chart">
             <Doughnut
               data={chartData}
               options={{
@@ -270,24 +250,12 @@ function RecurringExpenses() {
             />
           </div>
 
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns:
-                "repeat(auto-fit, minmax(180px, 1fr))",
-              gap: "16px",
-              marginTop: "24px"
-            }}
-          >
+          <div className="recurring-summary-grid">
             {Object.entries(categoryTotals).map(
               ([category, amount]) => (
                 <div
                   key={category}
-                  className="glass-card"
-                  style={{
-                    padding: "16px",
-                    textAlign: "center"
-                  }}
+                  className="glass-card recurring-summary-card"
                 >
                   <h4>{category}</h4>
 
@@ -307,14 +275,8 @@ function RecurringExpenses() {
             )}
           </div>
 
-          <div
-            className="glass-card"
-            style={{
-              marginTop: "20px",
-              padding: "20px"
-            }}
-          >
-            <h3 style={{ marginBottom: "10px" }}>
+          <div className="glass-card recurring-insights">
+            <h3 className="recurring-insights-title">
               Recurring Expense Insights
             </h3>
 
@@ -412,8 +374,17 @@ function RecurringExpenses() {
               required
             />
 
-            <Button className="auth-submit" type="submit">
-              <FaPlus />
+            <Button
+              className="auth-submit"
+              type="submit"
+              disabled={
+                !formData.title ||
+                !formData.amount ||
+                Number(formData.amount) <= 0 ||
+                !formData.nextDueDate
+              }
+            >              
+                <FaPlus />
               Add Recurring
             </Button>
           </form>
@@ -441,8 +412,10 @@ function RecurringExpenses() {
               {items.map((item) => (
                 <div className="expense-row" key={item.id}>
                   <div className="expense-left">
-                    <div className="transaction-icon">{item.icon}</div>
-
+                    <div className="transaction-icon">
+                      {recurringExpenseIcons[item.category] ||
+                        recurringExpenseIcons.Other}
+                      </div>
                     <div>
                       <h4>{item.title}</h4>
                       <p>

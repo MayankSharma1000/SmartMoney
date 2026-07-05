@@ -1,0 +1,84 @@
+/* =====================================================
+   RESPONSIVE DESIGN
+===================================================== */
+
+@media (max-width:1200px){
+
+    .stats-grid{
+
+        grid-template-columns:
+            repeat(2,1fr);
+
+    }
+
+}
+
+@media (max-width:992px){
+
+    .dashboard-grid{
+
+        display:flex;
+
+        flex-direction:column;
+
+    }
+
+    .page-header{
+
+        flex-direction:column;
+
+        gap:18px;
+
+    }
+
+}
+
+@media (max-width:768px){
+
+    .main-content{
+
+        padding:18px;
+
+    }
+
+    .stats-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .charts-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .goal-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+}
+
+@media (max-width:576px){
+
+    h1{
+
+        font-size:2rem;
+
+    }
+
+    .glass-card{
+
+        padding:18px;
+
+    }
+
+    .page-header{
+
+        margin-bottom:24px;
+
+    }
+
+}

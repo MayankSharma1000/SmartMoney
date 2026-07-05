@@ -9,6 +9,7 @@ import {
 import Button from "../components/ui/Button/Button";
 import Sidebar from "../components/Sidebar/Sidebar.jsx";
 import Navbar from "../components/Navbar/Navbar.jsx";
+import DashboardSkeleton from "../components/Dashboard/DashboardSkeleton";
 import { useAuth } from "../context/AuthContext.jsx";
 import {
   submitFeedback,
@@ -16,8 +17,11 @@ import {
 } from "../services/feedbackService.js";
 
 function Support() {
-  const { logout, user } = useAuth();
-
+  const {
+    logout,
+    user,
+    loading
+  } = useAuth();
   const [feedback, setFeedback] = useState("");
   const [feedbackList, setFeedbackList] = useState([]);
   const [message, setMessage] = useState("");
@@ -29,8 +33,9 @@ function Support() {
       const data = await getMyFeedback();
       setFeedbackList(data.feedback || []);
     } catch (err) {
-      console.log(err);
-    }
+      setError(
+        "Unable to load previous feedback."
+      );    }
   };
 
   useEffect(() => {
@@ -60,6 +65,20 @@ function Support() {
       setSending(false);
     }
   };
+
+  if (loading) {
+    return (
+      <div className="app-layout">
+        <Sidebar />
+  
+        <main className="main-content">
+          <Navbar />
+  
+          <DashboardSkeleton />
+        </main>
+      </div>
+    );
+  }
 
   return (
     <div className="app-layout">
@@ -99,8 +118,15 @@ function Support() {
                 required
               />
 
-              <Button className="auth-submit" type="submit" disabled={sending}>
-                <FaPaperPlane />
+              <Button
+                className="auth-submit"
+                type="submit"
+                disabled={
+                  sending ||
+                  !feedback.trim()
+                }
+              >                
+                  <FaPaperPlane />
                 {sending ? "Sending..." : "Send Feedback"}
               </Button>
 
@@ -120,8 +146,21 @@ function Support() {
               </div>
             </div>
 
-            <Button className="support-logout-btn" onClick={logout}>
-              <FaSignOutAlt />
+            <Button
+              className="support-logout-btn"
+              onClick={() => {
+
+                const confirmed = window.confirm(
+                  "Are you sure you want to logout?"
+                );
+
+                if (confirmed) {
+                  logout();
+                }
+
+              }}
+            >
+                <FaSignOutAlt />
               Logout Securely
             </Button>
           </div>
@@ -131,16 +170,21 @@ function Support() {
           <h3>My Feedback History</h3>
 
           {feedbackList.length === 0 ? (
-            <p className="progress-text">No feedback submitted yet.</p>
-          ) : (
+            <div className="empty-widget">
+            <h3>No Feedback Yet</h3>
+            <p> Your submitted feedback will appear here. </p>
+            </div>          
+                ) : (
             <div className="feedback-list">
               {feedbackList.map((item) => (
                 <div className="feedback-item" key={item._id}>
                   <p>{item.message}</p>
 
                   <div className="feedback-meta">
-                    <span>{item.status}</span>
-                    <span>
+                  <span className="feedback-status">
+                    {item.status}
+                  </span>
+                          <span>
                       {new Date(item.createdAt).toLocaleDateString("en-IN")}
                     </span>
                   </div>

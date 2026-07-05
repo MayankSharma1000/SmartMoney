@@ -1,137 +1,119 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Button from "../components/ui/Button/Button";
+
 import { completeOnboarding } from "../services/onboardingService";
+import { useAuth } from "../context/AuthContext";
+
+import ProgressBar from "../components/Onboarding/ProgressBar";
+import WelcomeStep from "../components/Onboarding/WelcomeStep";
+import IncomeStep from "../components/Onboarding/IncomeStep";
+import EmploymentStep from "../components/Onboarding/EmploymentStep";
+import CurrencyStep from "../components/Onboarding/CurrencyStep";
+import GoalsStep from "../components/Onboarding/GoalsStep";
 
 function Onboarding() {
+  const navigate = useNavigate();
 
-    const navigate = useNavigate();
+  const totalSteps = 5;
 
-    const [step, setStep] = useState(0);
+  const [step, setStep] = useState(1);
 
-    const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState({
+    monthlyIncome: "",
+    employmentType: "",
+    currency: "INR"
+  });
 
-        monthlyIncome: "",
+  const nextStep = async () => {
+    if (step < totalSteps) {
+      setStep((prev) => prev + 1);
+      return;
+    }
+  
+    try {
+      setLoading(true);
+      await completeOnboarding(formData);
+      navigate("/dashboard");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-        currency: "INR",
+  const previousStep = () => {
+    if (step > 1) {
+      setStep((prev) => prev - 1);
+    }
+  };
+  const { user } = useAuth();
 
-        employmentType: ""
+  return (
+    <main className="onboarding-page">
 
-    });
+      {step > 1 && step < 6 && (
+        <ProgressBar
+          currentStep={step - 1}
+          totalSteps={4}
+        />
+      )}
 
-    const handleNext = async () => {
+      {step === 1 && (
+        <WelcomeStep
+        userName={user?.name}
+          onNext={nextStep}
+        />
+      )}
 
-        if (step < 3) {
+      {step === 2 && (
+        <IncomeStep
+          value={formData.monthlyIncome}
+          onChange={(value) =>
+            setFormData({
+              ...formData,
+              monthlyIncome: value
+            })
+          }
+          onBack={previousStep}
+          onNext={nextStep}
+        />
+      )}
 
-            setStep(step + 1);
+      {step === 3 && (
+        <EmploymentStep
+          value={formData.employmentType}
+          onChange={(value) =>
+            setFormData({
+              ...formData,
+              employmentType: value
+            })
+          }
+          onBack={previousStep}
+          onNext={nextStep}
+        />
+      )}
 
-            return;
+      {step === 4 && (
+        <CurrencyStep
+          value={formData.currency}
+          onChange={(value) =>
+            setFormData({
+              ...formData,
+              currency: value
+            })
+          }
+          onBack={previousStep}
+          onNext={nextStep}
+        />
+      )}
 
-        }
+      {step === 5 && (
+        <GoalsStep
+          loading={loading}
+          onFinish={nextStep}
+        />
+      )}
 
-        await completeOnboarding(formData);
-
-        navigate("/dashboard");
-
-    };
-
-    return (
-        <div>
-            {step === 0 && (
-                <div>
-                    <h1>Welcome 👋</h1>
-                    <p>
-                        Let's personalize your financial workspace.
-                    </p>
-
-                    <Button onClick={handleNext}>
-                        Continue
-                    </Button>
-                </div>
-            )}
-
-            {step === 1 && (
-                <div>
-                    <h2>
-                        Monthly Income
-                    </h2>
-                    <input
-                        type="number"
-                        value={formData.monthlyIncome}
-                        onChange={(e)=>
-                            setFormData({
-                                ...formData,
-                                monthlyIncome:e.target.value
-                            })
-                        }
-                    />
-
-                    <Button onClick={handleNext}>
-                        Continue
-                    </Button>
-                </div>
-            )}
-
-            {step === 2 && (
-                <div>
-                    <h2>Currency</h2>
-                    <select
-                        value={formData.currency}
-
-                        onChange={(e)=>
-                            setFormData({
-                                ...formData,
-                                currency:e.target.value
-                            })
-                        }
-                    >
-                        <option>INR</option>
-                        <option>USD</option>
-                        <option>EUR</option>
-                        <option>GBP</option>
-                    </select>
-
-                    <Button onClick={handleNext}>
-                        Continue
-                    </Button>
-                </div>
-            )}
-
-            {step === 3 && (
-                <div>
-                    <h2>
-                        Employment
-                    </h2>
-
-                    <select
-                        value={formData.employmentType}
-                        onChange={(e)=>
-
-                            setFormData({
-                                ...formData,
-                                employmentType:e.target.value
-                            })
-                        }
-                    >
-                        <option value="">
-                            Select
-                        </option>
-
-                        <option>Salaried</option>
-                        <option>Student</option>
-                        <option>Business</option>
-                        <option>Freelancer</option>
-                        <option>Other</option>
-                    </select>
-
-                    <Button onClick={handleNext}>
-                        Finish
-                    </Button>
-
-                </div>
-            )}
-        </div>
-    );
+    </main>
+  );
 }
 
 export default Onboarding;

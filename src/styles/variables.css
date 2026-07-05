@@ -2,6 +2,15 @@
     /* Fonts */
     --font-primary: "Inter", sans-serif;
     --font-heading: "Space Grotesk", sans-serif;
+
+    /* Typography */
+    --text-xs: 12px;
+    --text-sm: 14px;
+    --text-md: 16px;
+    --text-lg: 18px;
+    --text-xl: 22px;
+    --text-2xl: 30px;
+    --text-3xl: 42px;
   
     /* Border Radius */
     --radius-sm: 12px;
@@ -9,15 +18,44 @@
     --radius-lg: 24px;
     --radius-xl: 32px;
   
+
+    /* Spacing */
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 20px;
+    --space-6: 24px;
+    --space-8: 32px;
+    --space-10: 40px;
+    --space-12: 48px;
+
     /* Shadows */
     --shadow-sm: 0 4px 20px rgba(0, 0, 0, 0.08);
-  
     --shadow-md: 0 12px 40px rgba(0, 0, 0, 0.12);
-  
     --shadow-lg: 0 25px 60px rgba(0, 0, 0, 0.18);
   
     /* Animation */
     --transition: all 0.25s ease;
+
+    /* Layers */
+    --z-dropdown: 100;
+    --z-sticky: 200;
+    --z-sidebar: 500;
+    --z-navbar: 700;
+    --z-modal: 1000;
+    --z-toast: 1200;
+
+    --focus-ring: 0 0 0 4px rgba(59,130,246,.22);
+
+    --transition-fast: .18s ease;
+    --transition: .25s ease;
+    --transition-slow: .35s ease;
+
+    --container-sm: 720px;
+    --container-md: 960px;
+    --container-lg: 1200px;
+    --container-xl: 1440px;
   }
   
   /* ========================= */

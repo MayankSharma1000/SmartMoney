@@ -1,4 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, {
+  useEffect,
+  useMemo,
+  useState
+} from "react";
+
 import {
   FaPlus,
   FaTrash,
@@ -11,6 +16,9 @@ import {
 import Sidebar from "../components/Sidebar/Sidebar.jsx";
 import Navbar from "../components/Navbar/Navbar.jsx";
 import Button from "../components/ui/Button/Button";
+
+import { investmentTypes } from "../constants/investmentTypes";
+import { investmentIcons } from "../utils/investmentIcons";
 
 import {
   getInvestments,
@@ -34,19 +42,6 @@ function Investments() {
     notes: ""
   });
 
-  const typeIcons = {
-    "Mutual Fund": <FaUniversity />,
-    Stock: <FaChartLine />,
-    ETF: <FaChartLine />,
-    Gold: <FaCoins />,
-    Crypto: <FaBitcoin />,
-    Bond: <FaUniversity />,
-    "Fixed Deposit": <FaUniversity />,
-    PPF: <FaUniversity />,
-    NPS: <FaUniversity />,
-    Other: <FaChartLine />
-  };
-
   const loadInvestments = async () => {
     try {
       setLoading(true);
@@ -67,17 +62,23 @@ function Investments() {
     loadInvestments();
   }, []);
 
-  const totalInvested = investments.reduce(
-    (sum, item) => sum + Number(item.investedAmount || 0),
-    0
-  );
-
-  const currentValue = investments.reduce(
-    (sum, item) => sum + Number(item.currentValue || 0),
-    0
-  );
-
-  const profit = currentValue - totalInvested;
+  const totalInvested = useMemo(() => {
+    return investments.reduce(
+      (sum, item) => sum + Number(item.investedAmount || 0),
+      0
+    );
+  }, [investments]);
+  
+  const currentValue = useMemo(() => {
+    return investments.reduce(
+      (sum, item) => sum + Number(item.currentValue || 0),
+      0
+    );
+  }, [investments]);
+  
+  const profit = useMemo(() => {
+    return currentValue - totalInvested;
+  }, [currentValue, totalInvested]);
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -122,6 +123,10 @@ function Investments() {
   };
 
   const handleDelete = async (id) => {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this investment?"
+    );
+    if (!confirmed) return;
     try {
       setError("");
 
@@ -152,7 +157,7 @@ function Investments() {
 
         {error && <div className="auth-error">{error}</div>}
 
-        <section className="stats-grid" style={{ marginBottom: "24px" }}>
+        <section className="stats-grid investment-stats">          
           <div className="stat-card">
             <p className="stat-title">Total Invested</p>
             <h2 className="stat-value">
@@ -199,16 +204,14 @@ function Investments() {
             />
 
             <select name="type" value={formData.type} onChange={handleChange}>
-              <option>Stock</option>
-              <option>Mutual Fund</option>
-              <option>ETF</option>
-              <option>Gold</option>
-              <option>Crypto</option>
-              <option>Bond</option>
-              <option>Fixed Deposit</option>
-              <option>PPF</option>
-              <option>NPS</option>
-              <option>Other</option>
+            {investmentTypes.map(type => (
+              <option
+                key={type}
+                value={type}
+              >
+                {type}
+              </option>
+            ))}
             </select>
 
             <input
@@ -255,7 +258,12 @@ function Investments() {
               type="submit"
               variant="primary"
               className="auth-submit"
-              disabled={submitLoading}
+              disabled={
+                submitLoading ||
+                !formData.name ||
+                Number(formData.investedAmount) <= 0 ||
+                Number(formData.currentValue) <= 0
+              }
             >
               <FaPlus />
               {submitLoading ? "Adding..." : "Add Investment"}
@@ -275,9 +283,12 @@ function Investments() {
             {loading ? (
               <p className="progress-text">Loading investments...</p>
             ) : investments.length === 0 ? (
-              <p className="progress-text">
-                No investments yet. Add your first investment.
-              </p>
+              <div className="empty-widget">
+                <h3>No Investments Yet</h3>
+                <p>
+                  Start tracking your portfolio by adding your first investment.
+                </p>
+              </div>
             ) : (
               <div className="expense-list">
                 {investments.map((item) => {
@@ -292,14 +303,23 @@ function Investments() {
                     <div className="expense-row" key={item._id}>
                       <div className="expense-left">
                         <div className="transaction-icon">
-                          {typeIcons[item.type] || typeIcons.Other}
+                          {investmentIcons[item.type] || investmentIcons.Other}
                         </div>
 
                         <div>
                           <h4>{item.name}</h4>
                           <p>
-                            {item.type} • Invested ₹
+                            {item.type}
+
+                            {item.platform
+                              ? ` • ${item.platform}`
+                              : ""}
+
+                            {" • "}Invested ₹
                             {invested.toLocaleString("en-IN")}
+                          </p>
+                          <p className="expense-note">
+                            {item.notes || "No notes"}
                           </p>
                         </div>
                       </div>

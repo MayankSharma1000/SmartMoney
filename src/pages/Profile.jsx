@@ -15,6 +15,7 @@ import {
 import Button from "../components/ui/Button/Button";
 import Sidebar from "../components/Sidebar/Sidebar.jsx";
 import Navbar from "../components/Navbar/Navbar.jsx";
+import DashboardSkeleton from "../components/Dashboard/DashboardSkeleton";
 
 import { useAuth } from "../context/AuthContext.jsx";
 import { useDashboard } from "../hooks/useDashboard.js";
@@ -22,8 +23,10 @@ import { useBudget } from "../hooks/useBudget.js";
 
 function Profile() {
   const { user } = useAuth();
-  const { dashboardData } = useDashboard();
-  const { budget } = useBudget();
+  const {
+    dashboardData,
+    loading
+  } = useDashboard();  const { budget } = useBudget();
 
   const [isEditing, setIsEditing] = useState(false);
 
@@ -34,10 +37,17 @@ function Profile() {
   });
 
   useEffect(() => {
-    const savedProfile = JSON.parse(localStorage.getItem("financeProfile"));
-
-    if (savedProfile) {
-      setProfileData(savedProfile);
+    try {
+      const savedProfile = JSON.parse(
+        localStorage.getItem("financeProfile")
+      );
+  
+      if (savedProfile) {
+        setProfileData(savedProfile);
+      }
+  
+    } catch {
+      localStorage.removeItem("financeProfile");
     }
   }, []);
 
@@ -54,7 +64,41 @@ function Profile() {
   };
 
   const monthlyIncome = Number(profileData.monthlyIncome || 0);
+
   const monthlyBudget = budget?.monthlyBudget || 0;
+  
+  const budgetUsage = React.useMemo(() => {
+  
+    if (!monthlyBudget) return 0;
+  
+    return Math.round(
+      ((dashboardData?.totalExpenses || 0) /
+        monthlyBudget) * 100
+    );
+  
+  }, [dashboardData, monthlyBudget]);
+
+  if (loading) {
+
+    return (
+  
+      <div className="app-layout">
+  
+        <Sidebar />
+  
+        <main className="main-content">
+  
+          <Navbar />
+  
+          <DashboardSkeleton />
+  
+        </main>
+  
+      </div>
+  
+    );
+  
+  }
 
   return (
     <div className="app-layout">
@@ -89,7 +133,20 @@ function Profile() {
 
               <Button
                 className="auth-submit profile-edit-btn"
-                onClick={isEditing ? handleSave : () => setIsEditing(true)}
+                disabled={
+                  isEditing &&
+                  (
+                    !profileData.occupation ||
+                    !profileData.monthlyIncome ||
+                    Number(profileData.monthlyIncome) <= 0 ||
+                    !profileData.financialGoal
+                  )
+                }
+                onClick={
+                  isEditing
+                    ? handleSave
+                    : () => setIsEditing(true)
+                }
               >
                 {isEditing ? <FaSave /> : <FaEdit />}
                 {isEditing ? "Save Profile" : "Edit Profile"}
@@ -241,15 +298,7 @@ function Profile() {
 
             <div>
               <h4>Budget Usage</h4>
-              <p>
-                {monthlyBudget
-                  ? Math.round(
-                      ((dashboardData?.totalExpenses || 0) / monthlyBudget) *
-                        100
-                    )
-                  : 0}
-                %
-              </p>
+              <p> {budgetUsage}% </p>
             </div>
 
             <div>

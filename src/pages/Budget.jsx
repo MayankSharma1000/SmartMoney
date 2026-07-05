@@ -8,7 +8,10 @@ function Budget() {
   const [monthlyBudget, setMonthlyBudget] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
-  const [saving, setSaving] = useState(false);
+  const currentMonth = new Date().toLocaleString("default", {
+    month: "long",
+    year: "numeric"
+  });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -50,24 +53,42 @@ function Budget() {
         <Navbar />
 
         <section className="page-header">
-          <h1>Monthly Budget</h1>
-          <p>Set your monthly spending limit.</p>
+          <h1>Budget Planner</h1>
+          <p>
+            Set a monthly spending limit and stay in control of your finances.
+          </p>
         </section>
 
-        <form className="expense-form glass-card" onSubmit={handleSubmit}>
+        <form
+          className="expense-form glass-card"
+          onSubmit={handleSubmit}
+        >
           <h3>Set Budget</h3>
+
+          <p className="budget-month">
+            Budget for {currentMonth}
+          </p>
 
           {error && <div className="auth-error">{error}</div>}
 
           <input
             type="number"
-            placeholder="Enter monthly budget"
+            placeholder="e.g. 50000"
             value={monthlyBudget}
             onChange={(e) => setMonthlyBudget(e.target.value)}
+            min="1"
             required
           />
 
-          <Button className="auth-submit" type="submit" disabled={saving}>
+          <Button
+            className="auth-submit"
+            type="submit"
+            disabled={
+              saving ||
+              !monthlyBudget ||
+              Number(monthlyBudget) <= 0
+            }
+          >
             {saving ? "Saving..." : "Save Budget"}
           </Button>
 

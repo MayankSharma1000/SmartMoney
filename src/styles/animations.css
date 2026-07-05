@@ -1,0 +1,209 @@
+/* =====================================================
+   PREMIUM UI ANIMATIONS
+===================================================== */
+
+/* ---------- Fade Up ---------- */
+
+.fade-up{
+
+    animation:fadeUp .45s ease forwards;
+
+}
+
+@keyframes fadeUp{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(18px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
+
+}
+
+/* ---------- Fade In ---------- */
+
+.fade-in{
+
+    animation:fadeIn .35s ease forwards;
+
+}
+
+@keyframes fadeIn{
+
+    from{
+
+        opacity:0;
+
+    }
+
+    to{
+
+        opacity:1;
+
+    }
+
+}
+
+/* ---------- Scale ---------- */
+
+.scale-in{
+
+    animation:scaleIn .30s ease forwards;
+
+}
+
+@keyframes scaleIn{
+
+    from{
+
+        opacity:0;
+
+        transform:scale(.96);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:scale(1);
+
+    }
+
+}
+
+/* ---------- Hover Lift ---------- */
+
+.hover-lift{
+
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease;
+
+}
+
+.hover-lift:hover{
+
+    transform:translateY(-4px);
+
+}
+
+/* ---------- Rotate Icon ---------- */
+
+.icon-hover{
+
+    transition:
+        transform .25s ease;
+
+}
+
+.icon-hover:hover{
+
+    transform:rotate(-8deg)
+              scale(1.08);
+
+}
+
+/* ---------- Floating ---------- */
+
+.float{
+
+    animation:floating 4s ease-in-out infinite;
+
+}
+
+@keyframes floating{
+
+    0%{
+
+        transform:translateY(0);
+
+    }
+
+    50%{
+
+        transform:translateY(-5px);
+
+    }
+
+    100%{
+
+        transform:translateY(0);
+
+    }
+
+}
+
+/* ---------- Glow ---------- */
+
+.glow{
+
+    transition:
+        box-shadow .25s ease;
+
+}
+
+.glow:hover{
+
+    box-shadow:
+        0 0 30px rgba(59,130,246,.28);
+
+}
+
+/* ---------- Skeleton ---------- */
+
+.shimmer{
+
+    position:relative;
+
+    overflow:hidden;
+
+}
+
+.shimmer::after{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    background:
+
+        linear-gradient(
+
+            90deg,
+
+            transparent,
+
+            rgba(255,255,255,.12),
+
+            transparent
+
+        );
+
+    transform:translateX(-100%);
+
+    animation:shimmer 1.4s infinite;
+
+}
+
+@keyframes shimmer{
+
+    to{
+
+        transform:translateX(100%);
+
+    }
+
+}

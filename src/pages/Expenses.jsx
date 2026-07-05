@@ -1,24 +1,15 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import { categoryIcons } from "../utils/categoryIcons.jsx";
+import { categories } from "../constants/categories";
+import { ITEMS_PER_PAGE } from "../constants/pagination";
 import Button from "../components/ui/Button/Button";
 
 import {
   FaPlus,
   FaTrash,
-  FaUtensils,
-  FaCar,
-  FaBolt,
-  FaGamepad,
-  FaPlane,
   FaMagnifyingGlass
 } from "react-icons/fa6";
-
-import {
-  FaShoppingCart,
-  FaHeart,
-  FaGraduationCap,
-  FaQuestionCircle
-} from "react-icons/fa";
 
 import Sidebar from "../components/Sidebar/Sidebar.jsx";
 import Navbar from "../components/Navbar/Navbar.jsx";
@@ -46,8 +37,6 @@ function Expenses() {
   
   const [currentPage, setCurrentPage] =
     useState(1);
-  
-  const ITEMS_PER_PAGE = 10;
 
   const [formData, setFormData] = useState({
     title: "",
@@ -57,31 +46,6 @@ function Expenses() {
     note: "",
     paymentMethod: "UPI"
   });
-
-  const categoryIcons = {
-    Food: <FaUtensils />,
-    Transport: <FaCar />,
-    Shopping: <FaShoppingCart />,
-    Bills: <FaBolt />,
-    Entertainment: <FaGamepad />,
-    Health: <FaHeart />,
-    Education: <FaGraduationCap />,
-    Travel: <FaPlane />,
-    Other: <FaQuestionCircle />
-  };
-
-  const categories = [
-    "All",
-    "Food",
-    "Transport",
-    "Shopping",
-    "Bills",
-    "Entertainment",
-    "Health",
-    "Education",
-    "Travel",
-    "Other"
-  ];
 
   const fetchExpenses = async () => {
     try {
@@ -109,10 +73,12 @@ function Expenses() {
     setSearchText(navbarSearch);
   }, [searchParams]);
 
-  const totalExpense = expenses.reduce(
-    (sum, expense) => sum + Number(expense.amount || 0),
-    0
-  );
+  const totalExpense = useMemo(() => {
+    return expenses.reduce(
+      (sum, expense) => sum + Number(expense.amount || 0),
+      0
+    );
+  }, [expenses]);
 
   const filteredExpenses = useMemo(() => {
     return expenses.filter((expense) => {
@@ -205,6 +171,11 @@ function Expenses() {
   };
 
   const handleDelete = async (id) => {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this expense?"
+    );
+  
+    if (!confirmed) return;
     try {
       setError("");
 
@@ -241,20 +212,11 @@ function Expenses() {
 
         {error && <div className="auth-error">{error}</div>}
 
-        <section
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "24px"
-          }}
-        >
+        <section className="expenses-container">
+
         <form
           className="expense-form glass-card"
           onSubmit={handleAddExpense}
-          style={{
-            width: "100%",
-            padding: "24px"
-          }}
         >
         <div className="chart-title">
           <div>
@@ -263,16 +225,8 @@ function Expenses() {
           </div>
         </div>
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns:
-              "2fr 1fr 1fr 1fr 1fr auto",
-            gap: "16px",
-            alignItems: "center",
-            marginTop: "20px"
-          }}
-        >
+        <div className="expense-form-grid">
+
           <input
             type="text"
             name="title"
@@ -301,15 +255,16 @@ function Expenses() {
               Select Category
             </option>
 
-            <option value="Food">Food</option>
-            <option value="Transport">Transport</option>
-            <option value="Shopping">Shopping</option>
-            <option value="Bills">Bills</option>
-            <option value="Entertainment">Entertainment</option>
-            <option value="Health">Health</option>
-            <option value="Education">Education</option>
-            <option value="Travel">Travel</option>
-            <option value="Other">Other</option>
+            {categories
+              .filter(category => category !== "All")
+              .map(category => (
+                <option
+                  key={category}
+                  value={category}
+                >
+                  {category}
+                </option>
+              ))}
           </select>
 
           <input
@@ -332,17 +287,14 @@ function Expenses() {
           </select>
 
           <Button
-            className="auth-submit"
+            className="expense-submit-btn"
             type="submit"
-            disabled={submitLoading}
-            style={{
-              minWidth: "180px",
-              height: "54px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "10px"
-            }}
+            disabled={
+              submitLoading ||
+              !formData.title ||
+              !formData.amount ||
+              !formData.category
+            }
           >
             <FaPlus />
 
@@ -353,14 +305,7 @@ function Expenses() {
         </div>
       </form>
           <div className="expenses-panel glass-card">
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginBottom: "20px"
-              }}
-            >
+            <div className="expense-panel-header">
               <div>
                 <h2>Transaction History</h2>
                 <p>
@@ -438,10 +383,9 @@ function Expenses() {
                               : "No date"}{" "}
                             • {expense.paymentMethod || "UPI"}
                           </p>
-
-                          {expense.note && (
-                            <p className="expense-note">{expense.note}</p>
-                          )}
+                          <p className="expense-note">
+                            {expense.note || "No notes"}
+                          </p>
                         </div>
                       </div>
 
@@ -458,39 +402,20 @@ function Expenses() {
                   ))}
                 </div>
               
-                <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      gap: "10px",
-                      marginTop: "24px"
-                    }}
-                  >
-                    {Array.from(
-                      { length: totalPages },
-                      (_, index) => (
-                        <Button
-                          key={index}
-                          onClick={() =>
-                            setCurrentPage(index + 1)
-                          }
-                          style={{
-                            width: "40px",
-                            height: "40px",
-                            borderRadius: "10px",
-                            border: "none",
-                            cursor: "pointer",
-                            background:
-                              currentPage === index + 1
-                                ? "#3b82f6"
-                                : "#1f2937",
-                            color: "#fff"
-                          }}
-                        >
-                          {index + 1}
-                        </Button>
-                      )
-                    )}
+                <div className="pagination">
+                  {Array.from({ length: totalPages }, (_, index) => (
+                    <Button
+                      key={index}
+                      onClick={() => setCurrentPage(index + 1)}
+                      className={
+                        currentPage === index + 1
+                          ? "page-btn active"
+                          : "page-btn"
+                      }
+                    >
+                      {index + 1}
+                    </Button>
+                  ))}
                 </div>
               </>
             )}

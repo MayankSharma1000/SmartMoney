@@ -3,7 +3,12 @@ import { FaPlus, FaTrash, FaPiggyBank } from "react-icons/fa";
 
 import Button from "../components/ui/Button/Button";
 import Sidebar from "../components/Sidebar/Sidebar.jsx";
+import "../styles/savings.css";
 import Navbar from "../components/Navbar/Navbar.jsx";
+import SavingsHero from "../components/Savings/SavingsHero";
+import SavingsSummary from "../components/Savings/SavingsSummary";
+import SavingsGoalForm from "../components/Savings/SavingsGoalForm";
+import SavingsGoalsList from "../components/Savings/SavingsGoalsList";
 
 import {
   getSavingsGoals,
@@ -26,6 +31,11 @@ function Savings() {
     notes: ""
   });
 
+  const currentMonth = new Date().toLocaleString("default", {
+    month: "long",
+    year: "numeric"
+  });
+
   const loadGoals = async () => {
     try {
       setLoading(true);
@@ -46,10 +56,32 @@ function Savings() {
     loadGoals();
   }, []);
 
-  const totalSaved = goals.reduce(
-    (sum, goal) => sum + Number(goal.currentAmount || 0),
-    0
-  );
+  const totalSaved = React.useMemo(() => {
+    return goals.reduce(
+      (sum, goal) => sum + Number(goal.currentAmount || 0),
+      0
+    );
+  }, [goals]);
+
+  const averageProgress = React.useMemo(() => {
+
+    if (goals.length === 0) return 0;
+  
+    const total = goals.reduce((sum, goal) => {
+  
+      const target = Number(goal.targetAmount || 0);
+  
+      const current = Number(goal.currentAmount || 0);
+  
+      if (!target) return sum;
+  
+      return sum + (current / target) * 100;
+  
+    }, 0);
+  
+    return Math.round(total / goals.length);
+  
+  }, [goals]);
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -93,6 +125,11 @@ function Savings() {
   };
 
   const handleDelete = async (id) => {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this savings goal?"
+    );
+  
+    if (!confirmed) return;
     try {
       setError("");
 
@@ -112,162 +149,47 @@ function Savings() {
 
       <main className="main-content">
         <Navbar />
-
-        <section className="page-header">
-          <h1>Savings Goals</h1>
-          <p>
-            Plan emergency funds, car funds, travel goals and long-term savings
-            with real MongoDB progress tracking.
-          </p>
-        </section>
+        <SavingsHero />
+          <SavingsSummary
+              totalSaved={totalSaved}
+              goals={goals.length}
+              averageProgress={averageProgress}
+          />
 
         {error && <div className="auth-error">{error}</div>}
 
-        <section className="expense-layout">
-          <form className="expense-form glass-card" onSubmit={handleAddGoal}>
-            <h3>Add Savings Goal</h3>
-
-            <input
-              type="text"
-              name="title"
-              placeholder="Goal name"
-              value={formData.title}
-              onChange={handleChange}
-              required
-            />
-
-            <select
-              name="category"
-              value={formData.category}
-              onChange={handleChange}
-            >
-              <option>Emergency Fund</option>
-              <option>Car</option>
-              <option>House</option>
-              <option>Travel</option>
-              <option>Wedding</option>
-              <option>Education</option>
-              <option>Retirement</option>
-              <option>Other</option>
-            </select>
-
-            <input
-              type="number"
-              name="targetAmount"
-              placeholder="Target amount ₹"
-              value={formData.targetAmount}
-              onChange={handleChange}
-              required
-            />
-
-            <input
-              type="number"
-              name="currentAmount"
-              placeholder="Already saved ₹"
-              value={formData.currentAmount}
-              onChange={handleChange}
-            />
-
-            <input
-              type="date"
-              name="targetDate"
-              value={formData.targetDate}
-              onChange={handleChange}
-            />
-
-            <textarea
-              name="notes"
-              placeholder="Optional notes"
-              value={formData.notes}
-              onChange={handleChange}
-            />
-
-            <Button
-              type="submit"
-              className="auth-submit"
-              disabled={submitLoading}
-              loading={submitLoading}
-            >
-              <FaPlus />
-              Add Goal
-            </Button>
-          </form>
-
-          <div className="expenses-panel glass-card">
-            <div className="expenses-summary">
+        <section className="savings-page">
+          <SavingsGoalForm
+              formData={formData}
+              handleChange={handleChange}
+              handleAddGoal={handleAddGoal}
+              submitLoading={submitLoading}
+          />
+          <section className="goals-section">
+            <div className="section-heading">
               <div>
-                <p>Total Saved</p>
-                <h2>₹{totalSaved.toLocaleString("en-IN")}</h2>
+                <h2>Your Savings Goals</h2>
+                <p>
+                  Monitor progress across every financial goal.
+                </p>
               </div>
 
-              <span>{goals.length} goals</span>
+              <div className="goal-count">
+                {goals.length} Goal{goals.length !== 1 ? "s" : ""}
+              </div>
+
             </div>
-
             {loading ? (
-              <p className="progress-text">Loading savings goals...</p>
-            ) : goals.length === 0 ? (
-              <p className="progress-text">
-                No savings goals yet. Add your first goal.
-              </p>
-            ) : (
-              <div className="expense-list">
-                {goals.map((goal) => {
-                  const target = Number(goal.targetAmount || 0);
-                  const saved = Number(goal.currentAmount || 0);
-
-                  const progress = target
-                    ? Math.min(Math.round((saved / target) * 100), 100)
-                    : 0;
-
-                  return (
-                    <div className="expense-row" key={goal._id}>
-                      <div className="expense-left">
-                        <div className="transaction-icon">
-                          <FaPiggyBank />
-                        </div>
-
-                        <div>
-                          <h4>{goal.title}</h4>
-
-                          <p>
-                            ₹{saved.toLocaleString("en-IN")} saved of ₹
-                            {target.toLocaleString("en-IN")}
-                          </p>
-
-                          <div className="progress-container small-progress">
-                            <div className="progress-bar">
-                              <div
-                                className="progress-fill"
-                                style={{ width: `${progress}%` }}
-                              />
-                            </div>
-
-                            <p className="progress-text">
-                              {progress}% completed
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="expense-actions">
-                        <strong className="income">{progress}%</strong>
-
-                        <Button
-                          type="button"
-                          variant="danger"
-                          size="sm"
-                          onClick={() => handleDelete(goal._id)}
-                          aria-label="Delete savings goal"
-                        >
-                          <FaTrash />
-                        </Button>
-                      </div>
-                    </div>
-                  );
-                })}
+              <div className="loading-state">
+                Loading savings goals...
               </div>
+            ) : (
+              <SavingsGoalsList
+                goals={goals}
+                handleDelete={handleDelete}
+              />
             )}
-          </div>
+          </section>
         </section>
       </main>
     </div>
