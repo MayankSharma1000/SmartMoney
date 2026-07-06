@@ -3,11 +3,10 @@ import React from "react";
 import {
   FaWallet,
   FaPiggyBank,
-  FaChartLine,
-  FaLightbulb
+  FaChartLine
 } from "react-icons/fa";
 
-import Button from "../components/ui/Button/Button";
+import AppShell from "../components/layout/AppShell/AppShell";
 
 import SavingsProgress from "../components/DashboardWidgets/SavingsProgress";
 import InvestmentSummary from "../components/DashboardWidgets/InvestmentSummary";
@@ -99,10 +98,7 @@ function Dashboard() {
   ];
 
   return (
-    <div className="app-layout">
-      <Sidebar />
-
-      <main className="main-content dashboard-page">
+      <AppShell>
         <DashboardHeader />
         <QuickActions />
 
@@ -141,10 +137,8 @@ function Dashboard() {
             <InvestmentSummary />
             <AIInsights insights={insights}/>
           </div>
-
         </section>
-      </main>
-    </div>
+      </AppShell>
   );
 }
 
