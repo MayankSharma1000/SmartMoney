@@ -1,4 +1,4 @@
-import Sidebar from "../../Sidebar/Sidebar";
+import Sidebar from "../Sidebar/Sidebar";
 import "./AppShell.css";
 
 function AppShell({ children }) {

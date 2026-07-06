@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FaPlus, FaTrash, FaPiggyBank } from "react-icons/fa";
 
 import Button from "../components/ui/Button/Button";
-import Sidebar from "../components/Sidebar/Sidebar.jsx";
+import AppShell from "../components/layout/AppShell/AppShell";
 import "../styles/savings.css";
 import Navbar from "../components/Navbar/Navbar.jsx";
 import SavingsHero from "../components/Savings/SavingsHero";
@@ -144,10 +144,7 @@ function Savings() {
   };
 
   return (
-    <div className="app-layout">
-      <Sidebar />
-
-      <main className="main-content">
+    <AppShell>
         <Navbar />
         <SavingsHero />
           <SavingsSummary
@@ -191,8 +188,7 @@ function Savings() {
             )}
           </section>
         </section>
-      </main>
-    </div>
+      </AppShell>
   );
 }
 

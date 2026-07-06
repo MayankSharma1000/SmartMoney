@@ -1,6 +1,5 @@
 import React from "react";
 
-import Sidebar from "../components/Sidebar/Sidebar.jsx";
 import Navbar from "../components/Navbar/Navbar.jsx";
 import "../components/Analytics/Analytics.css";
 import {DEFAULT_LIABILITIES} from "../constants/financeConstants";
@@ -18,6 +17,7 @@ import ActivityTimeline from "../components/Analytics/ActivityTimeline.jsx";
 import AISuggestions from "../components/Analytics/AISuggestions.jsx";
 import AIFinancialCoach from "../components/Analytics/AIFinancialCoach.jsx";
 import AnalyticsFooter from "../components/Analytics/AnalyticsFooter.jsx";
+import AppShell from "../components/layout/AppShell/AppShell.jsx";
 
 function Analytics() {
   const { dashboardData, loading } = useDashboard();
@@ -47,10 +47,7 @@ function Analytics() {
   }
 
   return (
-    <div className="app-layout">
-      <Sidebar />
-  
-      <main className="main-content analytics-page">
+      <AppShell>
         <Navbar />
   
         <AnalyticsHeader />
@@ -81,9 +78,8 @@ function Analytics() {
         </div>
         <AnalyticsFooter />
   
-      </main>
-    </div>
-  );
+      </AppShell>
+    );
   }
 
 export default Analytics;

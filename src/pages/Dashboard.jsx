@@ -6,17 +6,16 @@ import {
   FaChartLine
 } from "react-icons/fa";
 
-import AppShell from "../components/layout/AppShell/AppShell";
-
+import AppShell from "@/components/layout/AppShell";
 import SavingsProgress from "../components/DashboardWidgets/SavingsProgress";
 import InvestmentSummary from "../components/DashboardWidgets/InvestmentSummary";
 import BudgetProgress from "../components/DashboardWidgets/BudgetProgress";
 
 import ReportActions from "../components/Dashboard/ReportActions";
-import StatsGrid from "../components/Dashboard/StatsGrid";
+import MetricGrid from "../components/Dashboard/MetricGrid";
 import ChartsSection from "../components/Dashboard/ChartsSection";
 import FinancialHealthCard from "../components/Dashboard/FinancialHealthCard";
-import DashboardHeader from "../components/Dashboard/DashboardHeader";
+import PageHero from "@/components/shared/PageHero";
 import QuickActions from "../components/Dashboard/QuickActions";
 import RecentTransactions from "../components/Dashboard/RecentTransactions";
 import AIInsights from "../components/Dashboard/AIInsights";
@@ -99,7 +98,10 @@ function Dashboard() {
 
   return (
       <AppShell>
-        <DashboardHeader />
+        <PageHero
+            title="Dashboard"
+            subtitle="Welcome back. Here's a complete overview of your financial health."
+        />
         <QuickActions />
 
         <FinancialHealthCard
@@ -114,7 +116,7 @@ function Dashboard() {
         />
 
         <section className="dashboard-grid">
-          <StatsGrid
+          <MetricGrid
               stats={stats}
           />
 

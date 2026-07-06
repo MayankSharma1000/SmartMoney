@@ -1,8 +1,8 @@
 import React from "react";
-import "./StatsGrid.css";
+import "./MetricGrid.css";
 import { motion } from "framer-motion";
 
-function StatsGrid({ stats }) {
+function MetricGrid({ stats }) {
   return (
     <div className="stats-grid">
 
@@ -51,4 +51,4 @@ function StatsGrid({ stats }) {
   );
 }
 
-export default StatsGrid;
+export default MetricGrid;

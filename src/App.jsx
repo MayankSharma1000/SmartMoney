@@ -9,11 +9,8 @@ import Expenses from "./pages/Expenses.jsx";
 import Savings from "./pages/Savings.jsx";
 import Investments from "./pages/Investments.jsx";
 import Analytics from "./pages/Analytics.jsx";
-import Profile from "./pages/Profile.jsx";
 import NotFound from "./pages/NotFound.jsx";
 import RecurringExpenses from "./pages/RecurringExpenses";
-import Budget from "./pages/Budget.jsx";
-import Support from "./pages/Support.jsx";
 
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
@@ -53,15 +50,6 @@ function App() {
       />
 
       <Route
-        path="/budget"
-        element={
-          <ProtectedRoute>
-            <Budget />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
         path="/savings"
         element={
           <ProtectedRoute>
@@ -92,24 +80,6 @@ function App() {
         element={
           <ProtectedRoute>
             <Analytics />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/profile"
-        element={
-          <ProtectedRoute>
-            <Profile />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/support"
-        element={
-          <ProtectedRoute>
-            <Support />
           </ProtectedRoute>
         }
       />
