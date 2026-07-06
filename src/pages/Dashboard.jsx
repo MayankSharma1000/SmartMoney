@@ -100,7 +100,7 @@ function Dashboard() {
       <AppShell>
         <PageHero
             title="Dashboard"
-            subtitle="Welcome back. Here's a complete overview of your financial health."
+            subtitle="Monitor your financial health, investments and savings from one place."
         />
         <QuickActions />
 
