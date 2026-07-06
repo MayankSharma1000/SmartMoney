@@ -11,8 +11,7 @@ import {
   FaCalendarAlt,
   FaCog,
   FaSignOutAlt,
-  FaTrashAlt,
-  FaHeartbeat
+  FaTrashAlt
 } from "react-icons/fa";
 
 function Sidebar() {
@@ -97,29 +96,56 @@ function Sidebar() {
 
       {/* ================= SIDEBAR FOOTER ================= */}
       <div className="sidebar-footer">
-        <div className="financial-health-card">
-          <FaHeartbeat className="health-icon" />
-          <div>
-            <span>Financial Health</span>
-            <h3>87 / 100</h3>
-            <small>Excellent</small>
+
+        <div className="sidebar-widget">
+
+          <span className="widget-label">
+            THIS MONTH
+          </span>
+
+          <h2>
+            ₹18,420
+          </h2>
+
+          <p>
+            Saved
+            <span className="positive">
+              +12%
+            </span>
+          </p>
+
+        </div>
+
+        <div className="sidebar-divider" />
+
+        <button className="account-button">
+
+          <div className="account-avatar">
+            MS
           </div>
-        </div>
 
-        <div className="sidebar-actions">
-          <button className="sidebar-action-btn">
-            <FaSignOutAlt />
-            <span>Logout</span>
-          </button>
+          <div>
 
-          <button className="sidebar-action-btn danger">
-            <FaTrashAlt />
-            <span>Delete Account</span>
-          </button>
-        </div>
+            <strong>My Account</strong>
+
+            <span>Settings</span>
+
+          </div>
+
+        </button>
+
+        <button className="sidebar-action-btn">
+
+          <FaSignOutAlt />
+
+          Logout
+
+        </button>
+
       </div>
-      </aside>
-    );
+
+    </aside>
+  );
 }
 
 export default Sidebar;

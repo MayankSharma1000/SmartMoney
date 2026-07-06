@@ -9,7 +9,6 @@ import {
 
 import Button from "../components/ui/Button/Button";
 import Sidebar from "../components/Sidebar/Sidebar";
-import Navbar from "../components/Navbar/Navbar";
 
 import SavingsProgress from "../components/DashboardWidgets/SavingsProgress";
 import InvestmentSummary from "../components/DashboardWidgets/InvestmentSummary";
@@ -47,7 +46,6 @@ function Dashboard() {
       <div className="app-layout">
         <Sidebar />
         <main className="main-content">
-          <Navbar />
           <DashboardSkeleton />
         </main>
       </div>
@@ -59,7 +57,6 @@ function Dashboard() {
       <div className="app-layout">
         <Sidebar />
         <main className="main-content">
-          <Navbar />
           <h2>{error}</h2>
         </main>
       </div>
@@ -129,8 +126,6 @@ function Dashboard() {
       <Sidebar />
 
       <main className="main-content dashboard-page">
-        <Navbar />
-
         <DashboardHeader />
         <QuickActions />
 
