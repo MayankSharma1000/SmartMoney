@@ -8,7 +8,6 @@ import {
 } from "react-icons/fa";
 
 import Button from "../components/ui/Button/Button";
-import Sidebar from "../components/Sidebar/Sidebar";
 
 import SavingsProgress from "../components/DashboardWidgets/SavingsProgress";
 import InvestmentSummary from "../components/DashboardWidgets/InvestmentSummary";
@@ -40,28 +39,6 @@ function Dashboard() {
   const { dashboardData, loading, error } = useDashboard();
   const { budget } = useBudget();
   const { expenses } = useExpenses();
-
-  if (loading) {
-    return (
-      <div className="app-layout">
-        <Sidebar />
-        <main className="main-content">
-          <DashboardSkeleton />
-        </main>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="app-layout">
-        <Sidebar />
-        <main className="main-content">
-          <h2>{error}</h2>
-        </main>
-      </div>
-    );
-  }
 
   const budgetStats = calculateBudgetStats(
     budget?.monthlyBudget || 0,
