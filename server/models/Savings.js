@@ -11,19 +11,27 @@ const savingsSchema = new mongoose.Schema(
     title: {
       type: String,
       required: [true, "Savings goal title is required"],
-      trim: true
+      trim: true,
+      minlength: 2,
+      maxlength: 100
     },
 
     targetAmount: {
       type: Number,
-      required: true,
-      min: 0
+      required: [true, "Target amount is required"],
+      min: 1
     },
 
     currentAmount: {
       type: Number,
       default: 0,
-      min: 0
+      min: 0,
+      validate: {
+        validator(value) {
+          return value <= this.targetAmount;
+        },
+        message: "Current amount cannot exceed target amount."
+      }
     },
 
     targetDate: {
@@ -47,6 +55,8 @@ const savingsSchema = new mongoose.Schema(
 
     notes: {
       type: String,
+      trim: true,
+      maxlength: 500,
       default: ""
     },
 
@@ -56,16 +66,19 @@ const savingsSchema = new mongoose.Schema(
     }
   },
   {
-    timestamps: true
+    timestamps: true,
+    versionKey: false
   }
 );
 
 savingsSchema.index({
+  user: 1,
+  title: 1
+});
 
-  user:1,
-  
-  goalName:1
-  
-  });
+savingsSchema.set("toJSON", {
+  virtuals: true,
+  versionKey: false
+});
 
 module.exports = mongoose.model("Savings", savingsSchema);
