@@ -1,55 +1,46 @@
 import "./MetricCard.css";
 
 function MetricCard({
-    title,
-    value,
-    subtitle,
-    icon,
-    trend,
-    trendType = "positive",
-    onClick
+  title,
+  value,
+  subtitle,
+  icon,
+  trend,
+  trendType = "neutral",
 }) {
-    return (
-        <article
-            className="metric-card"
-            onClick={onClick}
-        >
-            <div className="metric-header">
+  return (
+    <div className="metric-card">
 
-                <div className="metric-icon">
-                    {icon}
-                </div>
+      <div className="metric-card-header">
 
-                {trend && (
-                    <span
-                        className={`metric-trend ${trendType}`}
-                    >
-                        {trend}
-                    </span>
-                )}
+        <div className="metric-card-icon">
+          {icon}
+        </div>
 
-            </div>
+        {trend && (
+          <span className={`metric-card-trend ${trendType}`}>
+            {trend}
+          </span>
+        )}
 
-            <div className="metric-content">
+      </div>
 
-                <p className="metric-title">
-                    {title}
-                </p>
+      <p className="metric-card-title">
+        {title}
+      </p>
 
-                <h2 className="metric-value">
-                    {value}
-                </h2>
+      <h2 className="metric-card-value">
+        {value}
+      </h2>
 
-                {subtitle && (
-                    <span className="metric-subtitle">
-                        {subtitle}
-                    </span>
-                )}
+      {subtitle && (
+        <p className="metric-card-subtitle">
+          {subtitle}
+        </p>
+      )}
 
-            </div>
-
-        </article>
-    );
+    </div>
+  );
 }
 
 export default MetricCard;

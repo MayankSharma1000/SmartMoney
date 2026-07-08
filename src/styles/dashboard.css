@@ -36,12 +36,11 @@ body,
   overflow-x: hidden;
 }
 
-.dashboard-grid {
-  display: grid;
-  gap: 24px;
-  width: 100%;
-  max-width: 100%;
-  overflow-x: hidden;
+.dashboard-grid{
+  display:flex;
+  flex-direction:column;
+  gap:32px;
+  margin-top:32px;
 }
 
 .analytics-card {
@@ -349,20 +348,37 @@ body,
   gap: 18px;
 }
 
-.charts-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1.3fr) minmax(320px, 0.8fr);
-  gap: 20px;
+.charts-grid{
+  display:grid;
+  grid-template-columns:2fr 1fr;
+  gap:32px;
+  align-items:stretch;
 }
 
-.goal-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 20px;
+.goal-grid{
+
+  display:grid;
+
+  grid-template-columns:repeat(3,minmax(0,1fr));
+
+  gap:32px;
+
+  align-items:start;
+
 }
 
-.chart-card {
-  padding: 24px;
+.chart-card{
+
+  background:#0D0D0D;
+
+  border:1px solid rgba(255,255,255,.06);
+
+  border-radius:24px;
+
+  padding:28px;
+
+  min-height:420px;
+
 }
 
 .chart-title {
@@ -386,7 +402,7 @@ body,
 
 .chart-height,
 .donut-wrapper {
-  height: 280px;
+  height: 300px;
 }
 
 /* =========================
@@ -1773,9 +1789,13 @@ body,
 
 .quick-actions{
 
-  margin:36px 0;
-  
-  }
+  display:flex;
+
+  flex-direction:column;
+
+  gap:20px;
+
+}
   
   .quick-actions h2{
   
@@ -1786,30 +1806,28 @@ body,
   }
   
   .quick-grid{
-  
-  display:grid;
-  
-  grid-template-columns:repeat(4,1fr);
-  
-  gap:20px;
-  
-  }
+
+    display:grid;
+
+    grid-template-columns:repeat(4,minmax(0,1fr));
+
+    gap:24px;
+
+}
   
   .quick-card{
-  
+
+  min-height:140px;
+
   padding:24px;
-  
-  border-radius:24px;
-  
-  background:var(--bg-card);
-  
-  border:1px solid var(--border-color);
-  
-  cursor:pointer;
-  
-  transition:.3s;
-  
-  }
+
+  display:flex;
+
+  flex-direction:column;
+
+  justify-content:center;
+
+}
   
   .quick-card:hover{
   

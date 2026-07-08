@@ -1,6 +1,15 @@
 .recent-transactions{
 
-    padding:28px;
+    background:#0D0D0D;
+
+    border:1px solid rgba(255,255,255,.06);
+
+    border-radius:24px;
+
+    padding:32px;
+
+    box-shadow:
+        0 12px 30px rgba(0,0,0,.35);
 
 }
 
@@ -19,6 +28,10 @@
 .widget-header h2{
 
     margin:0;
+
+    font-size:1.5rem;
+
+    font-weight:700;
 
 }
 
@@ -54,23 +67,27 @@
 
     align-items:center;
 
-    padding:18px;
+    padding:20px;
 
-    border-radius:16px;
+    border-radius:18px;
 
     margin-bottom:14px;
 
-    background:rgba(255,255,255,.03);
+    background:#111111;
 
-    transition:all .25s ease;
+    border:1px solid rgba(255,255,255,.04);
+
+    transition:.3s ease;
 
 }
 
 .transaction-item:hover{
 
-    transform:translateX(6px);
+    transform:translateY(-3px);
 
-    background:rgba(255,255,255,.06);
+    border-color:rgba(37,99,235,.25);
+
+    background:#141414;
 
 }
 

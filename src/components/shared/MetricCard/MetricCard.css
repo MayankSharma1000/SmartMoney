@@ -1,110 +1,169 @@
 .metric-card{
+    position: relative;
+    overflow: hidden;
 
-    background:#0A0A0A;
+    min-height: 180px;
 
-    border:1px solid rgba(255,255,255,.05);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 
-    border-radius:18px;
+    padding: 30px;
 
-    padding:22px;
+    background: #0A0A0A;
 
-    transition:.25s ease;
+    border: 1px solid rgba(255,255,255,.06);
+    border-radius: 24px;
 
-    cursor:pointer;
+    transition: all .3s ease;
 
+    box-shadow:
+        0 12px 30px rgba(0,0,0,.35);
+}
+
+.metric-card::before{
+    content:"";
+
+    position:absolute;
+
+    top:0;
+    left:0;
+
+    width:100%;
+    height:4px;
+
+    background:linear-gradient(
+        90deg,
+        #2563EB,
+        #3B82F6
+    );
+
+    opacity:.9;
 }
 
 .metric-card:hover{
 
-    transform:translateY(-4px);
+    transform:translateY(-8px);
 
     border-color:rgba(37,99,235,.45);
 
     box-shadow:
-    0 20px 45px rgba(0,0,0,.35);
-
+        0 30px 70px rgba(37,99,235,.15),
+        0 20px 40px rgba(0,0,0,.45);
 }
 
-.metric-header{
+.metric-card-header{
 
     display:flex;
 
     justify-content:space-between;
 
-    align-items:center;
+    align-items:flex-start;
 
-    margin-bottom:24px;
-
+    margin-bottom:26px;
 }
 
-.metric-icon{
+.metric-card-icon{
 
-    width:48px;
+    width:60px;
 
-    height:48px;
+    height:60px;
 
     display:flex;
 
-    align-items:center;
-
     justify-content:center;
 
-    border-radius:14px;
+    align-items:center;
+
+    border-radius:18px;
 
     background:rgba(37,99,235,.12);
 
-    color:#2563EB;
+    color:#3B82F6;
 
-    font-size:20px;
+    font-size:24px;
 
+    transition:.3s ease;
 }
 
-.metric-title{
+.metric-card:hover .metric-card-icon{
 
-    color:#94A3B8;
+    background:#2563EB;
 
-    font-size:.9rem;
+    color:#FFF;
 
-    margin-bottom:8px;
-
+    transform:scale(1.08) rotate(-8deg);
 }
 
-.metric-value{
+.metric-card-trend{
 
-    color:#F8FAFC;
+    padding:6px 14px;
 
-    font-size:2rem;
+    border-radius:999px;
+
+    font-size:.75rem;
 
     font-weight:700;
 
-    margin-bottom:6px;
-
+    letter-spacing:.02em;
 }
 
-.metric-subtitle{
-
-    color:#94A3B8;
-
-    font-size:.82rem;
-
-}
-
-.metric-trend{
-
-    font-size:.8rem;
-
-    font-weight:700;
-
-}
-
-.metric-trend.positive{
+.metric-card-trend.positive{
 
     color:#22C55E;
 
+    background:rgba(34,197,94,.12);
 }
 
-.metric-trend.negative{
+.metric-card-trend.negative{
 
     color:#EF4444;
 
+    background:rgba(239,68,68,.12);
+}
+
+.metric-card-trend.neutral{
+
+    color:#3B82F6;
+
+    background:rgba(59,130,246,.12);
+}
+
+.metric-card-title{
+
+    color:#94A3B8;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    margin-bottom:12px;
+
+    text-transform:uppercase;
+
+    letter-spacing:.08em;
+}
+
+.metric-card-value{
+
+    color:#F8FAFC;
+
+    font-size:3rem;
+
+    font-weight:800;
+
+    line-height:1;
+
+    letter-spacing:-1.5px;
+
+    margin-bottom:14px;
+}
+
+.metric-card-subtitle{
+
+    color:#94A3B8;
+
+    font-size:.92rem;
+
+    line-height:1.6;
 }
