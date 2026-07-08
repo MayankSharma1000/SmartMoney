@@ -1,14 +1,14 @@
 const {
-  getDashboardData
+  buildDashboard: buildDashboardService
 } = require("../services/dashboardService");
 
 const ApiResponse = require("../utils/apiResponse");
 
-const getDashboardSummary = async (req, res) => {
+const buildDashboard = async (req, res) => {
 
   try {
 
-    const summary = await getDashboardData(req.user._id);
+    const summary = await buildDashboardService(req.user._id);
 
     return ApiResponse.success(
 
@@ -38,6 +38,6 @@ const getDashboardSummary = async (req, res) => {
 
 module.exports = {
 
-  getDashboardSummary
+  buildDashboard
 
 };
