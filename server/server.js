@@ -23,7 +23,6 @@ const adminRoutes = require("./routes/adminRoutes");
 
 const app = express();
 const morgan = require("morgan");
-const logger = require("./utils/logger");
 
 app.use(
   morgan(
@@ -101,28 +100,12 @@ app.use("/api/ai", aiRoutes);
 app.use("/api/feedback", feedbackRoutes);
 
 /* ========================= */
-/* ERROR HANDLER */
-/* ========================= */
-
-app.use((err, req, res, next) => {
-  console.error(err);
-
-  res.status(err.status || 500).json({
-    success: false,
-    message: err.message || "Server Error"
-  });
-});
-
-
-/* ========================= */
 /* SERVER */
 /* ========================= */
 
 const PORT = process.env.PORT || 5500;
 
-const errorHandler =
-require("./middleware/errorHandler");
-
+const errorHandler = require("./middleware/errorHandler");
 app.use(errorHandler);
 
 app.listen(PORT, () => {
