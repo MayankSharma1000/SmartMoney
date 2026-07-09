@@ -1,7 +1,8 @@
 const RecurringExpense = require("../models/RecurringExpense");
+const asyncHandler = require("../utils/asyncHandler");
+const ApiResponse = require("../utils/apiResponse");
 
-const createRecurringExpense = async (req, res) => {
-  try {
+const createRecurringExpense = asyncHandler(async (req, res) => {
     const { title, category, amount, frequency, nextDueDate, paymentMethod } =
       req.body;
 
@@ -22,38 +23,27 @@ const createRecurringExpense = async (req, res) => {
       paymentMethod
     });
 
-    res.status(201).json({
-      success: true,
-      recurringExpense
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message
-    });
-  }
-};
+    return ApiResponse.success(
+      res,
+      recurringExpense,
+      "Recurring expense created successfully",
+      201
+    )
+});
 
-const getRecurringExpenses = async (req, res) => {
-  try {
+const getRecurringExpenses = asyncHandler(async (req, res) => {
     const recurringExpenses = await RecurringExpense.find({
       user: req.user._id
     }).sort({ nextDueDate: 1 });
 
-    res.status(200).json({
-      success: true,
-      recurringExpenses
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message
-    });
-  }
-};
+    return ApiResponse.success(
+      res,
+      recurringExpenses,
+      "Recurring expenses fetched successfully"
+    );
+});
 
-const deleteRecurringExpense = async (req, res) => {
-  try {
+const deleteRecurringExpense = asyncHandler(async (req, res) => {
     const recurringExpense = await RecurringExpense.findOne({
       _id: req.params.id,
       user: req.user._id
@@ -68,17 +58,12 @@ const deleteRecurringExpense = async (req, res) => {
 
     await recurringExpense.deleteOne();
 
-    res.status(200).json({
-      success: true,
-      message: "Recurring expense deleted successfully"
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message
-    });
-  }
-};
+    return ApiResponse.success(
+      res,
+      null,
+      "Recurring expense deleted successfully"
+    );
+});
 
 module.exports = {
   createRecurringExpense,
