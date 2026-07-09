@@ -20,8 +20,10 @@ const feedbackSchema = new mongoose.Schema(
 
     message: {
       type: String,
-      required: true,
-      trim: true
+      required: [true, "Feedback message is required"],
+      trim: true,
+      minlength: 5,
+      maxlength: 1000
     },
 
     status: {
@@ -31,8 +33,22 @@ const feedbackSchema = new mongoose.Schema(
     }
   },
   {
-    timestamps: true
+    timestamps: true,
+    versionKey: false
   }
 );
+
+feedbackSchema.index({
+  user:1,
+  createdAt:-1
+});
+
+feedbackSchema.set("toJSON",{
+  versionKey:false
+});
+
+feedbackSchema.set("toObject",{
+  versionKey:false
+});
 
 module.exports = mongoose.model("Feedback", feedbackSchema);
