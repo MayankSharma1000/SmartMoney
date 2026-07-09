@@ -1,11 +1,11 @@
 const Expense = require("../models/Expense");
+const asyncHandler = require("../utils/asyncHandler");
+const ApiResponse = require("../utils/apiResponse");
 
 /* ========================= */
 /* ADD EXPENSE */
 /* ========================= */
-
-const addExpense = async (req, res) => {
-  try {
+const addExpense = asyncHandler(async (req, res) => {
     const {
       title,
       category,
@@ -32,47 +32,38 @@ const addExpense = async (req, res) => {
       paymentMethod
     });
 
-    res.status(201).json({
-      success: true,
-      expense
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message
-    });
-  }
-};
+    return ApiResponse.success(
+      res,
+      expense,
+      "Expense created successfully",
+      201
+    );
+});
 
 /* ========================= */
 /* GET USER EXPENSES */
 /* ========================= */
 
-const getExpenses = async (req, res) => {
-  try {
+const getExpenses = asyncHandler(async (req, res) => {
     const expenses = await Expense.find({
       user: req.user._id
     }).sort({ date: -1 });
 
-    res.status(200).json({
-      success: true,
-      count: expenses.length,
-      expenses
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message
-    });
-  }
-};
+    return ApiResponse.success(
+      res,
+      {
+        count: expenses.length,
+        expenses
+      },
+      "Expenses fetched successfully"
+    );
+});
 
 /* ========================= */
 /* UPDATE EXPENSE */
 /* ========================= */
 
-const updateExpense = async (req, res) => {
-  try {
+const updateExpense = asyncHandler(async (req, res) => {
     const expense = await Expense.findOne({
       _id: req.params.id,
       user: req.user._id
@@ -94,24 +85,18 @@ const updateExpense = async (req, res) => {
       }
     );
 
-    res.status(200).json({
-      success: true,
-      expense: updatedExpense
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message
-    });
-  }
-};
+    return ApiResponse.success(
+      res,
+      updatedExpense,
+      "Expense updated successfully"
+    );
+});
 
 /* ========================= */
 /* DELETE EXPENSE */
 /* ========================= */
 
-const deleteExpense = async (req, res) => {
-  try {
+const deleteExpense = asyncHandler(async (req, res) => {
     const expense = await Expense.findOne({
       _id: req.params.id,
       user: req.user._id
@@ -126,17 +111,12 @@ const deleteExpense = async (req, res) => {
 
     await expense.deleteOne();
 
-    res.status(200).json({
-      success: true,
-      message: "Expense deleted successfully"
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message
-    });
-  }
-};
+    return ApiResponse.success(
+      res,
+      null,
+      "Expense deleted successfully"
+    );
+});
 
 module.exports = {
   addExpense,

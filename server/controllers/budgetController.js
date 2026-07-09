@@ -1,7 +1,8 @@
 const Budget = require("../models/Budget");
+const asyncHandler = require("../utils/asyncHandler");
+const ApiResponse = require("../utils/apiResponse");
 
-const setBudget = async (req, res) => {
-  try {
+const setBudget = asyncHandler(async (req, res) => {
     const { monthlyBudget, month, year } = req.body;
 
     if (!req.user || !req.user._id) {
@@ -48,23 +49,14 @@ const setBudget = async (req, res) => {
       }
     );
 
-    return res.status(200).json({
-      success: true,
-      message: "Budget saved successfully",
-      budget
-    });
-  } catch (error) {
-    console.error("Budget Save Error:", error);
+    return ApiResponse.success(
+      res,
+      budget,
+      "Budget saved successfully"
+    );
+});
 
-    return res.status(500).json({
-      success: false,
-      message: "Budget could not be saved"
-    });
-  }
-};
-
-const getBudget = async (req, res) => {
-  try {
+const getBudget = asyncHandler(async (req, res) => {
     if (!req.user || !req.user._id) {
       return res.status(401).json({
         success: false,
@@ -84,19 +76,12 @@ const getBudget = async (req, res) => {
       year
     });
 
-    return res.status(200).json({
-      success: true,
-      budget
-    });
-  } catch (error) {
-    console.error("Budget Fetch Error:", error);
-
-    return res.status(500).json({
-      success: false,
-      message: "Budget could not be fetched"
-    });
-  }
-};
+    return ApiResponse.success(
+      res,
+      budget,
+      "Budget fetched successfully"
+    );
+});
 
 module.exports = {
   setBudget,
