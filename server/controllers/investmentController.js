@@ -1,11 +1,12 @@
 const Investment = require("../models/Investment");
+const asyncHandler = require("../utils/asyncHandler");
+const ApiResponse = require("../utils/apiResponse");
 
 /* ========================= */
 /* CREATE INVESTMENT */
 /* ========================= */
 
-const createInvestment = async (req, res) => {
-  try {
+const createInvestment = asyncHandler(async (req, res) => {
     const {
       name,
       type,
@@ -34,47 +35,38 @@ const createInvestment = async (req, res) => {
       notes
     });
 
-    res.status(201).json({
-      success: true,
-      investment
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message
-    });
-  }
-};
+    return ApiResponse.success(
+      res,
+      investment,
+      "Investment created successfully",
+      201
+    );
+});
 
 /* ========================= */
 /* GET INVESTMENTS */
 /* ========================= */
 
-const getInvestments = async (req, res) => {
-  try {
+const getInvestments = asyncHandler(async (req, res) => {
     const investments = await Investment.find({
       user: req.user._id
     }).sort({ createdAt: -1 });
 
-    res.status(200).json({
-      success: true,
-      count: investments.length,
-      investments
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message
-    });
-  }
-};
+    return ApiResponse.success(
+      res,
+      {
+        count: investments.length,
+        investments
+      },
+      "Investments fetched successfully"
+    );
+});
 
 /* ========================= */
 /* UPDATE INVESTMENT */
 /* ========================= */
 
-const updateInvestment = async (req, res) => {
-  try {
+const updateInvestment = asyncHandler(async (req, res) => {
     const investment = await Investment.findOne({
       _id: req.params.id,
       user: req.user._id
@@ -96,24 +88,18 @@ const updateInvestment = async (req, res) => {
       }
     );
 
-    res.status(200).json({
-      success: true,
-      investment: updatedInvestment
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message
-    });
-  }
-};
+    return ApiResponse.success(
+      res,
+      updatedInvestment,
+      "Investment updated successfully"
+    );
+});
 
 /* ========================= */
 /* DELETE INVESTMENT */
 /* ========================= */
 
-const deleteInvestment = async (req, res) => {
-  try {
+const deleteInvestment = asyncHandler(async (req, res) => {
     const investment = await Investment.findOne({
       _id: req.params.id,
       user: req.user._id
@@ -128,17 +114,12 @@ const deleteInvestment = async (req, res) => {
 
     await investment.deleteOne();
 
-    res.status(200).json({
-      success: true,
-      message: "Investment deleted successfully"
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message
-    });
-  }
-};
+    return ApiResponse.success(
+      res,
+      null,
+      "Investment deleted successfully"
+    );
+});
 
 module.exports = {
   createInvestment,
