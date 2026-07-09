@@ -17,8 +17,8 @@ import {
 import { Doughnut } from "react-chartjs-2";
 import { recurringExpenseIcons } from "../utils/recurringExpenseIcons";
 
+import AppShell from "../components/layout/AppShell/AppShell";
 import Button from "../components/ui/Button/Button";
-import Sidebar from "../components/Sidebar/Sidebar.jsx";
 import Navbar from "../components/Navbar/Navbar.jsx";
 
 ChartJS.register(
@@ -155,10 +155,7 @@ function RecurringExpenses() {
   };
 
   return (
-    <div className="app-layout">
-      <Sidebar />
-
-      <main className="main-content">
+    <AppShell>
         <Navbar />
 
         <section className="page-header">
@@ -441,8 +438,7 @@ function RecurringExpenses() {
             </div>
           </div>
         </section>
-      </main>
-    </div>
+      </AppShell>
   );
 }
 

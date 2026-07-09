@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import Button from "../components/ui/Button/Button";
-import Sidebar from "../components/Sidebar/Sidebar.jsx";
+import AppShell from "../components/layout/AppShell/AppShell";
 import Navbar from "../components/Navbar/Navbar.jsx";
 import { setBudget } from "../services/budgetService.js";
+import App from "../App";
 
 function Budget() {
   const [monthlyBudget, setMonthlyBudget] = useState("");
@@ -46,10 +47,7 @@ function Budget() {
   };
 
   return (
-    <div className="app-layout">
-      <Sidebar />
-
-      <main className="main-content">
+    <AppShell>
         <Navbar />
 
         <section className="page-header">
@@ -94,8 +92,7 @@ function Budget() {
 
           {message && <p className="progress-text">{message}</p>}
         </form>
-      </main>
-    </div>
+      </AppShell>
   );
 }
 

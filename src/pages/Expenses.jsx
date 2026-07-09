@@ -11,7 +11,7 @@ import {
   FaMagnifyingGlass
 } from "react-icons/fa6";
 
-import Sidebar from "../components/Sidebar/Sidebar.jsx";
+import AppShell from "../components/layout/AppShell/AppShell";
 import Navbar from "../components/Navbar/Navbar.jsx";
 
 import {
@@ -191,10 +191,7 @@ function Expenses() {
   };
 
   return (
-    <div className="app-layout">
-      <Sidebar />
-
-      <main className="main-content">
+    <AppShell>
         <Navbar />
 
         <section className="page-header">
@@ -421,8 +418,7 @@ function Expenses() {
             )}
           </div>
         </section>
-      </main>
-    </div>
+      </AppShell>
   );
 }
 

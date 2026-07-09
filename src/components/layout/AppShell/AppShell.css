@@ -1,0 +1,12 @@
+.app-shell{
+    display:flex;
+    min-height:100vh;
+    background:#000;
+}
+
+.app-content{
+    flex:1;
+    margin-left:260px;
+    padding:32px;
+    overflow-x:hidden;
+}

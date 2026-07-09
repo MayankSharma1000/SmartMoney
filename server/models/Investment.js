@@ -11,7 +11,9 @@ const investmentSchema = new mongoose.Schema(
     name: {
       type: String,
       required: [true, "Investment name is required"],
-      trim: true
+      trim: true,
+      minlength: 2,
+      maxlength: 100
     },
 
     type: {
@@ -33,13 +35,13 @@ const investmentSchema = new mongoose.Schema(
 
     investedAmount: {
       type: Number,
-      required: true,
-      min: 0
+      required: [true, "Invested amount is required"],
+      min: 1
     },
 
     currentValue: {
       type: Number,
-      required: true,
+      required: [true, "Current value is required"],
       min: 0
     },
 
@@ -50,13 +52,17 @@ const investmentSchema = new mongoose.Schema(
 
     platform: {
       type: String,
+      trim: true,
+      maxlength: 100,
       default: ""
     },
 
     notes: {
       type: String,
+      trim: true,
+      maxlength: 500,
       default: ""
-    }
+    },
   },
   {
     timestamps: true
@@ -83,23 +89,21 @@ investmentSchema.virtual("returnPercentage").get(function () {
 
 /* Include virtuals in JSON responses */
 investmentSchema.set("toJSON", {
-  virtuals: true
+  virtuals: true,
+  versionKey: false
 });
 
 investmentSchema.set("toObject", {
-  virtuals: true
+  virtuals: true,
+  versionKey: false
+});
+
+investmentSchema.index({
+  user:1,
+  type:1
 });
 
 module.exports = mongoose.model(
   "Investment",
   investmentSchema
 );
-
-
-investmentSchema.index({
-
-  user:1,
-  
-  type:1
-  
-  });

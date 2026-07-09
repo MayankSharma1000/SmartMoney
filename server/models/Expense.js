@@ -11,12 +11,14 @@ const expenseSchema = new mongoose.Schema(
     title: {
       type: String,
       required: [true, "Expense title is required"],
-      trim: true
+      trim: true,
+      minlength: 2,
+      maxlength: 100
     },
 
     category: {
       type: String,
-      required: true,
+      required: [true, "Category is required"],
       enum: [
         "Food",
         "Transport",
@@ -33,7 +35,7 @@ const expenseSchema = new mongoose.Schema(
     amount: {
       type: Number,
       required: true,
-      min: 0
+      min: 0.01
     },
 
     date: {
@@ -43,6 +45,8 @@ const expenseSchema = new mongoose.Schema(
 
     note: {
       type: String,
+      trim: true,
+      maxlength: 500,
       default: ""
     },
 
@@ -56,11 +60,12 @@ const expenseSchema = new mongoose.Schema(
         "Net Banking",
         "Other"
       ],
-      default: "UPI"
+      default: "Cash"
     }
   },
   {
-    timestamps: true
+    timestamps: true,
+    versionKey: false
   }
 );
 
@@ -86,6 +91,11 @@ expenseSchema.index({
 
   amount: -1
 
+});
+
+expenseSchema.set("toJSON", {
+  virtuals: true,
+  versionKey: false
 });
 
 module.exports = mongoose.model("Expense", expenseSchema);

@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import "../../styles/Sidebar.css";
+import "../../../styles/Sidebar.css";
 
 import {
   FaWallet,
@@ -8,11 +8,10 @@ import {
   FaReceipt,
   FaPiggyBank,
   FaChartLine,
-  FaUser,
   FaCalendarAlt,
-  FaHeadset,
-  FaCrown,
-  FaChevronRight
+  FaCog,
+  FaSignOutAlt,
+  FaTrashAlt
 } from "react-icons/fa";
 
 function Sidebar() {
@@ -48,14 +47,9 @@ function Sidebar() {
       icon: <FaCalendarAlt />
     },
     {
-      name: "Profile",
-      path: "/profile",
-      icon: <FaUser />
-    },
-    {
-      name: "Support",
-      path: "/support",
-      icon: <FaHeadset />
+      name: "Settings",
+      path: "/settings",
+      icon: <FaCog />
     }
   ];
 
@@ -72,7 +66,7 @@ function Sidebar() {
 
         <div>
           <h2>SmartMoney</h2>
-          <p>Expense Intelligence</p>
+          <p>Personal Finance OS</p>
         </div>
 
       </div>
@@ -101,50 +95,52 @@ function Sidebar() {
       </nav>
 
       {/* ================= SIDEBAR FOOTER ================= */}
-
       <div className="sidebar-footer">
 
-        {/* Premium Card */}
+        <div className="sidebar-widget">
 
-        <div className="sidebar-premium">
+          <span className="widget-label">
+            THIS MONTH
+          </span>
 
-          <div className="premium-icon">
-            <FaCrown />
-          </div>
+          <h2>
+            ₹18,420
+          </h2>
 
-          <div className="premium-content">
-
-            <h4>Premium Dashboard</h4>
-
-            <p>
-              AI Reports & Smart Insights
-            </p>
-
-          </div>
+          <p>
+            Saved
+            <span className="positive">
+              +12%
+            </span>
+          </p>
 
         </div>
 
-        {/* User Profile */}
+        <div className="sidebar-divider" />
 
-        <div className="sidebar-profile">
+        <button className="account-button">
 
-          <div className="sidebar-profile-avatar">
+          <div className="account-avatar">
             MS
           </div>
 
-          <div className="sidebar-profile-info">
+          <div>
 
-            <h4>Mayank Sharma</h4>
+            <strong>My Account</strong>
 
-            <p>Full Stack Developer</p>
+            <span>Settings</span>
 
           </div>
 
-          <FaChevronRight
-            className="profile-arrow"
-          />
+        </button>
 
-        </div>
+        <button className="sidebar-action-btn">
+
+          <FaSignOutAlt />
+
+          Logout
+
+        </button>
 
       </div>
 

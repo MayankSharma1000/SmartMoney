@@ -13,7 +13,7 @@ import {
   FaUniversity
 } from "react-icons/fa";
 
-import Sidebar from "../components/Sidebar/Sidebar.jsx";
+import AppShell from "../components/layout/AppShell/AppShell";
 import Navbar from "../components/Navbar/Navbar.jsx";
 import Button from "../components/ui/Button/Button";
 
@@ -141,10 +141,7 @@ function Investments() {
   };
 
   return (
-    <div className="app-layout">
-      <Sidebar />
-
-      <main className="main-content">
+      <AppShell>
         <Navbar />
 
         <section className="page-header">
@@ -345,8 +342,7 @@ function Investments() {
             )}
           </div>
         </section>
-      </main>
-    </div>
+      </AppShell>       
   );
 }
 

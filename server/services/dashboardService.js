@@ -2,117 +2,57 @@ const Expense = require("../models/Expense");
 const Savings = require("../models/Savings");
 const Investment = require("../models/Investment");
 
-const {
-  generateAnalytics
-} = require("../analytics/analyticsEngine");
+const {generateAnalytics} = require("../analytics/analyticsEngine");
+const {calculateDashboardTotals, getRecentTransactions} = require("../utils/dashboardCalculations");
 
-async function getDashboardData(userId) {
 
-  const [expenses, savings, investments] =
-    await Promise.all([
+  async function buildDashboard(userId) {
+    try {
+      const [expenses, savings, investments] = await Promise.all([
+        Expense.find({ user: userId })
+          .select("title category amount paymentMethod date")
+          .sort({date:-1})
+          .lean(),
 
-      Expense.find({ user: userId }).sort({
-        date: -1
-      }),
+        Savings.find({ user: userId })
+          .lean(),
 
-      Savings.find({ user: userId }),
+        Investment.find({ user: userId })
+          .lean()
+      ]);
 
-      Investment.find({ user: userId })
-
-    ]);
+        } catch (error) {
+          throw new Error(
+            `Failed to build dashboard: ${error.message}`
+          );
+        }
 
   /* ========================= */
   /* BASIC TOTALS */
   /* ========================= */
 
-  const totalExpenses = expenses.reduce(
+  const {
 
-    (sum, item) =>
+    totalExpenses,
 
-      sum + Number(item.amount || 0),
+    totalSavings,
 
-    0
+    totalInvested,
 
-  );
+    currentInvestmentValue,
 
-  const totalSavings = savings.reduce(
+    investmentProfit
 
-    (sum, item) =>
+  } = calculateDashboardTotals(
 
-      sum +
+    expenses,
 
-      Number(
+    savings,
 
-        item.currentAmount ||
-
-        item.savedAmount ||
-
-        item.saved ||
-
-        item.amount ||
-
-        0
-
-      ),
-
-    0
+    investments
 
   );
 
-  const totalInvested = investments.reduce(
-
-    (sum, item) =>
-
-      sum +
-
-      Number(
-
-        item.investedAmount ||
-
-        item.invested ||
-
-        item.amount ||
-
-        item.purchaseValue ||
-
-        0
-
-      ),
-
-    0
-
-  );
-
-  const currentInvestmentValue = investments.reduce(
-
-    (sum, item) =>
-
-      sum +
-
-      Number(
-
-        item.currentValue ||
-
-        item.current ||
-
-        item.marketValue ||
-
-        item.value ||
-
-        item.investedAmount ||
-
-        item.amount ||
-
-        0
-
-      ),
-
-    0
-
-  );
-
-  const investmentProfit =
-    currentInvestmentValue - totalInvested;
 
   /* ========================= */
   /* ANALYTICS */
@@ -133,6 +73,7 @@ async function getDashboardData(userId) {
     expenses
 
   );
+
 
   /* ========================= */
   /* RETURN */
@@ -168,14 +109,11 @@ async function getDashboardData(userId) {
       analytics.monthlyChart || [],
 
     recentTransactions:
-      expenses.slice(0, 5)
+      getRecentTransactions(expenses)
 
   };
-
 }
 
 module.exports = {
-
-  getDashboardData
-
+  buildDashboard
 };
