@@ -1,11 +1,12 @@
 const Savings = require("../models/Savings");
+const asyncHandler = require("../utils/asyncHandler");
+const ApiResponse = require("../utils/apiResponse");
 
 /* ========================= */
 /* CREATE SAVINGS GOAL */
 /* ========================= */
 
-const createSavingsGoal = async (req, res) => {
-  try {
+const createSavingsGoal = asyncHandler(async (req, res) => {
     const {
       title,
       targetAmount,
@@ -32,47 +33,38 @@ const createSavingsGoal = async (req, res) => {
       notes
     });
 
-    res.status(201).json({
-      success: true,
-      goal
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message
-    });
-  }
-};
+    return ApiResponse.success(
+      res,
+      goal,
+      "Savings goal created successfully",
+      201
+    );
+});
 
 /* ========================= */
 /* GET SAVINGS GOALS */
 /* ========================= */
 
-const getSavingsGoals = async (req, res) => {
-  try {
+const getSavingsGoals = asyncHandler(async (req, res) => {
     const goals = await Savings.find({
       user: req.user._id
     }).sort({ createdAt: -1 });
 
-    res.status(200).json({
-      success: true,
-      count: goals.length,
-      goals
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message
-    });
-  }
-};
+    return ApiResponse.success(
+      res,
+      {
+        count: goals.length,
+        goals
+      },
+      "Savings goals fetched successfully"
+    );
+});
 
 /* ========================= */
 /* UPDATE SAVINGS GOAL */
 /* ========================= */
 
-const updateSavingsGoal = async (req, res) => {
-  try {
+const updateSavingsGoal = asyncHandler(async (req, res) => {
     const goal = await Savings.findOne({
       _id: req.params.id,
       user: req.user._id
@@ -94,49 +86,39 @@ const updateSavingsGoal = async (req, res) => {
       }
     );
 
-    res.status(200).json({
-      success: true,
-      goal: updatedGoal
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message
-    });
-  }
-};
+    return ApiResponse.success(
+      res,
+      updatedGoal,
+      "Savings goal updated successfully"
+    );
+});
 
 /* ========================= */
 /* DELETE SAVINGS GOAL */
 /* ========================= */
 
-const deleteSavingsGoal = async (req, res) => {
-  try {
+const deleteSavingsGoal = asyncHandler(async (req, res) => {
     const goal = await Savings.findOne({
       _id: req.params.id,
       user: req.user._id
     });
 
     if (!goal) {
-      return res.status(404).json({
-        success: false,
-        message: "Savings goal not found"
-      });
+      return ApiResponse.success(
+        res,
+        null,
+        "Savings goal deleted successfully"
+      );
     }
 
     await goal.deleteOne();
 
-    res.status(200).json({
-      success: true,
-      message: "Savings goal deleted successfully"
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message
-    });
-  }
-};
+    return ApiResponse.success(
+      res,
+      null,
+      "Savings goal deleted successfully"
+    );
+});
 
 module.exports = {
   createSavingsGoal,
