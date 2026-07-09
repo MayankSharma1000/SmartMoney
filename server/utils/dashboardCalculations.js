@@ -84,8 +84,13 @@ function calculateDashboardTotals(
         }));
     }
 
-  module.exports = {
+    function getRecentTransactions(expenses) {
+      return expenses
+        .sort((a, b) => new Date(b.date) - new Date(a.date))
+        .slice(0, 5);
+    }
 
-    calculateDashboardTotals
-
-  };
+    module.exports = {
+      calculateDashboardTotals,
+      getRecentTransactions
+    };

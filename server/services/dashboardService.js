@@ -6,51 +6,33 @@ const {generateAnalytics} = require("../analytics/analyticsEngine");
 const {calculateDashboardTotals, getRecentTransactions} = require("../utils/dashboardCalculations");
 
 
-  async function buildDashboard(userId) {
-    try {
-      const [expenses, savings, investments] = await Promise.all([
-        Expense.find({ user: userId })
-          .select("title category amount paymentMethod date")
-          .sort({date:-1})
-          .lean(),
+async function buildDashboard(userId) {
+  try {
 
-        Savings.find({ user: userId })
-          .lean(),
+    const [expenses, savings, investments] = await Promise.all([
+      Expense.find({ user: userId })
+        .select("title category amount paymentMethod date")
+        .sort({ date: -1 })
+        .lean(),
 
-        Investment.find({ user: userId })
-          .lean()
-      ]);
-
-        } catch (error) {
-          throw new Error(
-            `Failed to build dashboard: ${error.message}`
-          );
-        }
+      Savings.find({ user: userId }).lean(),
+      Investment.find({ user: userId }).lean()
+    ]);
 
   /* ========================= */
   /* BASIC TOTALS */
   /* ========================= */
 
   const {
-
     totalExpenses,
-
     totalSavings,
-
     totalInvested,
-
     currentInvestmentValue,
-
     investmentProfit
-
   } = calculateDashboardTotals(
-
     expenses,
-
     savings,
-
     investments
-
   );
 
 
@@ -59,19 +41,12 @@ const {calculateDashboardTotals, getRecentTransactions} = require("../utils/dash
   /* ========================= */
 
   const analytics = generateAnalytics(
-
     {
-
       totalExpenses,
-
       totalSavings,
-
       currentInvestmentValue
-
     },
-
     expenses
-
   );
 
 
@@ -80,15 +55,10 @@ const {calculateDashboardTotals, getRecentTransactions} = require("../utils/dash
   /* ========================= */
 
   return {
-
     totalExpenses,
-
     totalSavings,
-
     totalInvested,
-
     currentInvestmentValue,
-
     investmentProfit,
 
     expenseCount: expenses.length,
@@ -112,6 +82,11 @@ const {calculateDashboardTotals, getRecentTransactions} = require("../utils/dash
       getRecentTransactions(expenses)
 
   };
+  } catch (error) {
+    throw new Error(
+      `Failed to build dashboard: ${error.message}`
+    );
+  }
 }
 
 module.exports = {

@@ -90,10 +90,9 @@ const loginUser = async (req, res) => {
     const { email, password } =
       req.body;
 
-    const user =
-      await User.findOne({
+      const user = await User.findOne({
         email
-      });
+      }).select("+password");
 
     if (
       !user ||
@@ -122,10 +121,11 @@ const loginUser = async (req, res) => {
         generateToken(user._id)
     });
   } catch (error) {
+    console.error(error);
+
     res.status(500).json({
       success: false,
-      message:
-        "Internal Server Error"
+      message: error.message
     });
   }
 };
