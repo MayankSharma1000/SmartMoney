@@ -10,20 +10,34 @@ const recurringExpenseSchema = new mongoose.Schema(
 
     title: {
       type: String,
-      required: true,
-      trim: true
+      required: [true, "Recurring expense title is required"],
+      trim: true,
+      minlength: 2,
+      maxlength: 100
     },
 
     category: {
       type: String,
-      required: true,
+      required: [true, "Category is required"],
+      enum: [
+        "Bills",
+        "Rent",
+        "EMI",
+        "Insurance",
+        "Subscription",
+        "Utilities",
+        "Internet",
+        "Education",
+        "Health",
+        "Other"
+      ],
       default: "Bills"
     },
 
     amount: {
       type: Number,
-      required: true,
-      min: 0
+      required: [true, "Amount is required"],
+      min: 1
     },
 
     frequency: {
@@ -39,7 +53,16 @@ const recurringExpenseSchema = new mongoose.Schema(
 
     paymentMethod: {
       type: String,
-      default: "UPI"
+      enum: [
+        "Cash",
+        "UPI",
+        "Credit Card",
+        "Debit Card",
+        "Net Banking",
+        "Auto Debit",
+        "Other"
+      ],
+      default: "Auto Debit"
     },
 
     isActive: {
@@ -48,9 +71,30 @@ const recurringExpenseSchema = new mongoose.Schema(
     }
   },
   {
-    timestamps: true
+    timestamps: true,
+    versionKey: false
   }
 );
+
+recurringExpenseSchema.set("toJSON", {
+  virtuals: true,
+  versionKey: false
+});
+
+recurringExpenseSchema.set("toObject", {
+  virtuals: true,
+  versionKey: false
+});
+
+recurringExpenseSchema.index({
+  user: 1,
+  nextDueDate: 1
+});
+
+recurringExpenseSchema.index({
+  user: 1,
+  isActive: 1
+});
 
 module.exports = mongoose.model(
   "RecurringExpense",

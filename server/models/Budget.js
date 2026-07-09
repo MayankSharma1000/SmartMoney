@@ -10,21 +10,59 @@ const budgetSchema = new mongoose.Schema(
 
     monthlyBudget: {
       type: Number,
-      required: true
+      required: [true, "Monthly budget is required"],
+      min: 1
     },
 
     month: {
       type: String,
-      required: true
+      required: [true, "Month is required"],
+      enum: [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December"
+      ]
     },
 
     year: {
       type: Number,
-      required: true
-    }
+      required: [true, "Year is required"],
+      min: 2020,
+      max: 2100
+    },
   },
   {
     timestamps: true
+  }
+);
+
+budgetSchema.set("toJSON", {
+  virtuals: true,
+  versionKey: false
+});
+
+budgetSchema.set("toObject", {
+  virtuals: true,
+  versionKey: false
+});
+
+budgetSchema.index(
+  {
+    user: 1,
+    month: 1,
+    year: 1
+  },
+  {
+    unique: true
   }
 );
 

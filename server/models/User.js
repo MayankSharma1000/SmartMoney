@@ -5,7 +5,9 @@ const userSchema = new mongoose.Schema(
     name: {
       type: String,
       required: [true, "Name is required"],
-      trim: true
+      trim: true,
+      minlength: 2,
+      maxlength: 60
     },
 
     email: {
@@ -13,17 +15,24 @@ const userSchema = new mongoose.Schema(
       required: [true, "Email is required"],
       unique: true,
       lowercase: true,
-      trim: true
+      trim: true,
+      match: [
+        /^\S+@\S+\.\S+$/,
+        "Please enter a valid email address."
+      ]
     },
 
     password: {
       type: String,
-      required: [true, "Password is required"]
+      required: [true, "Password is required"],
+      minlength: 8,
+      select: false
     },
 
     savingsTarget: {
       type: Number,
-      default: 0
+      default: 0,
+      min: 0
     },
 
     profilePicture: {
@@ -39,9 +48,10 @@ const userSchema = new mongoose.Schema(
 
     monthlyIncome: {
       type: Number,
-      default: null
+      default: null,
+      min: 0
     },
-    
+
     currency: {
       type: String,
       enum: [
@@ -57,7 +67,7 @@ const userSchema = new mongoose.Schema(
       ],
       default: "INR"
     },
-    
+
     employmentType: {
       type: String,
       enum: [
@@ -70,7 +80,7 @@ const userSchema = new mongoose.Schema(
       ],
       default: null
     },
-    
+
     onboardingCompleted: {
       type: Boolean,
       default: false
@@ -78,8 +88,27 @@ const userSchema = new mongoose.Schema(
 
   },
   {
-    timestamps: true
+    timestamps: true,
+    versionKey: false
   }
 );
+
+userSchema.set("toJSON", {
+  virtuals: true,
+  versionKey: false,
+  transform(doc, ret) {
+    delete ret.password;
+    return ret;
+  }
+});
+
+userSchema.set("toObject", {
+  virtuals: true,
+  versionKey: false
+});
+
+userSchema.index({
+  email: 1
+});
 
 module.exports = mongoose.model("User", userSchema);
