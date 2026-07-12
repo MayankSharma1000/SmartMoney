@@ -1,36 +1,73 @@
-import React from "react";
+import { motion } from "framer-motion";
 import "./Button.css";
 
 function Button({
-  children,
-  variant = "primary",
-  size = "md",
-  loading = false,
-  disabled = false,
-  icon,
-  type = "button",
-  onClick,
-  className = "",
-  ...props
+
+    children,
+
+    variant = "primary",
+
+    size = "md",
+
+    icon,
+
+    fullWidth = false,
+
+    onClick,
+
+    type = "button",
+
+    disabled = false
+
 }) {
-  return (
-    <button
-      type={type}
-      disabled={disabled || loading}
-      onClick={onClick}
-      className={`btn btn-${variant} btn-${size} ${className}`}
-      {...props}
-    >
-      {loading ? (
-        <span className="btn-spinner"></span>
-      ) : (
-        <>
-          {icon && <span className="btn-icon">{icon}</span>}
-          <span>{children}</span>
-        </>
-      )}
-    </button>
-  );
+
+    return (
+
+        <motion.button
+
+            whileTap={{ scale: .97 }}
+
+            whileHover={
+                !disabled
+                    ? { y: -2 }
+                    : {}
+            }
+
+            type={type}
+
+            disabled={disabled}
+
+            onClick={onClick}
+
+            className={`
+                btn
+                btn-${variant}
+                btn-${size}
+                ${fullWidth ? "btn-full" : ""}
+            `}
+
+        >
+
+            {icon &&
+
+                <span className="btn-icon">
+
+                    {icon}
+
+                </span>
+
+            }
+
+            <span>
+
+                {children}
+
+            </span>
+
+        </motion.button>
+
+    );
+
 }
 
 export default Button;

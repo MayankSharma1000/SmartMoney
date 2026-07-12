@@ -1,0 +1,104 @@
+.icon-box{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border-radius:18px;
+
+    flex-shrink:0;
+
+    transition:all .25s ease;
+
+    }
+
+    /* Sizes */
+
+    .icon-sm{
+
+    width:42px;
+    height:42px;
+    font-size:18px;
+
+    }
+
+    .icon-md{
+
+    width:54px;
+    height:54px;
+    font-size:22px;
+
+    }
+
+    .icon-lg{
+
+    width:68px;
+    height:68px;
+    font-size:28px;
+
+    }
+
+    /* Primary */
+
+    .icon-primary{
+
+    background:
+    linear-gradient(
+    135deg,
+    var(--primary),
+    var(--primary-light)
+    );
+
+    color:white;
+
+    box-shadow:
+    0 10px 24px
+    rgba(99,102,241,.28);
+
+    }
+
+    /* Success */
+
+    .icon-success{
+
+    background:
+    rgba(34,197,94,.15);
+
+    color:var(--success);
+
+    }
+
+    /* Warning */
+
+    .icon-warning{
+
+    background:
+    rgba(245,158,11,.15);
+
+    color:var(--warning);
+
+    }
+
+    /* Danger */
+
+    .icon-danger{
+
+    background:
+    rgba(239,68,68,.15);
+
+    color:var(--danger);
+
+    }
+
+    /* Neutral */
+
+    .icon-neutral{
+
+    background:
+    rgba(255,255,255,.05);
+
+    color:var(--text);
+
+    }

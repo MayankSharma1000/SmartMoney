@@ -1,25 +1,26 @@
 import {
-  FaWallet,
-  FaPiggyBank,
   FaChartLine,
   FaHeartbeat,
+  FaPiggyBank,
+  FaWallet,
 } from "react-icons/fa";
 
 import AppShell from "@/components/layout/AppShell";
-import PageHero from "@/components/shared/PageHero";
+import PageHeader from "@/components/shared/PageHeader";
+import Section from "@/components/shared/Section";
 
+import AIInsights from "../components/Dashboard/AIInsights";
+import ChartsSection from "../components/Dashboard/ChartsSection";
 import MetricGrid from "../components/Dashboard/MetricGrid";
 import QuickActions from "../components/Dashboard/QuickActions";
-import ChartsSection from "../components/Dashboard/ChartsSection";
 import RecentTransactions from "../components/Dashboard/RecentTransactions";
-import AIInsights from "../components/Dashboard/AIInsights";
 
 import BudgetProgress from "../components/DashboardWidgets/BudgetProgress";
-import SavingsProgress from "../components/DashboardWidgets/SavingsProgress";
 import InvestmentSummary from "../components/DashboardWidgets/InvestmentSummary";
+import SavingsProgress from "../components/DashboardWidgets/SavingsProgress";
 
-import { useDashboard } from "../hooks/useDashboard";
 import { useBudget } from "../hooks/useBudget";
+import { useDashboard } from "../hooks/useDashboard";
 import { useExpenses } from "../hooks/useExpenses";
 
 import { calculateBudgetStats } from "../utils/calculateBudgetStats";
@@ -33,9 +34,9 @@ function Dashboard() {
   if (loading) {
     return (
       <AppShell>
-        <PageHero
-          title="Dashboard"
-          subtitle="Loading your financial workspace..."
+        <PageHeader
+            title="Dashboard"
+            subtitle="Monitor your expenses, savings, investments and financial health from one intelligent workspace."
         />
       </AppShell>
     );
@@ -93,22 +94,50 @@ function Dashboard() {
 
   return (
     <AppShell>
-      <PageHero
-        title="Dashboard"
-        subtitle="Monitor your expenses, savings, investments and financial health from one intelligent workspace."
+      <PageHeader
+          title="Dashboard"
+          subtitle="Monitor your expenses, savings, investments and financial health from one intelligent workspace."
       />
 
-      <MetricGrid stats={stats} />
+      <Section>
+        <MetricGrid stats={stats} />
+      </Section>
 
-      <QuickActions />
+      <Section
+          title="Quick Actions"
+          subtitle="Frequently used shortcuts"
+      >
+          <QuickActions />
+      </Section>
 
-      <ChartsSection dashboardData={dashboardData} />
+      <Section
+          title="Analytics"
+          subtitle="Track your financial trends"
+      >
+          <ChartsSection
+              dashboardData={dashboardData}
+          />
+      </Section>
 
-      <RecentTransactions
-        transactions={dashboardData.recentTransactions || []}
-      />
+      <Section
+          title="Recent Transactions"
+          subtitle="Your latest financial activity"
+      >
 
-      <section className="goal-grid">
+          <RecentTransactions
+              transactions={
+                  dashboardData.recentTransactions || []
+              }
+          />
+
+      </Section>
+
+      <Section
+          title="Financial Overview"
+          subtitle="Budget, savings, investments and AI insights"
+      >
+
+      <div className="goal-grid">
         <BudgetProgress
           monthlyBudget={budget?.monthlyBudget || 0}
           spent={budgetStats.spent}
@@ -121,7 +150,8 @@ function Dashboard() {
         <InvestmentSummary />
 
         <AIInsights insights={insights} />
-      </section>
+        </div>
+      </Section>
     </AppShell>
   );
 }

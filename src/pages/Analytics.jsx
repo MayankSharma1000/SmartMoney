@@ -1,23 +1,21 @@
-import React from "react";
-
-import Navbar from "../components/Navbar/Navbar.jsx";
 import "../components/Analytics/Analytics.css";
-import {DEFAULT_LIABILITIES} from "../constants/financeConstants";
-import DashboardSkeleton from "../components/Dashboard/DashboardSkeleton";
 
+import DashboardSkeleton from "../components/Dashboard/DashboardSkeleton";
+import AppShell from "../components/layout/AppShell/AppShell.jsx";
+
+import { DEFAULT_LIABILITIES } from "../constants/financeConstants";
 import { useDashboard } from "../hooks/useDashboard";
 
-import AnalyticsHeader from "../components/Analytics/AnalyticsHeader.jsx";
-import InsightCards from "../components/Analytics/InsightCards.jsx";
-import FinancialHealth from "../components/Analytics/FinancialHealth.jsx";
-import SpendingOverview from "../components/Analytics/SpendingOverview.jsx";
-import SavingsGoals from "../components/Analytics/SavingsGoals.jsx";
-import InvestmentOverview from "../components/Analytics/InvestmentOverview.jsx";
 import ActivityTimeline from "../components/Analytics/ActivityTimeline.jsx";
-import AISuggestions from "../components/Analytics/AISuggestions.jsx";
 import AIFinancialCoach from "../components/Analytics/AIFinancialCoach.jsx";
+import AISuggestions from "../components/Analytics/AISuggestions.jsx";
 import AnalyticsFooter from "../components/Analytics/AnalyticsFooter.jsx";
-import AppShell from "../components/layout/AppShell/AppShell.jsx";
+import AnalyticsHeader from "../components/Analytics/AnalyticsHeader.jsx";
+import FinancialHealth from "../components/Analytics/FinancialHealth.jsx";
+import InsightCards from "../components/Analytics/InsightCards.jsx";
+import InvestmentOverview from "../components/Analytics/InvestmentOverview.jsx";
+import SavingsGoals from "../components/Analytics/SavingsGoals.jsx";
+import SpendingOverview from "../components/Analytics/SpendingOverview.jsx";
 
 function Analytics() {
   const { dashboardData, loading } = useDashboard();
@@ -35,27 +33,18 @@ function Analytics() {
 
   if (loading) {
     return (
-      <div className="app-layout">
-        <Sidebar />
-
-        <main className="main-content">
-          <Navbar />
-          <DashboardSkeleton />      
-        </main>
-      </div>
+      <AppShell>
+        <DashboardSkeleton />
+      </AppShell>
     );
   }
 
   return (
       <AppShell>
-        <Navbar />
-  
         <AnalyticsHeader />
-  
         <InsightCards />
-        
         <AIFinancialCoach analytics={dashboardData?.analytics}/>
-        
+
         <section className="analytics-main-grid">
           <FinancialHealth />
           <SpendingOverview
@@ -71,13 +60,13 @@ function Analytics() {
             liabilities={liabilities}
           />
         </section>
-  
+
         <div className="analytics-bottom-grid">
           <ActivityTimeline />
           <AISuggestions />
         </div>
         <AnalyticsFooter />
-  
+
       </AppShell>
     );
   }

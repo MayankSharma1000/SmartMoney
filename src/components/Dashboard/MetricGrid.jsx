@@ -1,11 +1,11 @@
 import "./MetricGrid.css";
-import MetricCard from "@/components/shared/MetricCard";
+import StatCard from "@/components/ui/StatCard";
 
 function MetricGrid({ stats = [] }) {
   return (
     <div className="stats-grid">
       {stats.map((stat) => (
-        <MetricCard
+        <StatCard
           key={stat.title}
           title={stat.title}
           value={stat.value}

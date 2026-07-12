@@ -1,0 +1,73 @@
+.stat-card{
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:space-between;
+
+    min-height:190px;
+
+    }
+
+    .stat-card-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:flex-start;
+
+    margin-bottom:24px;
+
+    }
+
+    .stat-title{
+
+    font-size:.85rem;
+
+    font-weight:600;
+
+    color:var(--text-secondary);
+
+    margin-bottom:10px;
+
+    }
+
+    .stat-value{
+
+    font-size:2rem;
+
+    font-weight:800;
+
+    color:var(--text);
+
+    line-height:1.1;
+
+    }
+
+    .stat-card-footer{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:16px;
+
+    margin-top:auto;
+
+    }
+
+    .stat-subtitle{
+
+    font-size:.85rem;
+
+    color:var(--text-secondary);
+
+    line-height:1.5;
+
+    max-width:70%;
+
+    }

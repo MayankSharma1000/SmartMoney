@@ -1,0 +1,49 @@
+.chart-card{
+
+    display:flex;
+
+    flex-direction:column;
+
+    min-height:420px;
+
+    }
+
+    .chart-card-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:24px;
+
+    }
+
+    .chart-card-header h3{
+
+    font-size:1.15rem;
+
+    font-weight:700;
+
+    color:var(--text);
+
+    margin-bottom:6px;
+
+    }
+
+    .chart-card-header p{
+
+    font-size:.85rem;
+
+    color:var(--text-secondary);
+
+    }
+
+    .chart-card-body{
+
+    flex:1;
+
+    min-height:320px;
+
+    }

@@ -1,0 +1,71 @@
+.card{
+
+    background:var(--surface);
+
+    border:1px solid var(--border);
+
+    border-radius:20px;
+
+    padding:24px;
+
+    box-shadow:var(--shadow);
+
+    transition:var(--transition);
+
+    position:relative;
+
+    overflow:hidden;
+
+    }
+
+    .card::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+
+    left:0;
+
+    right:0;
+
+    height:1px;
+
+    background:
+
+    linear-gradient(
+
+    90deg,
+
+    transparent,
+
+    rgba(255,255,255,.15),
+
+    transparent
+
+    );
+
+    opacity:0;
+
+    transition:.3s;
+
+    }
+
+    .card:hover{
+
+    border-color:
+
+    rgba(99,102,241,.45);
+
+    box-shadow:
+
+    0 24px 60px rgba(0,0,0,.45);
+
+    }
+
+    .card:hover::before{
+
+    opacity:1;
+
+    }

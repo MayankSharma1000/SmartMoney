@@ -1,35 +1,35 @@
 import {
-    useEffect,
-    useState
-  } from "react";
-  
+  useEffect,
+  useState
+} from "react";
+
   import {
-    getSavingsGoals
-  } from "../services/savingsService";
-  
+  getSavingsGoals
+} from "../services/savingsService";
+
   export const useSavingsGoals =
     () => {
       const [goals, setGoals] =
         useState([]);
-  
+
       useEffect(() => {
         const fetchGoals =
           async () => {
             try {
-              const data =
+              const response =
                 await getSavingsGoals();
-  
+
               setGoals(
-                data.goals || []
+                response.data?.goals || []
               );
             } catch (error) {
               console.log(error);
             }
           };
-  
+
         fetchGoals();
       }, []);
-  
+
       return {
         goals
       };

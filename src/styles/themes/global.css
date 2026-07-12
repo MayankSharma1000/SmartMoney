@@ -1,0 +1,57 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    }
+
+    html{
+
+    scroll-behavior:smooth;
+
+    }
+
+    body{
+
+        background:
+        radial-gradient(
+        circle at top,
+        #1A1238 0%,
+        #09090B 40%,
+        #09090B 100%
+        );
+
+        color:var(--text);
+
+        font-family:Inter,sans-serif;
+
+        overflow-x:hidden;
+
+        min-height:100vh;
+
+        }
+
+    a{
+
+    text-decoration:none;
+
+    color:inherit;
+
+    }
+
+    button{
+
+    font-family:inherit;
+
+    cursor:pointer;
+
+    border:none;
+
+    }
+
+    img{
+
+    display:block;
+
+    max-width:100%;
+
+    }

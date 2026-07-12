@@ -1,10 +1,10 @@
-import React from "react";
 import {
-  FaPlusCircle,
-  FaPiggyBank,
   FaChartLine,
-  FaFileExport
+  FaFileExport,
+  FaPiggyBank,
+  FaPlusCircle
 } from "react-icons/fa";
+import "./QuickActions.css";
 
 const actions = [
   {
@@ -31,11 +31,7 @@ const actions = [
 
 function QuickActions() {
   return (
-    <section className="quick-actions">
-
-      <h2>Quick Actions</h2>
-
-      <div className="quick-grid">
+    <div className="quick-grid">
 
         {actions.map((action) => (
 
@@ -65,10 +61,7 @@ function QuickActions() {
           </div>
 
         ))}
-
       </div>
-
-    </section>
   );
 }
 

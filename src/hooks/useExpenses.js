@@ -18,7 +18,7 @@ export const useExpenses = () => {
           await getExpenses();
 
         setExpenses(
-          data.expenses || []
+          data.data?.expenses || []
         );
       } catch (error) {
         console.log(error);

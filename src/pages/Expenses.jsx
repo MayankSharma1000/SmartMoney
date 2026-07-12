@@ -1,23 +1,23 @@
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { categoryIcons } from "../utils/categoryIcons.jsx";
+import Button from "../components/ui/Button/Button";
 import { categories } from "../constants/categories";
 import { ITEMS_PER_PAGE } from "../constants/pagination";
-import Button from "../components/ui/Button/Button";
+import { categoryIcons } from "../utils/categoryIcons.jsx";
 
 import {
+  FaMagnifyingGlass,
   FaPlus,
-  FaTrash,
-  FaMagnifyingGlass
+  FaTrash
 } from "react-icons/fa6";
 
 import AppShell from "../components/layout/AppShell/AppShell";
 import Navbar from "../components/Navbar/Navbar.jsx";
 
 import {
-  getExpenses,
   addExpense,
-  deleteExpense
+  deleteExpense,
+  getExpenses
 } from "../services/expenseService.js";
 
 function Expenses() {
@@ -31,10 +31,10 @@ function Expenses() {
   const [searchText, setSearchText] = useState(
     searchParams.get("search") || ""
   );
-  
+
   const [selectedCategory, setSelectedCategory] =
     useState("All");
-  
+
   const [currentPage, setCurrentPage] =
     useState(1);
 
@@ -53,7 +53,9 @@ function Expenses() {
       setError("");
 
       const data = await getExpenses();
-      setExpenses(data.expenses || []);
+      setExpenses(
+        data.data?.expenses || []
+      );
     } catch (err) {
       setError(
         err.response?.data?.message ||
@@ -106,7 +108,7 @@ function Expenses() {
   const totalPages = Math.ceil(
     filteredExpenses.length / ITEMS_PER_PAGE
   );
-  
+
   const currentExpenses = filteredExpenses.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
     currentPage * ITEMS_PER_PAGE
@@ -150,7 +152,10 @@ function Expenses() {
 
       const data = await addExpense(payload);
 
-      setExpenses((prev) => [data.expense, ...prev]);
+      setExpenses(prev=>[
+        data.data,
+        ...prev
+      ]);
 
       setFormData({
         title: "",
@@ -174,7 +179,7 @@ function Expenses() {
     const confirmed = window.confirm(
       "Are you sure you want to delete this expense?"
     );
-  
+
     if (!confirmed) return;
     try {
       setError("");
@@ -398,7 +403,7 @@ function Expenses() {
                     </div>
                   ))}
                 </div>
-              
+
                 <div className="pagination">
                   {Array.from({ length: totalPages }, (_, index) => (
                     <Button

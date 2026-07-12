@@ -1,0 +1,141 @@
+.investment-card{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:24px;
+
+    min-height:320px;
+
+    }
+
+    .investment-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    }
+
+    .investment-header h3{
+
+    font-size:1.15rem;
+
+    font-weight:700;
+
+    color:var(--text);
+
+    margin-bottom:6px;
+
+    }
+
+    .investment-header p{
+
+    font-size:.85rem;
+
+    color:var(--text-secondary);
+
+    }
+
+    .investment-body{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:16px;
+
+    }
+
+    .investment-row{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    font-size:.95rem;
+
+    }
+
+    .investment-row span{
+
+    color:var(--text-secondary);
+
+    }
+
+    .profit{
+
+    color:var(--success);
+
+    font-weight:700;
+
+    }
+
+    .loss{
+
+    color:var(--danger);
+
+    font-weight:700;
+
+    }
+
+    .investment-actions{
+
+    display:flex;
+
+    gap:14px;
+
+    margin-top:auto;
+
+    }
+
+    .investment-actions button{
+
+    flex:1;
+
+    padding:12px;
+
+    border:none;
+
+    border-radius:12px;
+
+    cursor:pointer;
+
+    font-weight:600;
+
+    transition:.25s;
+
+    }
+
+    .edit-btn{
+
+    background:var(--primary);
+
+    color:white;
+
+    }
+
+    .delete-btn{
+
+    background:rgba(239,68,68,.12);
+
+    color:var(--danger);
+
+    }
+
+    .edit-btn:hover{
+
+    opacity:.92;
+
+    }
+
+    .delete-btn:hover{
+
+    background:rgba(239,68,68,.22);
+
+    }
