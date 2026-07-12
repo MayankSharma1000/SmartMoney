@@ -1,19 +1,23 @@
-import React from "react";
-import { FaPlus } from "react-icons/fa";
-import Button from "../ui/Button/Button";
+import Button from "@/components/ui/Button";
+import { FaPlus, FaSave } from "react-icons/fa";
 
 function SavingsGoalForm({
   formData,
   handleChange,
-  handleAddGoal,
-  submitLoading
+  handleSubmit,
+  submitLoading,
+  isEditing,
 }) {
   return (
     <section className="goal-form-card">
-
       <div className="goal-form-header">
         <div>
-          <h2>Create Savings Goal</h2>
+          <h2>
+            {isEditing
+              ? "Update Savings Goal"
+              : "Create Savings Goal"}
+          </h2>
+
           <p>
             Track your progress towards every financial milestone.
           </p>
@@ -22,11 +26,9 @@ function SavingsGoalForm({
 
       <form
         className="goal-form"
-        onSubmit={handleAddGoal}
+        onSubmit={handleSubmit}
       >
-
         <div className="form-row">
-
           <input
             type="text"
             name="title"
@@ -49,11 +51,9 @@ function SavingsGoalForm({
             <option>Retirement</option>
             <option>Other</option>
           </select>
-
         </div>
 
         <div className="form-row">
-
           <input
             type="number"
             name="targetAmount"
@@ -70,11 +70,9 @@ function SavingsGoalForm({
             value={formData.currentAmount}
             onChange={handleChange}
           />
-
         </div>
 
         <div className="form-row">
-
           <input
             type="date"
             name="targetDate"
@@ -89,22 +87,23 @@ function SavingsGoalForm({
             value={formData.notes}
             onChange={handleChange}
           />
-
         </div>
 
         <Button
           type="submit"
           disabled={submitLoading}
         >
-          <FaPlus />
+          {isEditing ? <FaSave /> : <FaPlus />}
 
           {submitLoading
-            ? "Creating..."
+            ? isEditing
+              ? "Updating..."
+              : "Creating..."
+            : isEditing
+            ? "Update Goal"
             : "Create Goal"}
         </Button>
-
       </form>
-
     </section>
   );
 }

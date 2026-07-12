@@ -1,19 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { FaPlus, FaTrash, FaPiggyBank } from "react-icons/fa";
 
-import Button from "../components/ui/Button/Button";
 import AppShell from "../components/layout/AppShell/AppShell";
-import "../styles/savings.css";
 import Navbar from "../components/Navbar/Navbar.jsx";
-import SavingsHero from "../components/Savings/SavingsHero";
-import SavingsSummary from "../components/Savings/SavingsSummary";
 import SavingsGoalForm from "../components/Savings/SavingsGoalForm";
 import SavingsGoalsList from "../components/Savings/SavingsGoalsList";
+import SavingsHero from "../components/Savings/SavingsHero";
+import SavingsSummary from "../components/Savings/SavingsSummary";
+import "../styles/savings.css";
 
 import {
-  getSavingsGoals,
   createSavingsGoal,
-  deleteSavingsGoal
+  deleteSavingsGoal,
+  getSavingsGoals
 } from "../services/savingsService.js";
 
 function Savings() {
@@ -41,8 +39,11 @@ function Savings() {
       setLoading(true);
       setError("");
 
-      const data = await getSavingsGoals();
-      setGoals(data.goals || []);
+      const response = await getSavingsGoals();
+      setGoals(
+        response.data?.goals || []
+      );
+
     } catch (err) {
       setError(
         err.response?.data?.message || "Failed to load savings goals."
@@ -66,21 +67,21 @@ function Savings() {
   const averageProgress = React.useMemo(() => {
 
     if (goals.length === 0) return 0;
-  
+
     const total = goals.reduce((sum, goal) => {
-  
+
       const target = Number(goal.targetAmount || 0);
-  
+
       const current = Number(goal.currentAmount || 0);
-  
+
       if (!target) return sum;
-  
+
       return sum + (current / target) * 100;
-  
+
     }, 0);
-  
+
     return Math.round(total / goals.length);
-  
+
   }, [goals]);
 
   const handleChange = (e) => {
@@ -90,45 +91,95 @@ function Savings() {
     }));
   };
 
-  const handleAddGoal = async (e) => {
+  const handleSaveGoal = async (e) => {
+
     e.preventDefault();
 
     try {
-      setSubmitLoading(true);
+
       setError("");
 
-      const payload = {
-        ...formData,
-        targetAmount: Number(formData.targetAmount),
-        currentAmount: Number(formData.currentAmount || 0)
-      };
+      if (editingId) {
 
-      const data = await createSavingsGoal(payload);
+        const response =
+          await updateSavingsGoal(
+            editingId,
+            formData
+          );
 
-      setGoals((prev) => [data.goal, ...prev]);
+        setGoals((prev) =>
+          prev.map((goal) =>
+            goal._id === editingId
+              ? response.data
+              : goal
+          )
+        );
+
+        setEditingId(null);
+
+      } else {
+
+        const response =
+          await createSavingsGoal(
+            formData
+          );
+
+        setGoals((prev) => [
+          response.data,
+          ...prev,
+        ]);
+
+      }
 
       setFormData({
         title: "",
         targetAmount: "",
         currentAmount: "",
-        category: "Emergency Fund",
         targetDate: "",
-        notes: ""
+        category: "",
+        notes: "",
       });
+
     } catch (err) {
+
       setError(
-        err.response?.data?.message || "Failed to add savings goal."
+        err.response?.data?.message ||
+        "Failed to save goal."
       );
-    } finally {
-      setSubmitLoading(false);
+
     }
+
+  };
+
+  const [editingId, setEditingId] = useState(null);
+
+  const handleEdit = (goal) => {
+
+    setEditingId(goal._id);
+
+    setFormData({
+      title: goal.title || "",
+      targetAmount: goal.targetAmount || "",
+      currentAmount: goal.currentAmount || "",
+      targetDate: goal.targetDate
+        ? goal.targetDate.substring(0, 10)
+        : "",
+      category: goal.category || "",
+      notes: goal.notes || "",
+    });
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+
   };
 
   const handleDelete = async (id) => {
     const confirmed = window.confirm(
       "Are you sure you want to delete this savings goal?"
     );
-  
+
     if (!confirmed) return;
     try {
       setError("");
@@ -159,9 +210,11 @@ function Savings() {
           <SavingsGoalForm
               formData={formData}
               handleChange={handleChange}
-              handleAddGoal={handleAddGoal}
-              submitLoading={submitLoading}
+              handleSubmit={handleSaveGoal}
+              submitLoading={loading}
+              isEditing={Boolean(editingId)}
           />
+
           <section className="goals-section">
             <div className="section-heading">
               <div>
@@ -182,8 +235,9 @@ function Savings() {
               </div>
             ) : (
               <SavingsGoalsList
-                goals={goals}
-                handleDelete={handleDelete}
+                  goals={goals}
+                  handleDelete={handleDelete}
+                  handleEdit={handleEdit}
               />
             )}
           </section>

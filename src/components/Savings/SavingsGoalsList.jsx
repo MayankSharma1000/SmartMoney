@@ -1,9 +1,9 @@
-import React from "react";
 import SavingsGoalCard from "./SavingsGoalCard";
 
 function SavingsGoalsList({
   goals,
-  handleDelete
+  handleDelete,
+  handleEdit
 }) {
   if (goals.length === 0) {
     return (
@@ -25,13 +25,12 @@ function SavingsGoalsList({
     >
 
       {goals.map(goal => (
-
         <SavingsGoalCard
-          key={goal._id}
-          goal={goal}
-          handleDelete={handleDelete}
+        key={goal._id}
+        goal={goal}
+        handleDelete={handleDelete}
+        handleEdit={handleEdit}
         />
-
       ))}
 
     </section>

@@ -1,8 +1,16 @@
-import React from "react";
-import { FaBullseye, FaCalendarAlt, FaTrash } from "react-icons/fa";
+import {
+  FaBullseye,
+  FaCalendarAlt,
+  FaEdit,
+  FaTrash
+} from "react-icons/fa";
 import Button from "../ui/Button/Button";
 
-function SavingsGoalCard({ goal, handleDelete }) {
+function SavingsGoalCard({
+  goal,
+  handleDelete,
+  handleEdit
+}) {
   const current = Number(goal.currentAmount || 0);
   const target = Number(goal.targetAmount || 0);
 
@@ -36,12 +44,21 @@ function SavingsGoalCard({ goal, handleDelete }) {
 
         </div>
 
-        <Button
-          className="delete-goal-btn"
-          onClick={() => handleDelete(goal._id)}
-        >
-          <FaTrash />
-        </Button>
+        <div className="goal-actions">
+          <Button
+            onClick={() => handleEdit(goal)}
+          >
+            <FaEdit />
+          </Button>
+
+          <Button
+            className="delete-goal-btn"
+            onClick={() => handleDelete(goal._id)}
+          >
+            <FaTrash />
+          </Button>
+
+        </div>
 
       </div>
 
