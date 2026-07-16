@@ -1,7 +1,5 @@
-import React from "react";
-
-import MonthlyOverview from "../DashboardWidgets/MonthlyOverview";
-import TopSpending from "../DashboardWidgets/TopSpending";
+import MonthlyOverview from "./widgets/MonthlyOverview";
+import TopSpending from "./widgets/TopSpending";
 
 function ChartsSection({
     dashboardData

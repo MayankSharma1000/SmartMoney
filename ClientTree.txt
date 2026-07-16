@@ -1,0 +1,254 @@
+src
+├── App.jsx
+├── assets
+│   ├── icons
+│   └── images
+├── components
+│   ├── Analytics
+│   │   ├── AIFinancialCoach.jsx
+│   │   ├── AISuggestions.jsx
+│   │   ├── ActivityTimeline.jsx
+│   │   ├── Analytics.css
+│   │   ├── AnalyticsFooter.jsx
+│   │   ├── AnalyticsHeader.jsx
+│   │   ├── FinancialHealth.jsx
+│   │   ├── InsightCards.jsx
+│   │   ├── InvestmentOverview.jsx
+│   │   ├── SavingsGoals.jsx
+│   │   └── SpendingOverview.jsx
+│   ├── Dashboard
+│   │   ├── AIInsights.jsx
+│   │   ├── ChartsSection.jsx
+│   │   ├── DashboardHeader.jsx
+│   │   ├── DashboardSkeleton.jsx
+│   │   ├── FinancialHealthCard.jsx
+│   │   ├── MetricGrid.css
+│   │   ├── MetricGrid.jsx
+│   │   ├── QuickActions.css
+│   │   ├── QuickActions.jsx
+│   │   ├── RecentTransactions.css
+│   │   ├── RecentTransactions.jsx
+│   │   ├── ReportActions.jsx
+│   │   ├── SavingsProgress.jsx
+│   │   └── UpcomingBills.jsx
+│   ├── DashboardWidgets
+│   │   ├── AIAdvisor.jsx
+│   │   ├── BudgetProgress.jsx
+│   │   ├── GoalPredictions.jsx
+│   │   ├── InvestmentSummary.jsx
+│   │   ├── MonthlyOverview.jsx
+│   │   ├── SavingsProgress.jsx
+│   │   └── TopSpending.jsx
+│   ├── ExpenseCard.jsx
+│   ├── ExpenseForm.jsx
+│   ├── Investments
+│   │   ├── InvestmentCard.css
+│   │   ├── InvestmentCard.jsx
+│   │   ├── InvestmentForm.css
+│   │   ├── InvestmentForm.jsx
+│   │   ├── InvestmentList.css
+│   │   └── InvestmentList.jsx
+│   ├── Navbar
+│   │   └── Navbar.jsx
+│   ├── Onboarding
+│   │   ├── CurrencyStep.jsx
+│   │   ├── EmploymentStep.jsx
+│   │   ├── GoalsStep.jsx
+│   │   ├── IncomeStep.jsx
+│   │   ├── ProgressBar.jsx
+│   │   ├── StepCard.jsx
+│   │   └── WelcomeStep.jsx
+│   ├── ProtectedRoute.jsx
+│   ├── Savings
+│   │   ├── SavingsGoalCard.jsx
+│   │   ├── SavingsGoalForm.jsx
+│   │   ├── SavingsGoalsList.jsx
+│   │   ├── SavingsHero.jsx
+│   │   └── SavingsSummary.jsx
+│   ├── Settings
+│   │   ├── SettingsSection.css
+│   │   └── SettingsSection.jsx
+│   ├── ThemeToggle.jsx
+│   ├── index.js
+│   ├── layout
+│   │   ├── AppShell
+│   │   │   ├── AppShell.css
+│   │   │   ├── AppShell.jsx
+│   │   │   └── index.js
+│   │   ├── Header
+│   │   ├── PageContainer
+│   │   └── Sidebar
+│   │       ├── DeleteAccountModal.jsx
+│   │       ├── SettingsPreview.jsx
+│   │       ├── Sidebar.jsx
+│   │       ├── SidebarFooter.jsx
+│   │       ├── SidebarHeader.jsx
+│   │       ├── SidebarNavigation.jsx
+│   │       └── sidebarData.js
+│   ├── shared
+│   │   ├── EmptyState
+│   │   │   ├── EmptyState.css
+│   │   │   ├── EmptyState.jsx
+│   │   │   └── index.js
+│   │   ├── KPICard
+│   │   │   ├── KPICard.css
+│   │   │   └── KPICard.jsx
+│   │   ├── MetricGrid
+│   │   │   ├── MetricGrid.css
+│   │   │   ├── MetricGrid.jsx
+│   │   │   └── index.js
+│   │   ├── PageHeader
+│   │   │   ├── PageHeader.css
+│   │   │   ├── PageHeader.jsx
+│   │   │   └── index.js
+│   │   ├── PageHero
+│   │   │   ├── PageHero.css
+│   │   │   ├── PageHero.jsx
+│   │   │   └── index.js
+│   │   ├── Section
+│   │   │   ├── Section.css
+│   │   │   ├── Section.jsx
+│   │   │   └── index.js
+│   │   └── SectionHeader
+│   │       ├── SectionHeader.css
+│   │       ├── SectionHeader.jsx
+│   │       └── index.js
+│   ├── types.js
+│   └── ui
+│       ├── Badge
+│       │   ├── Badge.css
+│       │   ├── Badge.jsx
+│       │   └── index.js
+│       ├── Button
+│       │   ├── Button.css
+│       │   ├── Button.jsx
+│       │   └── index.js
+│       ├── Card
+│       │   ├── Card.css
+│       │   ├── Card.jsx
+│       │   └── index.js
+│       ├── ChartCard
+│       │   ├── ChartCard.css
+│       │   ├── ChartCard.jsx
+│       │   └── index.js
+│       ├── IconBox
+│       │   ├── IconBox.css
+│       │   ├── IconBox.jsx
+│       │   └── index.js
+│       ├── Input
+│       │   ├── Input.css
+│       │   └── Input.jsx
+│       ├── Modal
+│       │   ├── Modal.css
+│       │   └── Modal.jsx
+│       ├── Skeleton
+│       │   ├── Skeleton.css
+│       │   └── Skeleton.jsx
+│       ├── Spinner
+│       │   ├── Spinner.css
+│       │   └── Spinner.jsx
+│       └── StatCard
+│           ├── StatCard.css
+│           ├── StatCard.jsx
+│           └── index.js
+├── constants
+│   ├── categories.js
+│   ├── financeConstants.js
+│   ├── investmentTypes.js
+│   └── pagination.js
+├── context
+│   ├── AuthContext.jsx
+│   └── ThemeContext.jsx
+├── features
+│   ├── analytics
+│   ├── auth
+│   ├── dashboard
+│   ├── expenses
+│   ├── investments
+│   ├── recurring
+│   ├── savings
+│   └── settings
+├── helpers
+│   ├── currency.js
+│   ├── date.js
+│   ├── formatNumber.js
+│   └── validation.js
+├── hooks
+│   ├── index.js
+│   ├── useAuth.js
+│   ├── useBudget.js
+│   ├── useDashboard.js
+│   ├── useExpenses.js
+│   ├── useFinancialAdvice.js
+│   ├── useInvestments.js
+│   ├── useRecurringExpenses.js
+│   ├── useSavingsGoals.js
+│   └── useTheme.js
+├── lib
+├── main.jsx
+├── pages
+│   ├── Analytics.jsx
+│   ├── Budget.jsx
+│   ├── Dashboard.jsx
+│   ├── Expenses.jsx
+│   ├── Investments.jsx
+│   ├── Login.jsx
+│   ├── NotFound.jsx
+│   ├── Onboarding.jsx
+│   ├── Profile.jsx
+│   ├── RecurringExpenses.jsx
+│   ├── Register.jsx
+│   ├── Savings.jsx
+│   ├── Settings.jsx
+│   └── Support.jsx
+├── routes
+├── services
+│   ├── aiService.js
+│   ├── authService.js
+│   ├── budgetService.js
+│   ├── dashboardService.js
+│   ├── expenseService.js
+│   ├── feedbackService.js
+│   ├── investmentService.js
+│   ├── onboardingService.js
+│   ├── recurringExpenseService.js
+│   └── savingsService.js
+├── styles
+│   ├── Navbar.css
+│   ├── Sidebar.css
+│   ├── animations.css
+│   ├── base
+│   ├── charts.css
+│   ├── dashboard.css
+│   ├── forms.css
+│   ├── global.css
+│   ├── layout
+│   ├── layout.css
+│   ├── login.css
+│   ├── onboarding.css
+│   ├── pages
+│   │   └── settings.css
+│   ├── responsive.css
+│   ├── savings.css
+│   ├── tables.css
+│   ├── themes
+│   │   ├── global.css
+│   │   └── theme.css
+│   ├── tokens.css
+│   ├── utilities.css
+│   └── variables.css
+├── theme
+│   └── designTokens.js
+└── utils
+    ├── calculateBudgetStats.js
+    ├── calculateSavings.js
+    ├── categoryIcons.jsx
+    ├── expenseInsights.js
+    ├── exportReports.js
+    ├── formatCurrency.js
+    ├── generateInsights.js
+    ├── investmentIcons.jsx
+    ├── predictGoals.js
+    └── recurringExpenseIcons.jsx
+
+59 directories, 193 files

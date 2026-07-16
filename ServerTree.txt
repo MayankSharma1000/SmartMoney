@@ -1,0 +1,78 @@
+server
+├── analytics
+│   ├── analyticsEngine.js
+│   ├── chartGenerator.js
+│   ├── financialScore.js
+│   ├── goalEngine.js
+│   ├── insightGenerator.js
+│   ├── predictionEngine.js
+│   ├── reportBuilder.js
+│   └── riskEngine.js
+├── config
+│   ├── db.js
+│   └── redis.js
+├── constants
+│   └── dashboardConstants.js
+├── controllers
+│   ├── adminController.js
+│   ├── aiController.js
+│   ├── authController.js
+│   ├── budgetController.js
+│   ├── dashboardController.js
+│   ├── expenseController.js
+│   ├── feedbackController.js
+│   ├── investmentController.js
+│   ├── recurringExpenseController.js
+│   └── savingsController.js
+├── logs
+│   ├── app.log
+│   └── error.log
+├── middleware
+│   ├── adminMiddleware.js
+│   ├── authMiddleware.js
+│   ├── errorHandler.js
+│   ├── errorMiddleware.js
+│   └── validate.js
+├── models
+│   ├── Budget.js
+│   ├── Expense.js
+│   ├── Feedback.js
+│   ├── Investment.js
+│   ├── RecurringExpense.js
+│   ├── Savings.js
+│   └── User.js
+├── repositories
+│   ├── BudgetRepository.js
+│   ├── ExpenseRepository.js
+│   ├── InvestmentRepository.js
+│   ├── RecurringExpenseRepository.js
+│   ├── SavingsRepository.js
+│   └── UserRepository.js
+├── routes
+│   ├── adminRoutes.js
+│   ├── aiRoutes.js
+│   ├── authRoutes.js
+│   ├── budgetRoutes.js
+│   ├── dashboardRoutes.js
+│   ├── expenseRoutes.js
+│   ├── feedbackRoutes.js
+│   ├── investmentRoutes.js
+│   ├── recurringExpenseRoutes.js
+│   └── savingsRoutes.js
+├── server.js
+├── services
+│   ├── adminService.js
+│   ├── aiService.js
+│   ├── cacheService.js
+│   └── dashboardService.js
+├── tests
+├── utils
+│   ├── apiResponse.js
+│   ├── asyncHandler.js
+│   ├── dashboardCalculations.js
+│   ├── generateToken.js
+│   └── logger.js
+└── validators
+    └── expenseValidator.js
+
+14 directories, 62 files

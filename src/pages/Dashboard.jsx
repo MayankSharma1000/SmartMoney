@@ -1,8 +1,8 @@
 import {
-  FaChartLine,
-  FaHeartbeat,
-  FaPiggyBank,
-  FaWallet,
+    FaChartLine,
+    FaHeartbeat,
+    FaPiggyBank,
+    FaWallet,
 } from "react-icons/fa";
 
 import AppShell from "@/components/layout/AppShell";
@@ -15,9 +15,9 @@ import MetricGrid from "../components/Dashboard/MetricGrid";
 import QuickActions from "../components/Dashboard/QuickActions";
 import RecentTransactions from "../components/Dashboard/RecentTransactions";
 
-import BudgetProgress from "../components/DashboardWidgets/BudgetProgress";
-import InvestmentSummary from "../components/DashboardWidgets/InvestmentSummary";
-import SavingsProgress from "../components/DashboardWidgets/SavingsProgress";
+import BudgetProgress from "../components/Dashboard/widgets/BudgetProgress";
+import InvestmentSummary from "../components/Dashboard/widgets/InvestmentSummary";
+import SavingsProgress from "../components/Dashboard/widgets/SavingsProgress";
 
 import { useBudget } from "../hooks/useBudget";
 import { useDashboard } from "../hooks/useDashboard";

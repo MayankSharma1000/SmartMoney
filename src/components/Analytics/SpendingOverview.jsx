@@ -1,6 +1,5 @@
-import React from "react";
 
-import MonthlyOverview from "../DashboardWidgets/MonthlyOverview";
+import MonthlyOverview from "../Dashboard/widgets/MonthlyOverview";
 
 function SpendingOverview({ dashboardData }) {
 

@@ -1,16 +1,16 @@
-import React from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 
-import Login from "./pages/Login.jsx";
-import Register from "./pages/Register.jsx";
-import Onboarding from "./pages/Onboarding";
+import Analytics from "./pages/Analytics.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import Expenses from "./pages/Expenses.jsx";
-import Savings from "./pages/Savings.jsx";
 import Investments from "./pages/Investments.jsx";
-import Analytics from "./pages/Analytics.jsx";
+import Login from "./pages/Login.jsx";
 import NotFound from "./pages/NotFound.jsx";
+import Onboarding from "./pages/Onboarding";
 import RecurringExpenses from "./pages/RecurringExpenses";
+import Register from "./pages/Register.jsx";
+import Savings from "./pages/Savings.jsx";
+import Settings from "./pages/Settings.jsx";
 
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
@@ -80,6 +80,15 @@ function App() {
         element={
           <ProtectedRoute>
             <Analytics />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/settings"
+        element={
+          <ProtectedRoute>
+            <Settings />
           </ProtectedRoute>
         }
       />
