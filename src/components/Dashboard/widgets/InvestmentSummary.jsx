@@ -1,4 +1,4 @@
-import React from "react";
+import Card from "@/components/ui/Card";
 import { FaArrowTrendUp } from "react-icons/fa6";
 
 function InvestmentSummary() {
@@ -8,7 +8,7 @@ function InvestmentSummary() {
   const returns = 9.6;
 
   return (
-    <div className="glass-card budget-card">
+    <Card elevated className="budget-card">
       <div className="budget-header">
         <div className="budget-icon">
           <FaArrowTrendUp />
@@ -76,7 +76,7 @@ function InvestmentSummary() {
           {returns}%
         </span>
       </div>
-    </div>
+    </Card>
   );
 }
 

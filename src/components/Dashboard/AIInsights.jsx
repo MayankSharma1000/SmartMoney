@@ -1,9 +1,12 @@
-import React from "react";
+import Card from "@/components/ui/Card";
 import { FaLightbulb } from "react-icons/fa";
 
 function AIInsights({ insights }) {
   return (
-    <div className="glass-card budget-card">
+    <Card
+      elevated
+      className="budget-card"
+    >
 
       <div className="budget-header">
 
@@ -55,8 +58,7 @@ function AIInsights({ insights }) {
         )}
 
       </div>
-
-    </div>
+    </Card>
   );
 }
 

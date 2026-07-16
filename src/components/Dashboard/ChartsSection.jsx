@@ -6,9 +6,7 @@ function ChartsSection({
 }){
 
     return(
-
         <div className="charts-grid">
-
             <MonthlyOverview
                 monthlyChart={
                     dashboardData.monthlyChart || []
@@ -20,11 +18,8 @@ function ChartsSection({
                     dashboardData.categoryChart || []
                 }
             />
-
         </div>
-
     );
-
 }
 
 export default ChartsSection;

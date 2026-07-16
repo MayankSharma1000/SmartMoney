@@ -1,0 +1,37 @@
+.financial-control-center{
+
+    display:grid;
+
+    grid-template-columns:repeat(2,minmax(0,1fr));
+
+    gap:24px;
+
+    padding:12px;
+
+    }
+
+    .financial-control-center > *{
+
+    height:100%;
+
+    border-radius:24px;
+
+    transition:var(--transition);
+
+    }
+
+    .financial-control-center > *:hover{
+
+    transform:translateY(-5px);
+
+    }
+
+    @media(max-width:1000px){
+
+    .financial-control-center{
+
+    grid-template-columns:1fr;
+
+    }
+
+    }

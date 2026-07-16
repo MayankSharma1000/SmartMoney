@@ -2,66 +2,56 @@ import {
   FaChartLine,
   FaFileExport,
   FaPiggyBank,
-  FaPlusCircle
+  FaPlus,
 } from "react-icons/fa";
+
+import ActionCard from "@/components/ui/ActionCard";
+
 import "./QuickActions.css";
 
 const actions = [
   {
     title: "Add Expense",
-    subtitle: "Track today's spending",
-    icon: <FaPlusCircle />
+    subtitle: "Record spending",
+    icon: <FaPlus />,
+    color: "blue",
   },
   {
     title: "Add Savings",
-    subtitle: "Grow your future",
-    icon: <FaPiggyBank />
+    subtitle: "Grow wealth",
+    icon: <FaPiggyBank />,
+    color: "green",
   },
   {
-    title: "Add Investment",
-    subtitle: "Monitor wealth",
-    icon: <FaChartLine />
+    title: "Invest",
+    subtitle: "Portfolio",
+    icon: <FaChartLine />,
+    color: "purple",
   },
   {
-    title: "Export Reports",
+    title: "Export",
     subtitle: "PDF & Excel",
-    icon: <FaFileExport />
-  }
+    icon: <FaFileExport />,
+    color: "orange",
+  },
 ];
 
 function QuickActions() {
   return (
-    <div className="quick-grid">
-
-        {actions.map((action) => (
-
-          <div
-            className="quick-card"
-            key={action.title}
-          >
-
-            <div className="quick-icon">
-
-              {action.icon}
-
-            </div>
-
-            <h3>
-
-              {action.title}
-
-            </h3>
-
-            <p>
-
-              {action.subtitle}
-
-            </p>
-
-          </div>
-
-        ))}
-      </div>
+    <div className="quick-actions-bar">
+      {actions.map((action) => (
+        <ActionCard
+          key={action.title}
+          icon={action.icon}
+          title={action.title}
+          subtitle={action.subtitle}
+          color={action.color}
+          onClick={() => {
+            console.log(`${action.title} clicked`);
+          }}
+        />
+      ))}
+    </div>
   );
 }
 

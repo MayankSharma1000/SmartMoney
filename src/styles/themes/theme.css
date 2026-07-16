@@ -1,48 +1,106 @@
-:root{
+:root {
 
-    /* ===========================
-       COLORS
-    =========================== */
+   /* =========================
+      APP BACKGROUND
+   ========================== */
 
-    --bg:#09090B;
-    --bg-secondary:#111113;
-    --surface:#111827;
-    --surface-hover:#1A1A22;
+   --bg-primary: #070B14;
+   --bg-secondary: #0D1322;
+   --bg-tertiary: #121A2C;
 
-    --primary:#7C3AED;
-    --primary-light:#A855F7;
+   /* =========================
+      SURFACES
+   ========================== */
 
-    --success:#22C55E;
-    --warning:#F59E0B;
-    --danger:#EF4444;
+   --surface: #131B2E;
+   --surface-hover: #1A243A;
+   --surface-elevated: #1E2942;
 
-    --text:#FAFAFA;
-    --text-secondary:#A1A1AA;
+   /* =========================
+      BRAND
+   ========================== */
 
-    --border:#27272A;
+   --accent-primary: #4F8CFF;
+   --accent-secondary: #7C3AED;
+   --accent-hover: #6AA3FF;
 
+   /* =========================
+      STATUS
+   ========================== */
 
-    /* ===========================
-       SHADOWS
-    =========================== */
-    --shadow-sm: 0 4px 12px rgba(0,0,0,.18);
-    --shadow: 0 8px 30px rgba(0,0,0,.45);
-    --shadow-lg: 0 24px 80px rgba(0,0,0,.55);
+   --success: #22C55E;
+   --warning: #F59E0B;
+   --danger: #EF4444;
+   --info: #38BDF8;
 
-    /* ===========================
-       RADIUS
-    =========================== */
-    --radius-sm:12px;
-    --radius:18px;
-    --radius-lg:24px;
+   /* =========================
+      TEXT
+   ========================== */
 
-    /* ===========================
-       TRANSITIONS
-    =========================== */
-    --transition:.28s ease;
+   --text-primary: #F8FAFC;
+   --text-secondary: #94A3B8;
+   --text-muted: #64748B;
 
-    /* ===========================
-       SIDEBAR
-    =========================== */
-    --sidebar-width:270px;
-}
+   /* =========================
+      BORDERS
+   ========================== */
+
+   --border-color: rgba(255,255,255,.08);
+   --border-hover: rgba(79,140,255,.28);
+
+   /* =========================
+      GLASS
+   ========================== */
+
+   --glass-bg: rgba(20,29,48,.72);
+   --glass-border: rgba(255,255,255,.08);
+   --blur: 18px;
+
+   /* =========================
+      SHADOWS
+   ========================== */
+
+   --shadow-card:
+       0 12px 40px rgba(0,0,0,.35);
+
+   --shadow-hover:
+       0 18px 50px rgba(79,140,255,.18);
+
+   --shadow-lg:
+       0 30px 80px rgba(0,0,0,.45);
+
+   /* =========================
+      RADIUS
+   ========================== */
+
+   --radius-sm: 12px;
+   --radius-md: 18px;
+   --radius-lg: 24px;
+   --radius-xl: 32px;
+
+   /* =========================
+      SPACING
+   ========================== */
+
+   --space-1: 8px;
+   --space-2: 16px;
+   --space-3: 24px;
+   --space-4: 32px;
+   --space-5: 40px;
+   --space-6: 56px;
+
+   /* =========================
+      TRANSITIONS
+   ========================== */
+
+   --transition-fast: .18s ease;
+   --transition: .28s ease;
+   --transition-slow: .45s ease;
+
+   /* =========================
+      SIDEBAR
+   ========================== */
+
+   --sidebar-width: 270px;
+
+ }

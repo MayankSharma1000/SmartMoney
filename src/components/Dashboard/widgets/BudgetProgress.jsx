@@ -1,4 +1,4 @@
-import React from "react";
+import Card from "@/components/ui/Card";
 import { FaMoneyBillWave } from "react-icons/fa";
 
 function BudgetProgress({
@@ -13,7 +13,7 @@ function BudgetProgress({
   );
 
   return (
-    <div className="glass-card budget-card">
+    <Card elevated className="budget-card">
       <div className="budget-header">
         <div className="budget-icon">
           <FaMoneyBillWave />
@@ -71,7 +71,7 @@ function BudgetProgress({
           {safePercentage}%
         </span>
       </div>
-    </div>
+    </Card>
   );
 }
 

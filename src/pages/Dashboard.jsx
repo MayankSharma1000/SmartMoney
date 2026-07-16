@@ -1,17 +1,16 @@
 import {
-    FaChartLine,
-    FaHeartbeat,
-    FaPiggyBank,
-    FaWallet,
+  FaChartLine,
+  FaHeartbeat,
+  FaPiggyBank,
+  FaWallet,
 } from "react-icons/fa";
 
 import AppShell from "@/components/layout/AppShell";
-import PageHeader from "@/components/shared/PageHeader";
 import Section from "@/components/shared/Section";
+import DashboardHeader from "../components/Dashboard/DashboardHeader";
 
 import AIInsights from "../components/Dashboard/AIInsights";
 import ChartsSection from "../components/Dashboard/ChartsSection";
-import MetricGrid from "../components/Dashboard/MetricGrid";
 import QuickActions from "../components/Dashboard/QuickActions";
 import RecentTransactions from "../components/Dashboard/RecentTransactions";
 
@@ -34,9 +33,11 @@ function Dashboard() {
   if (loading) {
     return (
       <AppShell>
-        <PageHeader
-            title="Dashboard"
-            subtitle="Monitor your expenses, savings, investments and financial health from one intelligent workspace."
+        <DashboardHeader
+            user={{
+                name: "Mayank",
+                currency: "INR",
+            }}
         />
       </AppShell>
     );
@@ -91,67 +92,72 @@ function Dashboard() {
       icon: <FaHeartbeat />,
     },
   ];
-
   return (
     <AppShell>
-      <PageHeader
-          title="Dashboard"
-          subtitle="Monitor your expenses, savings, investments and financial health from one intelligent workspace."
+
+      <DashboardHeader
+        user={{
+          name: "Mayank",
+          currency: "INR",
+        }}
+        dashboardData={dashboardData}
       />
 
-      <Section>
-        <MetricGrid stats={stats} />
+      {/* Quick Actions */}
+      <Section
+        title="Quick Actions"
+        subtitle="Frequently used shortcuts"
+      >
+        <QuickActions />
       </Section>
 
-      <Section
-          title="Quick Actions"
-          subtitle="Frequently used shortcuts"
-      >
-          <QuickActions />
-      </Section>
+      {/* Recent Activity */}
+      <div className="dashboard-workspace">
+        <div className="workspace-left">
+          <Section
+            title="Recent Transactions"
+            subtitle="Latest activity"
+          >
+            <RecentTransactions />
+          </Section>
 
-      <Section
-          title="Analytics"
-          subtitle="Track your financial trends"
-      >
-          <ChartsSection
+        </div>
+
+        <div className="workspace-right">
+          <Section
+            title="Weekly Spending"
+            subtitle="Live analytics"
+          >
+            <ChartsSection
               dashboardData={dashboardData}
-          />
-      </Section>
+            />
+          </Section>
+        </div>
+      </div>
 
+      {/* Financial Overview */}
       <Section
-          title="Recent Transactions"
-          subtitle="Your latest financial activity"
+        title="Financial Control Center"
+        subtitle="Monitor and manage every aspect of your finances."
       >
+        <div className="financial-control-center">
 
-          <RecentTransactions
-              transactions={
-                  dashboardData.recentTransactions || []
-              }
+          <BudgetProgress
+            monthlyBudget={budget?.monthlyBudget || 0}
+            spent={budgetStats.spent}
+            remaining={budgetStats.remaining}
+            percentageUsed={budgetStats.percentageUsed}
           />
 
-      </Section>
+          <SavingsProgress />
 
-      <Section
-          title="Financial Overview"
-          subtitle="Budget, savings, investments and AI insights"
-      >
+          <InvestmentSummary />
 
-      <div className="goal-grid">
-        <BudgetProgress
-          monthlyBudget={budget?.monthlyBudget || 0}
-          spent={budgetStats.spent}
-          remaining={budgetStats.remaining}
-          percentageUsed={budgetStats.percentageUsed}
-        />
+          <AIInsights insights={insights} />
 
-        <SavingsProgress />
-
-        <InvestmentSummary />
-
-        <AIInsights insights={insights} />
         </div>
       </Section>
+
     </AppShell>
   );
 }

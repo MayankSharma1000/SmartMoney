@@ -1,0 +1,32 @@
+.theme-toggle {
+    background: transparent;
+  }
+
+  .theme-toggle-track {
+    width: 62px;
+    height: 34px;
+    padding: 4px;
+    border-radius: 999px;
+    background: var(--glass-bg);
+    border: 1px solid var(--border-color);
+    position: relative;
+  }
+
+  .theme-toggle-thumb {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    color: #ffffff;
+    background: var(--gradient-primary);
+    transition: var(--transition);
+  }
+
+  .theme-toggle-thumb.light {
+    transform: translateX(26px);
+  }
+
+  .theme-toggle-thumb.dark {
+    transform: translateX(0);
+  }
