@@ -7,11 +7,6 @@ import { useExpenses } from "./useExpenses";
 import { calculateBudgetStats } from "../utils/calculateBudgetStats";
 import { generateInsights } from "../utils/generateInsights";
 
-import {
-    exportExcelReport,
-    exportPDFReport,
-} from "../utils/exportReports";
-
 export const useFinancialReport = () => {
   const {
     dashboardData,
@@ -72,13 +67,19 @@ export const useFinancialReport = () => {
     budgetLoading ||
     expensesLoading;
 
-  const exportPDF = () => {
+  const exportPDF = async () => {
     if (loading) {
       console.warn(
         "Financial data is still loading."
       );
       return;
     }
+
+    const {
+      exportPDFReport,
+    } = await import(
+      "../utils/exportPDFReport"
+    );
 
     exportPDFReport(reportData);
   };
@@ -90,6 +91,12 @@ export const useFinancialReport = () => {
       );
       return;
     }
+
+    const {
+      exportExcelReport,
+    } = await import(
+      "../utils/exportExcelReport"
+    );
 
     await exportExcelReport(reportData);
   };
