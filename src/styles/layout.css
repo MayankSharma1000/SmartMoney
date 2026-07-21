@@ -59,40 +59,6 @@
 }
 
 /* ===========================
-   GLASS CARD
-=========================== */
-
-.glass-card{
-
-    background:
-        rgba(255,255,255,.04);
-
-    backdrop-filter:blur(18px);
-
-    border:
-
-        1px solid rgba(255,255,255,.08);
-
-    border-radius:20px;
-
-    box-shadow:
-        0 14px 35px rgba(0,0,0,.28);
-
-    transition:
-        all .25s ease;
-
-}
-
-.glass-card:hover{
-
-    transform:translateY(-3px);
-
-    border-color:
-        rgba(59,130,246,.22);
-
-}
-
-/* ===========================
    SECTION SPACING
 =========================== */
 
