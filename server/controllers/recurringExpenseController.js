@@ -6,10 +6,24 @@ const createRecurringExpense = asyncHandler(async (req, res) => {
     const { title, category, amount, frequency, nextDueDate, paymentMethod } =
       req.body;
 
-    if (!title || !amount || !nextDueDate) {
+    const recurringAmount =
+      Number(amount);
+
+    if (!title || !nextDueDate) {
       return res.status(400).json({
         success: false,
-        message: "Title, amount and next due date are required"
+        message: "Title and next due date are required"
+      });
+    }
+
+    if (
+      !Number.isFinite(recurringAmount) ||
+      recurringAmount < 1
+    ) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Please enter a valid recurring expense amount"
       });
     }
 
@@ -17,7 +31,7 @@ const createRecurringExpense = asyncHandler(async (req, res) => {
       user: req.user._id,
       title,
       category,
-      amount,
+      amount: recurringAmount,
       frequency,
       nextDueDate,
       paymentMethod

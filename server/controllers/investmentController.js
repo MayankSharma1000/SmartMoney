@@ -17,10 +17,39 @@ const createInvestment = asyncHandler(async (req, res) => {
       notes
     } = req.body;
 
-    if (!name || !type || !investedAmount || !currentValue) {
+    const normalizedInvestedAmount =
+      Number(investedAmount);
+
+    const normalizedCurrentValue =
+      Number(currentValue);
+
+    if (!name || !type) {
       return res.status(400).json({
         success: false,
-        message: "Name, type, invested amount and current value are required"
+        message: "Name and investment type are required"
+      });
+    }
+
+    if (
+      !Number.isFinite(normalizedInvestedAmount) ||
+      normalizedInvestedAmount < 1
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "Please enter a valid invested amount"
+      });
+    }
+
+    if (
+      currentValue === undefined ||
+      currentValue === null ||
+      currentValue === "" ||
+      !Number.isFinite(normalizedCurrentValue) ||
+      normalizedCurrentValue < 0
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "Please enter a valid current value"
       });
     }
 
@@ -28,8 +57,8 @@ const createInvestment = asyncHandler(async (req, res) => {
       user: req.user._id,
       name,
       type,
-      investedAmount,
-      currentValue,
+      investedAmount: normalizedInvestedAmount,
+      currentValue: normalizedCurrentValue,
       purchaseDate,
       platform,
       notes

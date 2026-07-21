@@ -14,7 +14,10 @@ const setBudget = asyncHandler(async (req, res) => {
 
     const budgetAmount = Number(monthlyBudget);
 
-    if (!budgetAmount || budgetAmount <= 0) {
+    if (
+      !Number.isFinite(budgetAmount) ||
+      budgetAmount < 1
+    ) {
       return res.status(400).json({
         success: false,
         message: "Please enter a valid monthly budget"
@@ -28,7 +31,22 @@ const setBudget = asyncHandler(async (req, res) => {
       });
 
     const selectedYear =
-      Number(year) || new Date().getFullYear();
+      year === undefined ||
+      year === null ||
+      year === ""
+        ? new Date().getFullYear()
+        : Number(year);
+
+    if (
+      !Number.isInteger(selectedYear) ||
+      selectedYear < 2020 ||
+      selectedYear > 2100
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "Please enter a valid budget year"
+      });
+    }
 
     const budget = await Budget.findOneAndUpdate(
       {

@@ -15,10 +15,23 @@ const addExpense = asyncHandler(async (req, res) => {
       paymentMethod
     } = req.body;
 
-    if (!title || !category || !amount) {
+    const expenseAmount =
+      Number(amount);
+
+    if (!title || !category) {
       return res.status(400).json({
         success: false,
-        message: "Title, category and amount are required"
+        message: "Title and category are required"
+      });
+    }
+
+    if (
+      !Number.isFinite(expenseAmount) ||
+      expenseAmount < 0.01
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "Please enter a valid expense amount"
       });
     }
 
@@ -26,7 +39,7 @@ const addExpense = asyncHandler(async (req, res) => {
       user: req.user._id,
       title,
       category,
-      amount,
+      amount: expenseAmount,
       date,
       note,
       paymentMethod

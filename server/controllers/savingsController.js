@@ -16,21 +16,57 @@ const createSavingsGoal = asyncHandler(async (req, res) => {
       notes
     } = req.body;
 
-    if (!title || !targetAmount) {
+    const normalizedTargetAmount =
+      Number(targetAmount);
+
+    const normalizedCurrentAmount =
+      currentAmount === undefined ||
+      currentAmount === null ||
+      currentAmount === ""
+        ? 0
+        : Number(currentAmount);
+
+    if (!title) {
       return res.status(400).json({
         success: false,
-        message: "Title and target amount are required"
+        message: "Title is required"
+      });
+    }
+
+    if (
+      !Number.isFinite(normalizedTargetAmount) ||
+      normalizedTargetAmount < 1
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "Please enter a valid target amount"
+      });
+    }
+
+    if (
+      !Number.isFinite(normalizedCurrentAmount) ||
+      normalizedCurrentAmount < 0 ||
+      normalizedCurrentAmount >
+        normalizedTargetAmount
+    ) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Current amount must be between 0 and the target amount"
       });
     }
 
     const goal = await Savings.create({
       user: req.user._id,
       title,
-      targetAmount,
-      currentAmount,
+      targetAmount: normalizedTargetAmount,
+      currentAmount: normalizedCurrentAmount,
       targetDate,
       category,
-      notes
+      notes,
+      isCompleted:
+        normalizedCurrentAmount >=
+        normalizedTargetAmount
     });
 
     return ApiResponse.success(
