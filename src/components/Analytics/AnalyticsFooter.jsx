@@ -1,19 +1,51 @@
-import React from "react";
-import { useEffect, useState } from "react";
+import React, {
+  useEffect,
+  useState,
+} from "react";
 
-function AnalyticsFooter() {
-  const [time, setTime] = useState("");
+function AnalyticsFooter({
+  user,
+}) {
+  const [time, setTime] =
+    useState("");
 
   useEffect(() => {
-    const now = new Date();
+    const now =
+      new Date();
 
     setTime(
-      now.toLocaleString("en-IN", {
-        dateStyle: "medium",
-        timeStyle: "short"
-      })
+      now.toLocaleString(
+        "en-IN",
+        {
+          dateStyle: "medium",
+          timeStyle: "short",
+        }
+      )
     );
   }, []);
+
+  const name =
+    user?.name ||
+    "SmartMoney User";
+
+  const email =
+    user?.email ||
+    "Account information unavailable";
+
+  const initials =
+    name
+      .split(" ")
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((part) =>
+        part.charAt(0).toUpperCase()
+      )
+      .join("") ||
+    "SM";
+
+  const currency =
+    user?.currency ||
+    "INR";
 
   return (
     <footer className="analytics-footer">
@@ -21,36 +53,46 @@ function AnalyticsFooter() {
       <div className="footer-profile">
 
         <div className="profile-avatar">
-          MS
+          {initials}
         </div>
 
         <div>
+          <h3>
+            {name}
+          </h3>
 
-          <h3>Mayank Sharma</h3>
-
-          <p>Full Stack Developer</p>
-
+          <p>
+            {email}
+          </p>
         </div>
 
       </div>
 
       <div className="analytics-footer-badges">
-        <div className="footer-badge secure">
-          🔒 AES-256 Encrypted
+
+        <div className="footer-badge">
+          Currency: {currency}
         </div>
 
-        <div className="footer-badge cloud">
-          ☁ Cloud Synced
+        <div className="footer-badge">
+          Analytics Active
         </div>
+
       </div>
 
       <div className="footer-right">
 
-        <p>Updated</p>
+        <p>
+          Analytics Updated
+        </p>
 
-        <strong>{time}</strong>
+        <strong>
+          {time}
+        </strong>
 
-        <span>Expense Tracker v2.0</span>
+        <span>
+          SmartMoney
+        </span>
 
       </div>
 

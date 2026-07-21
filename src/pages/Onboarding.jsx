@@ -1,114 +1,135 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { completeOnboarding } from "../services/onboardingService";
 import { useAuth } from "../context/AuthContext";
+import { completeOnboarding } from "../services/onboardingService";
 
+import EmploymentStep from "../components/Onboarding/EmploymentStep";
+import GoalsStep from "../components/Onboarding/GoalsStep";
+import IncomeStep from "../components/Onboarding/IncomeStep";
 import ProgressBar from "../components/Onboarding/ProgressBar";
 import WelcomeStep from "../components/Onboarding/WelcomeStep";
-import IncomeStep from "../components/Onboarding/IncomeStep";
-import EmploymentStep from "../components/Onboarding/EmploymentStep";
-import CurrencyStep from "../components/Onboarding/CurrencyStep";
-import GoalsStep from "../components/Onboarding/GoalsStep";
 
 function Onboarding() {
   const navigate = useNavigate();
+  const { user } = useAuth();
 
-  const totalSteps = 5;
+  /*
+   * Internal onboarding flow:
+   *
+   * 1 = Welcome
+   * 2 = Income + Currency
+   * 3 = Employment
+   * 4 = Goals
+   */
+  const totalSteps = 4;
 
   const [step, setStep] = useState(1);
+  const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
     monthlyIncome: "",
     employmentType: "",
-    currency: "INR"
+    currency: "INR",
   });
 
-  const nextStep = async () => {
+  const nextStep = () => {
     if (step < totalSteps) {
-      setStep((prev) => prev + 1);
-      return;
-    }
-  
-    try {
-      setLoading(true);
-      await completeOnboarding(formData);
-      navigate("/dashboard");
-    } finally {
-      setLoading(false);
+      setStep((previousStep) => previousStep + 1);
     }
   };
 
   const previousStep = () => {
     if (step > 1) {
-      setStep((prev) => prev - 1);
+      setStep((previousStep) => previousStep - 1);
     }
   };
-  const { user } = useAuth();
+
+  const finishOnboarding = async () => {
+    if (loading) {
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      await completeOnboarding(formData);
+
+      navigate("/dashboard", {
+        replace: true,
+      });
+    } catch (error) {
+      console.error(
+        "Failed to complete onboarding:",
+        error
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <main className="onboarding-page">
 
-      {step > 1 && step < 6 && (
+      {/* Welcome is not counted as a setup step */}
+      {step > 1 && step < 4 && (
         <ProgressBar
           currentStep={step - 1}
-          totalSteps={4}
+          totalSteps={2}
         />
       )}
 
+      {/* Welcome */}
       {step === 1 && (
         <WelcomeStep
-        userName={user?.name}
+          userName={user?.name}
           onNext={nextStep}
         />
       )}
 
+      {/* Step 1 of 3 — Income + Currency */}
       {step === 2 && (
         <IncomeStep
           value={formData.monthlyIncome}
+          currency={formData.currency}
           onChange={(value) =>
-            setFormData({
-              ...formData,
-              monthlyIncome: value
-            })
+            setFormData((previousData) => ({
+              ...previousData,
+              monthlyIncome: value,
+            }))
+          }
+          onCurrencyChange={(currency) =>
+            setFormData((previousData) => ({
+              ...previousData,
+              currency,
+            }))
           }
           onBack={previousStep}
           onNext={nextStep}
         />
       )}
 
+      {/* Step 2 of 3 — Employment */}
       {step === 3 && (
         <EmploymentStep
           value={formData.employmentType}
           onChange={(value) =>
-            setFormData({
-              ...formData,
-              employmentType: value
-            })
+            setFormData((previousData) => ({
+              ...previousData,
+              employmentType: value,
+            }))
           }
           onBack={previousStep}
           onNext={nextStep}
         />
       )}
 
+      {/* Step 3 of 3 — Goals */}
       {step === 4 && (
-        <CurrencyStep
-          value={formData.currency}
-          onChange={(value) =>
-            setFormData({
-              ...formData,
-              currency: value
-            })
-          }
-          onBack={previousStep}
-          onNext={nextStep}
-        />
-      )}
-
-      {step === 5 && (
         <GoalsStep
           loading={loading}
-          onFinish={nextStep}
+          onBack={previousStep}
+          onFinish={finishOnboarding}
         />
       )}
 

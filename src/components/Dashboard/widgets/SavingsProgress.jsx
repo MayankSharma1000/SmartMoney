@@ -5,144 +5,130 @@ import "./SavingsProgress.css";
 
 import { FaPiggyBank } from "react-icons/fa";
 
-function SavingsProgress() {
+function SavingsProgress({
+  currentAmount = 0,
+  targetAmount = 0,
+  currency = "INR",
+}) {
+  const saved = Number(currentAmount) || 0;
+  const target = Number(targetAmount) || 0;
 
-    const currentAmount = 74200;
-    const targetAmount = 100000;
+  const formatter = new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency,
+    maximumFractionDigits: 0,
+  });
 
-    const progress = Math.round(
-        (currentAmount / targetAmount) * 100
-    );
+  const hasGoal = target > 0;
 
-    const remainingAmount =
-        targetAmount - currentAmount;
+  const progress = hasGoal
+    ? Math.min(
+        Math.max(
+          Math.round((saved / target) * 100),
+          0
+        ),
+        100
+      )
+    : 0;
 
-    return (
+  const remainingAmount = hasGoal
+    ? Math.max(target - saved, 0)
+    : 0;
 
-        <Card
-            elevated
-            className="financial-widget savings-card"
-        >
+  return (
+    <Card
+      elevated
+      className="financial-widget savings-card"
+    >
+      <div className="widget-header">
+        <div className="savings-icon">
+          <FaPiggyBank />
+        </div>
 
-            {/* Header */}
+        <div className="widget-heading">
+          <h3 className="widget-title">
+            Savings
+          </h3>
 
-            <div className="widget-header">
+          <p className="widget-subtitle">
+            Track your savings progress
+          </p>
 
-                <div className="savings-icon">
-                    <FaPiggyBank />
-                </div>
+          {hasGoal && (
+            <span className="widget-pill success">
+              {progress >= 100
+                ? "Goal Reached"
+                : "In Progress"}
+            </span>
+          )}
+        </div>
+      </div>
 
-                <div className="widget-heading">
+      <div className="widget-value">
+        {formatter.format(saved)}
+      </div>
 
-                    <h3 className="widget-title">
-                        Emergency Fund
-                    </h3>
+      {!hasGoal ? (
+        <div className="widget-empty-state">
+          <p>No savings goal created yet.</p>
 
-                    <p className="widget-subtitle">
-                        Financial safety reserve
-                    </p>
-
-                    <span className="widget-pill success">
-
-                        On Track
-
-                    </span>
-
-                </div>
-
+          <span>
+            Create a savings goal to start tracking
+            your progress.
+          </span>
+        </div>
+      ) : (
+        <>
+          <div className="widget-progress-wrapper">
+            <div className="widget-progress">
+              <div
+                className="savings-progress-fill"
+                style={{
+                  width: `${progress}%`,
+                }}
+              />
             </div>
 
-            {/* Value */}
+            <div className="widget-progress-info">
+              <span>
+                {progress}% Complete
+              </span>
 
-            <div className="widget-value">
+              <span>
+                Goal {formatter.format(target)}
+              </span>
+            </div>
+          </div>
 
-                ₹{currentAmount.toLocaleString("en-IN")}
+          <div className="widget-metrics">
+            <div className="widget-metric">
+              <span className="widget-metric-label">
+                Saved
+              </span>
 
+              <strong className="widget-metric-value">
+                {formatter.format(saved)}
+              </strong>
             </div>
 
-            {/* Progress */}
+            <div className="widget-metric">
+              <span className="widget-metric-label">
+                Remaining
+              </span>
 
-            <div className="widget-progress-wrapper">
-
-                <div className="widget-progress">
-
-                    <div
-                        className="savings-progress-fill"
-                        style={{
-                            width: `${progress}%`
-                        }}
-                    />
-
-                </div>
-
-                <div className="widget-progress-info">
-
-                    <span>
-
-                        {progress}% Complete
-
-                    </span>
-
-                    <span>
-
-                        Goal ₹{targetAmount.toLocaleString("en-IN")}
-
-                    </span>
-
-                </div>
-
+              <strong className="widget-metric-value">
+                {formatter.format(remainingAmount)}
+              </strong>
             </div>
+          </div>
 
-            {/* Metrics */}
-
-            <div className="widget-metrics">
-
-                <div className="widget-metric">
-
-                    <span className="widget-metric-label">
-
-                        Saved
-
-                    </span>
-
-                    <strong className="widget-metric-value">
-
-                        ₹{currentAmount.toLocaleString("en-IN")}
-
-                    </strong>
-
-                </div>
-
-                <div className="widget-metric">
-
-                    <span className="widget-metric-label">
-
-                        Remaining
-
-                    </span>
-
-                    <strong className="widget-metric-value">
-
-                        ₹{remainingAmount.toLocaleString("en-IN")}
-
-                    </strong>
-
-                </div>
-
-            </div>
-
-            {/* Footer */}
-
-            <div className="widget-footer">
-
-                🎯 Target ₹{targetAmount.toLocaleString("en-IN")}
-
-            </div>
-
-        </Card>
-
-    );
-
+          <div className="widget-footer">
+            Target {formatter.format(target)}
+          </div>
+        </>
+      )}
+    </Card>
+  );
 }
 
 export default SavingsProgress;

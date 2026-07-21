@@ -1,103 +1,140 @@
-import React, { useEffect, useState } from "react";
 import {
-  FaEnvelope,
-  FaUser,
-  FaWallet,
-  FaPiggyBank,
-  FaChartLine,
-  FaShieldAlt,
+  useMemo,
+} from "react";
+
+import {
   FaBriefcase,
   FaBullseye,
-  FaEdit,
-  FaSave
+  FaChartLine,
+  FaEnvelope,
+  FaPiggyBank,
+  FaShieldAlt,
+  FaUser,
+  FaWallet,
 } from "react-icons/fa";
 
-import Button from "../components/ui/Button/Button";
+import DashboardSkeleton from "../components/Dashboard/DashboardSkeleton";
 import Sidebar from "../components/layout/Sidebar/Sidebar.jsx";
 import Navbar from "../components/Navbar/Navbar.jsx";
-import DashboardSkeleton from "../components/Dashboard/DashboardSkeleton";
 
 import { useAuth } from "../context/AuthContext.jsx";
-import { useDashboard } from "../hooks/useDashboard.js";
 import { useBudget } from "../hooks/useBudget.js";
+import { useDashboard } from "../hooks/useDashboard.js";
+
+import {
+  formatCurrency,
+} from "../utils/formatCurrency.js";
 
 function Profile() {
-  const { user } = useAuth();
+  const {
+    user,
+  } = useAuth();
+
   const {
     dashboardData,
-    loading
-  } = useDashboard();  const { budget } = useBudget();
+    loading,
+  } = useDashboard();
 
-  const [isEditing, setIsEditing] = useState(false);
+  const {
+    budget,
+  } = useBudget();
 
-  const [profileData, setProfileData] = useState({
-    occupation: "Software Engineer",
-    monthlyIncome: "50000",
-    financialGoal: "Emergency Fund"
-  });
+  const currency =
+    user?.currency || "INR";
 
-  useEffect(() => {
-    try {
-      const savedProfile = JSON.parse(
-        localStorage.getItem("financeProfile")
-      );
-
-      if (savedProfile) {
-        setProfileData(savedProfile);
-      }
-
-    } catch {
-      localStorage.removeItem("financeProfile");
-    }
-  }, []);
-
-  const handleChange = (e) => {
-    setProfileData((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value
-    }));
-  };
-
-  const handleSave = () => {
-    localStorage.setItem("financeProfile", JSON.stringify(profileData));
-    setIsEditing(false);
-  };
-
-  const monthlyIncome = Number(profileData.monthlyIncome || 0);
-
-  const monthlyBudget = budget?.monthlyBudget || 0;
-
-  const budgetUsage = React.useMemo(() => {
-
-    if (!monthlyBudget) return 0;
-
-    return Math.round(
-      ((dashboardData?.totalExpenses || 0) /
-        monthlyBudget) * 100
+  const monthlyIncome =
+    Number(
+      user?.monthlyIncome || 0
     );
 
-  }, [dashboardData, monthlyBudget]);
+  const monthlyBudget =
+    Number(
+      budget?.monthlyBudget || 0
+    );
+
+  const totalExpenses =
+    Number(
+      dashboardData?.totalExpenses || 0
+    );
+
+  const totalSavings =
+    Number(
+      dashboardData?.totalSavings || 0
+    );
+
+  const investmentValue =
+    Number(
+      dashboardData?.currentInvestmentValue ||
+        0
+    );
+
+  const investmentProfit =
+    Number(
+      dashboardData?.investmentProfit ||
+        0
+    );
+
+  const budgetUsage =
+    useMemo(() => {
+      if (monthlyBudget <= 0) {
+        return 0;
+      }
+
+      return Math.round(
+        (totalExpenses /
+          monthlyBudget) *
+          100
+      );
+    }, [
+      totalExpenses,
+      monthlyBudget,
+    ]);
+
+  const savingsRate =
+    useMemo(() => {
+      if (monthlyIncome <= 0) {
+        return 0;
+      }
+
+      return Math.round(
+        (totalSavings /
+          monthlyIncome) *
+          100
+      );
+    }, [
+      totalSavings,
+      monthlyIncome,
+    ]);
+
+  const savingsTarget =
+    Number(
+      user?.savingsTarget || 0
+    );
+
+  const savingsTargetProgress =
+    savingsTarget > 0
+      ? Math.min(
+          Math.round(
+            (totalSavings /
+              savingsTarget) *
+              100
+          ),
+          100
+        )
+      : 0;
 
   if (loading) {
-
     return (
-
       <div className="app-layout">
-
         <Sidebar />
 
         <main className="main-content">
-
           <Navbar />
 
           <DashboardSkeleton />
-
         </main>
-
       </div>
-
     );
-
   }
 
   return (
@@ -109,106 +146,94 @@ function Profile() {
 
         <section className="page-header">
           <h1>Profile</h1>
+
           <p>
-            Manage your financial profile, income, monthly budget and account
-            overview.
+            Your account and financial
+            overview based on your current
+            SmartMoney data.
           </p>
         </section>
 
         <section className="profile-card glass-card">
           <div className="profile-avatar">
-            {user?.name ? user.name.charAt(0).toUpperCase() : "M"}
+            {user?.name
+              ?.charAt(0)
+              ?.toUpperCase() ||
+              <FaUser />}
           </div>
 
           <div className="profile-info premium-profile-info">
             <div className="profile-main-row">
               <div>
-                <h2>{user?.name || "Mayank Sharma"}</h2>
+                <h2>
+                  {user?.name ||
+                    "SmartMoney User"}
+                </h2>
 
                 <p>
                   <FaEnvelope />
-                  {user?.email || "mayank@example.com"}
+
+                  {user?.email ||
+                    "Email unavailable"}
                 </p>
               </div>
-
-              <Button
-                className="auth-submit profile-edit-btn"
-                disabled={
-                  isEditing &&
-                  (
-                    !profileData.occupation ||
-                    !profileData.monthlyIncome ||
-                    Number(profileData.monthlyIncome) <= 0 ||
-                    !profileData.financialGoal
-                  )
-                }
-                onClick={
-                  isEditing
-                    ? handleSave
-                    : () => setIsEditing(true)
-                }
-              >
-                {isEditing ? <FaSave /> : <FaEdit />}
-                {isEditing ? "Save Profile" : "Edit Profile"}
-              </Button>
             </div>
 
             <div className="profile-details">
               <div>
                 <span>
-                  <FaBriefcase /> Occupation
+                  <FaBriefcase />
+                  Employment
                 </span>
 
-                {isEditing ? (
-                  <input
-                    name="occupation"
-                    value={profileData.occupation}
-                    onChange={handleChange}
-                  />
-                ) : (
-                  <strong>{profileData.occupation}</strong>
-                )}
+                <strong>
+                  {user?.employmentType ||
+                    "Not specified"}
+                </strong>
               </div>
 
               <div>
                 <span>
-                  <FaWallet /> Monthly Income
+                  <FaWallet />
+                  Monthly Income
                 </span>
 
-                {isEditing ? (
-                  <input
-                    type="number"
-                    name="monthlyIncome"
-                    value={profileData.monthlyIncome}
-                    onChange={handleChange}
-                  />
-                ) : (
-                  <strong>₹{monthlyIncome.toLocaleString("en-IN")}</strong>
-                )}
+                <strong>
+                  {formatCurrency(
+                    monthlyIncome,
+                    currency
+                  )}
+                </strong>
               </div>
 
               <div>
                 <span>
-                  <FaWallet /> Monthly Budget
+                  <FaWallet />
+                  Monthly Budget
                 </span>
 
-                <strong>₹{monthlyBudget.toLocaleString("en-IN")}</strong>
+                <strong>
+                  {formatCurrency(
+                    monthlyBudget,
+                    currency
+                  )}
+                </strong>
               </div>
 
               <div>
                 <span>
-                  <FaBullseye /> Financial Goal
+                  <FaBullseye />
+                  Savings Target
                 </span>
 
-                {isEditing ? (
-                  <input
-                    name="financialGoal"
-                    value={profileData.financialGoal}
-                    onChange={handleChange}
-                  />
-                ) : (
-                  <strong>{profileData.financialGoal}</strong>
-                )}
+                <strong>
+                  {savingsTarget > 0
+                    ? formatCurrency(
+                        savingsTarget,
+                        currency
+                      )
+                    : "Not set"}
+                </strong>
               </div>
             </div>
           </div>
@@ -217,107 +242,201 @@ function Profile() {
         <section className="stats-grid">
           <div className="stat-card">
             <div className="stat-header">
-              <p className="stat-title">Total Expenses</p>
+              <p className="stat-title">
+                Total Expenses
+              </p>
+
               <div className="stat-icon">
                 <FaWallet />
               </div>
             </div>
 
             <h2 className="stat-value">
-              ₹{(dashboardData?.totalExpenses || 0).toLocaleString("en-IN")}
+              {formatCurrency(
+                totalExpenses,
+                currency
+              )}
             </h2>
 
-            <p className="stat-growth">Current tracked spending</p>
+            <p className="stat-growth">
+              Current tracked spending
+            </p>
           </div>
 
           <div className="stat-card">
             <div className="stat-header">
-              <p className="stat-title">Total Savings</p>
+              <p className="stat-title">
+                Total Savings
+              </p>
+
               <div className="stat-icon">
                 <FaPiggyBank />
               </div>
             </div>
 
             <h2 className="stat-value">
-              ₹{(dashboardData?.totalSavings || 0).toLocaleString("en-IN")}
+              {formatCurrency(
+                totalSavings,
+                currency
+              )}
             </h2>
 
-            <p className="stat-growth">Across savings goals</p>
+            <p className="stat-growth">
+              Across savings goals
+            </p>
           </div>
 
           <div className="stat-card">
             <div className="stat-header">
-              <p className="stat-title">Investments</p>
+              <p className="stat-title">
+                Investments
+              </p>
+
               <div className="stat-icon">
                 <FaChartLine />
               </div>
             </div>
 
             <h2 className="stat-value">
-              ₹
-              {(dashboardData?.currentInvestmentValue || 0).toLocaleString(
-                "en-IN"
+              {formatCurrency(
+                investmentValue,
+                currency
               )}
             </h2>
 
-            <p className="stat-growth">Current portfolio value</p>
+            <p className="stat-growth">
+              Current portfolio value
+            </p>
           </div>
 
           <div className="stat-card">
             <div className="stat-header">
-              <p className="stat-title">Health Score</p>
+              <p className="stat-title">
+                Health Score
+              </p>
+
               <div className="stat-icon">
                 <FaShieldAlt />
               </div>
             </div>
 
             <h2 className="stat-value">
-              {dashboardData?.financialHealthScore || 0}/100
+              {dashboardData
+                ?.financialHealthScore ||
+                0}
+              /100
             </h2>
 
-            <p className="stat-growth">Based on live finance data</p>
+            <p className="stat-growth">
+              Based on tracked finance data
+            </p>
           </div>
         </section>
 
         <section className="glass-card financial-snapshot-card">
           <div className="snapshot-header">
-            <h2>Financial Snapshot</h2>
-            <p>Quick profile-based financial overview</p>
+            <h2>
+              Financial Snapshot
+            </h2>
+
+            <p>
+              Current overview based on
+              your account and tracked
+              financial activity.
+            </p>
           </div>
 
           <div className="profile-summary-grid premium-summary-grid">
             <div>
-              <h4>Monthly Income</h4>
-              <p>₹{monthlyIncome.toLocaleString("en-IN")}</p>
-            </div>
+              <h4>
+                Monthly Income
+              </h4>
 
-            <div>
-              <h4>Monthly Budget</h4>
-              <p>₹{monthlyBudget.toLocaleString("en-IN")}</p>
-            </div>
-
-            <div>
-              <h4>Budget Usage</h4>
-              <p> {budgetUsage}% </p>
-            </div>
-
-            <div>
-              <h4>Savings Rate</h4>
-              <p>{dashboardData?.savingsRate || 0}%</p>
-            </div>
-
-            <div>
-              <h4>Transactions</h4>
-              <p>{dashboardData?.expenseCount || 0}</p>
-            </div>
-
-            <div>
-              <h4>Investment Profit</h4>
               <p>
-                ₹
-                {(dashboardData?.investmentProfit || 0).toLocaleString(
-                  "en-IN"
+                {formatCurrency(
+                  monthlyIncome,
+                  currency
                 )}
+              </p>
+            </div>
+
+            <div>
+              <h4>
+                Monthly Budget
+              </h4>
+
+              <p>
+                {formatCurrency(
+                  monthlyBudget,
+                  currency
+                )}
+              </p>
+            </div>
+
+            <div>
+              <h4>
+                Budget Usage
+              </h4>
+
+              <p>
+                {budgetUsage}%
+              </p>
+            </div>
+
+            <div>
+              <h4>
+                Savings / Income
+              </h4>
+
+              <p>
+                {savingsRate}%
+              </p>
+            </div>
+
+            <div>
+              <h4>
+                Transactions
+              </h4>
+
+              <p>
+                {dashboardData
+                  ?.expenseCount ||
+                  0}
+              </p>
+            </div>
+
+            <div>
+              <h4>
+                Investment Profit
+              </h4>
+
+              <p>
+                {formatCurrency(
+                  investmentProfit,
+                  currency
+                )}
+              </p>
+            </div>
+
+            {savingsTarget > 0 && (
+              <div>
+                <h4>
+                  Savings Target Progress
+                </h4>
+
+                <p>
+                  {savingsTargetProgress}%
+                </p>
+              </div>
+            )}
+
+            <div>
+              <h4>
+                Currency
+              </h4>
+
+              <p>
+                {currency}
               </p>
             </div>
           </div>

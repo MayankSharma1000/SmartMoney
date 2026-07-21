@@ -1,128 +1,113 @@
 const {
-    generatePrediction
-  } = require("./predictionEngine");
+  generateInsights
+} = require("./insightGenerator");
 
 const {
-    generateInsights
-  }=require("./insightGenerator");
+  calculateFinancialScore
+} = require("./financialScore");
 
 const {
-    calculateFinancialScore
-  } = require("./financialScore");
-  
-const {
-    generateGoalProgress
-  } = require("./goalEngine");
+  generateCategoryChart,
+  generateMonthlyChart
+} = require("./chartGenerator");
 
-const {
-    generateCategoryChart,
-    generateMonthlyChart
-  } = require("./chartGenerator");
-  
-  function generateAnalytics(summary, expenses) {
-  
-    const financial =
-      calculateFinancialScore({
-  
-        income:
-          summary.totalSavings +
-          summary.totalExpenses,
-  
-        expenses:
-          summary.totalExpenses,
-  
-        savings:
-          summary.totalSavings,
-  
-        investments:
-          summary.currentInvestmentValue
-  
-      });
+function generateAnalytics(
+  summary = {},
+  expenses = []
+) {
+  const financial =
+    calculateFinancialScore({
+      income:
+        summary.monthlyIncome || 0,
 
-      const prediction =
-      generatePrediction({
-    
-        totalSavings:
-          summary.totalSavings,
-    
-        totalExpenses:
-          summary.totalExpenses,
-    
-        currentInvestmentValue:
-          summary.currentInvestmentValue
-    
-      });
+      expenses:
+        summary.totalExpenses || 0,
 
-      const goal =
-      generateGoalProgress({
+      savings:
+        summary.totalSavings || 0,
 
-        totalSavings:
-          summary.totalSavings,
+      investments:
+        summary.currentInvestmentValue || 0,
 
-        monthlySavings:
-          prediction.monthlySavings
+      monthlyBudget:
+        summary.monthlyBudget || 0
+    });
 
-      });
-      
-      const insights=
-        generateInsights({
+  const insights =
+    generateInsights({
+      monthlyIncome:
+        summary.monthlyIncome || 0,
 
-        totalExpenses:
-        summary.totalExpenses,
+      totalExpenses:
+        summary.totalExpenses || 0,
 
-        totalSavings:
-        summary.totalSavings,
+      totalSavings:
+        summary.totalSavings || 0,
 
-        currentInvestmentValue:
-        summary.currentInvestmentValue,
+      currentInvestmentValue:
+        summary.currentInvestmentValue || 0,
 
-        prediction,
-
-        financialHealthScore:
-        financial.score
-
-        });
-      
-    return {
-  
       financialHealthScore:
-        financial.score,
-  
-      financialHealthLabel:
-        financial.score >= 85
-          ? "Excellent"
-          : financial.score >= 70
-          ? "Good"
-          : financial.score >= 50
-          ? "Average"
-          : "Poor",
-  
-      healthBreakdown: {
-  
-        savingsStrength:
-          Math.round(financial.savingsRate),
-  
-        investmentStrength:
-          Math.round(financial.investmentRate),
-  
-        budgetDiscipline:
-          Math.round(
-            100 - financial.expenseRate
-          ),
-  
-        profitabilityScore:
-          Math.round(
-            financial.investmentRate
-          )
-      },
-      categoryChart: generateCategoryChart(expenses),
-      monthlyChart: generateMonthlyChart(expenses),
-      prediction,
-      goal,
-      insights
-    };
+        financial.score
+    });
+
+  let financialHealthLabel =
+    "Not enough data";
+
+  if ((summary.monthlyIncome || 0) > 0) {
+    if (financial.score >= 85) {
+      financialHealthLabel = "Excellent";
+    } else if (financial.score >= 70) {
+      financialHealthLabel = "Good";
+    } else if (financial.score >= 50) {
+      financialHealthLabel = "Average";
+    } else {
+      financialHealthLabel = "Needs Attention";
+    }
   }
-  
-  module.exports = {
-  generateAnalytics
+
+  return {
+    financialHealthScore:
+      financial.score,
+
+    financialHealthLabel,
+
+    healthBreakdown: {
+      savingsStrength:
+        Math.round(financial.savingsRate),
+
+      investmentStrength:
+        Math.round(
+          Math.min(
+            financial.investmentRate,
+            100
+          )
+        ),
+
+      budgetDiscipline:
+        Math.round(
+          financial.budgetDiscipline * 10
+        ),
+
+      expenseControl:
+        Math.round(
+          Math.max(
+            0,
+            100 - financial.expenseRate
+          )
+        )
+    },
+
+    categoryChart:
+      generateCategoryChart(expenses),
+
+    monthlyChart:
+      generateMonthlyChart(expenses),
+
+    insights
   };
+}
+
+module.exports = {
+  generateAnalytics
+};

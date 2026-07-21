@@ -1,11 +1,12 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import AppShell from "@/components/layout/AppShell/AppShell";
 import Navbar from "@/components/Navbar/Navbar";
 import SettingsSection from "@/components/Settings/SettingsSection";
-
 import Button from "@/components/ui/Button";
 
+import { useAuth } from "../context/AuthContext";
 import { useFinancialReport } from "../hooks/useFinancialReport";
 
 import "@/styles/pages/settings.css";
@@ -13,12 +14,17 @@ import "@/styles/pages/settings.css";
 import {
   FaDatabase,
   FaGlobe,
-  FaPalette,
-  FaShieldAlt,
   FaSignOutAlt,
 } from "react-icons/fa";
 
 function Settings() {
+  const navigate = useNavigate();
+
+  const {
+    user,
+    logout,
+  } = useAuth();
+
   const {
     exportPDF,
     exportExcel,
@@ -49,6 +55,14 @@ function Settings() {
     }
   };
 
+  const handleLogout = () => {
+    logout();
+
+    navigate("/login", {
+      replace: true,
+    });
+  };
+
   return (
     <AppShell>
       <Navbar />
@@ -57,41 +71,35 @@ function Settings() {
         <h1>Settings</h1>
 
         <p>
-          Manage your profile, preferences and application settings.
+          Manage your account preferences
+          and application data.
         </p>
       </section>
 
       <SettingsSection
-        title="Profile"
-        description="Basic account information"
+        title="Account"
+        description="Your SmartMoney account information"
       >
         <div className="settings-row">
           <strong>Name</strong>
-          <span>Mayank Sharma</span>
+
+          <span>
+            {user?.name || "Not available"}
+          </span>
         </div>
 
         <div className="settings-row">
           <strong>Email</strong>
-          <span>Logged in account</span>
-        </div>
-      </SettingsSection>
 
-      <SettingsSection
-        title="Appearance"
-        description="Customize your experience"
-      >
-        <div className="settings-row">
           <span>
-            <FaPalette /> Theme
+            {user?.email || "Not available"}
           </span>
-
-          <span>Dark Mode</span>
         </div>
       </SettingsSection>
 
       <SettingsSection
         title="Preferences"
-        description="Regional settings"
+        description="Financial preferences selected for your account"
       >
         <div className="settings-row">
           <span>
@@ -99,20 +107,14 @@ function Settings() {
           </span>
 
           <span>
-            Indian Rupee (₹)
+            {user?.currency || "INR"}
           </span>
-        </div>
-
-        <div className="settings-row">
-          <span>Timezone</span>
-
-          <span>Asia/Kolkata</span>
         </div>
       </SettingsSection>
 
       <SettingsSection
         title="Data"
-        description="Manage your application data"
+        description="Export your financial information"
       >
         <Button
           onClick={handleExportData}
@@ -131,22 +133,14 @@ function Settings() {
       </SettingsSection>
 
       <SettingsSection
-        title="Security"
-        description="Session management"
+        title="Session"
+        description="Manage your current session"
       >
-        <Button>
-          <FaShieldAlt />
-
-          Change Password
-        </Button>
-
-        <Button>
+        <Button onClick={handleLogout}>
           <FaSignOutAlt />
-
           Logout
         </Button>
       </SettingsSection>
-
     </AppShell>
   );
 }

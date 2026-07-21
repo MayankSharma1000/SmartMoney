@@ -1,19 +1,40 @@
-import React from "react";
-import Button from "../ui/Button/Button";
-/* ========================================= */
-/* COMPONENT */
-/* ========================================= */
+function AnalyticsHeader({
+  user,
+  period,
+}) {
+  const hour =
+    new Date().getHours();
 
-function AnalyticsHeader() {
+  let greeting = "Good Evening";
+
+  if (hour < 12) {
+    greeting = "Good Morning";
+  } else if (hour < 17) {
+    greeting = "Good Afternoon";
+  }
+
+  const name =
+    user?.name?.trim() || "there";
+
+  const currentDate =
+    new Date().toLocaleDateString(
+      undefined,
+      {
+        month: "long",
+        year: "numeric",
+      }
+    );
+
+  const selectedPeriod =
+    period?.month && period?.year
+      ? `${period.month} ${period.year}`
+      : currentDate;
+
   return (
     <section className="page-header">
-
-      {/* LEFT SIDE */}
-
       <div className="page-header-content">
-
         <span className="page-greeting">
-          Good Evening, Mayank 👋
+          {greeting}, {name} 👋
         </span>
 
         <h1 className="page-title">
@@ -21,37 +42,23 @@ function AnalyticsHeader() {
         </h1>
 
         <p className="page-subtitle">
-          Here's your financial overview for today.
-          Analyze expenses, savings, investments and
-          your overall financial health.
+          Review your spending, savings,
+          investments and overall financial
+          position.
         </p>
-
       </div>
-
-      {/* RIGHT SIDE */}
 
       <div className="page-header-actions">
-
-        <Button className="analytics-date-btn">
-
-          <span>📅</span>
-
+        <div className="analytics-date-btn">
           <div className="date-content">
+            <small>Current Period</small>
 
-            <small>Selected Period</small>
-
-            <strong>May 1 – May 31, 2026</strong>
-
+            <strong>
+              {selectedPeriod}
+            </strong>
           </div>
-
-          <span className="dropdown-icon">
-            ▼
-          </span>
-
-        </Button>
-
+        </div>
       </div>
-
     </section>
   );
 }

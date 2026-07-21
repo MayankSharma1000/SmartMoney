@@ -1,10 +1,13 @@
-import React from "react";
 import { FaCheckCircle } from "react-icons/fa";
 
 import Button from "../ui/Button/Button";
 import StepCard from "./StepCard";
 
-function GoalsStep({ onFinish }) {
+function GoalsStep({
+  onFinish,
+  onBack,
+  loading = false,
+}) {
   return (
     <StepCard>
 
@@ -34,13 +37,28 @@ function GoalsStep({ onFinish }) {
 
         </div>
 
-        <Button
-          className="success-btn"
-          loading={loading}
-          onClick={onFinish}
-        >
-          Go To Dashboard
-        </Button>
+        <div className="step-actions">
+
+          <Button
+            variant="secondary"
+            onClick={onBack}
+            disabled={loading}
+          >
+            Back
+          </Button>
+
+          <Button
+            className="success-btn"
+            loading={loading}
+            onClick={onFinish}
+            disabled={loading}
+          >
+            {loading
+              ? "Setting Up..."
+              : "Go To Dashboard"}
+          </Button>
+
+        </div>
 
       </div>
 

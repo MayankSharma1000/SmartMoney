@@ -4,42 +4,79 @@ const User = require("../models/User");
 const generateToken = require("../utils/generateToken");
 
 /* ========================= */
+/* USER RESPONSE */
+/* ========================= */
+
+const buildUserResponse = (user) => ({
+  id: user._id,
+  name: user.name,
+  email: user.email,
+  profilePicture: user.profilePicture || "",
+  monthlyIncome:
+    user.monthlyIncome ?? null,
+  currency:
+    user.currency || "INR",
+  employmentType:
+    user.employmentType || null,
+  savingsTarget:
+    user.savingsTarget || 0,
+  onboardingCompleted:
+    Boolean(user.onboardingCompleted),
+  role:
+    user.role || "user",
+});
+
+/* ========================= */
 /* REGISTER USER */
 /* ========================= */
 
 const registerUser = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const {
+      name,
+      email,
+      password,
+    } = req.body;
+
+    const normalizedEmail =
+      email?.trim().toLowerCase();
 
     const emailRegex =
       /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    if (!emailRegex.test(email)) {
+    if (
+      !normalizedEmail ||
+      !emailRegex.test(normalizedEmail)
+    ) {
       return res.status(400).json({
         success: false,
-        message: "Invalid email format"
+        message: "Invalid email format",
       });
     }
 
     const passwordRegex =
       /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{8,}$/;
 
-    if (!passwordRegex.test(password)) {
+    if (
+      !password ||
+      !passwordRegex.test(password)
+    ) {
       return res.status(400).json({
         success: false,
         message:
-          "Password must contain uppercase, lowercase, number and be 8+ characters."
+          "Password must contain uppercase, lowercase, number and be 8+ characters.",
       });
     }
 
     const existingUser =
-      await User.findOne({ email });
+      await User.findOne({
+        email: normalizedEmail,
+      });
 
     if (existingUser) {
       return res.status(400).json({
         success: false,
-        message:
-          "User already exists"
+        message: "User already exists",
       });
     }
 
@@ -54,29 +91,30 @@ const registerUser = async (req, res) => {
 
     const user =
       await User.create({
-        name,
-        email,
-        password:
-          hashedPassword
+        name: name?.trim(),
+        email: normalizedEmail,
+        password: hashedPassword,
       });
 
-    res.status(201).json({
+    return res.status(201).json({
       success: true,
 
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email
-      },
+      user:
+        buildUserResponse(user),
 
       token:
-        generateToken(user._id)
+        generateToken(user._id),
     });
   } catch (error) {
-    res.status(500).json({
+    console.error(
+      "Register Error:",
+      error
+    );
+
+    return res.status(500).json({
       success: false,
       message:
-        "Internal Server Error"
+        "Internal Server Error",
     });
   }
 };
@@ -87,15 +125,22 @@ const registerUser = async (req, res) => {
 
 const loginUser = async (req, res) => {
   try {
-    const { email, password } =
-      req.body;
+    const {
+      email,
+      password,
+    } = req.body;
 
-      const user = await User.findOne({
-        email
+    const normalizedEmail =
+      email?.trim().toLowerCase();
+
+    const user =
+      await User.findOne({
+        email: normalizedEmail,
       }).select("+password");
 
     if (
       !user ||
+      !password ||
       !(await bcrypt.compare(
         password,
         user.password
@@ -104,28 +149,29 @@ const loginUser = async (req, res) => {
       return res.status(401).json({
         success: false,
         message:
-          "Invalid credentials"
+          "Invalid credentials",
       });
     }
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
 
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email
-      },
+      user:
+        buildUserResponse(user),
 
       token:
-        generateToken(user._id)
+        generateToken(user._id),
     });
   } catch (error) {
-    console.error(error);
+    console.error(
+      "Login Error:",
+      error
+    );
 
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
-      message: error.message
+      message:
+        "Internal Server Error",
     });
   }
 };
@@ -134,51 +180,83 @@ const loginUser = async (req, res) => {
 /* COMPLETE ONBOARDING */
 /* ========================= */
 
-const completeOnboarding = async (req, res) => {
+const completeOnboarding = async (
+  req,
+  res
+) => {
   try {
-
     const {
       monthlyIncome,
       currency,
-      employmentType
+      employmentType,
     } = req.body;
 
-    const user = await User.findById(req.user._id);
+    const income =
+      Number(monthlyIncome);
+
+    if (
+      !Number.isFinite(income) ||
+      income < 0
+    ) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Please enter a valid monthly income",
+      });
+    }
+
+    const user =
+      await User.findById(
+        req.user._id
+      );
 
     if (!user) {
       return res.status(404).json({
         success: false,
-        message: "User not found"
+        message: "User not found",
       });
     }
 
-    user.monthlyIncome = monthlyIncome;
-    user.currency = currency;
-    user.employmentType = employmentType;
-    user.onboardingCompleted = true;
+    user.monthlyIncome =
+      income;
+
+    user.currency =
+      currency;
+
+    user.employmentType =
+      employmentType;
+
+    user.onboardingCompleted =
+      true;
 
     await user.save();
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
-      message: "Onboarding completed successfully",
-      user
-    });
 
+      message:
+        "Onboarding completed successfully",
+
+      user:
+        buildUserResponse(user),
+    });
   } catch (error) {
+    console.error(
+      "Onboarding Error:",
+      error
+    );
 
-    console.error(error);
-
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
-      message: "Internal Server Error"
+      message:
+        error.message ||
+        "Internal Server Error",
     });
-
   }
 };
 
 module.exports = {
   registerUser,
   loginUser,
-  completeOnboarding
+  completeOnboarding,
 };

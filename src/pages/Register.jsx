@@ -87,9 +87,12 @@ function Register() {
           transition={{ delay: 0.2 }}
         >
           <div>
-            <span>Money Leaks Found</span>
-            <h2>₹4,800</h2>
-            <p>Potential savings from avoidable spending</p>
+            <span>Smarter Money Management</span>
+            <h2>Build Better Habits</h2>
+            <p>
+              Identify spending patterns and turn
+              financial goals into measurable progress.
+            </p>
           </div>
 
           <div className="mini-ring">
@@ -166,7 +169,7 @@ function Register() {
                 value={formData.password}
                 onChange={handleChange}
                 required
-                minLength="6"
+                minLength="8"
               />
             </div>
           </label>

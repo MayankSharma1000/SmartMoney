@@ -1,4 +1,5 @@
 import { NavLink } from "react-router-dom";
+
 import "../../../styles/Sidebar.css";
 
 import { FaArrowTrendUp } from "react-icons/fa6";
@@ -9,7 +10,6 @@ import {
   FaCog,
   FaPiggyBank,
   FaReceipt,
-  FaSignOutAlt,
   FaWallet,
 } from "react-icons/fa";
 
@@ -55,7 +55,7 @@ function Sidebar() {
   return (
     <aside className="sidebar">
 
-      {/* ================= LOGO ================= */}
+      {/* ================= BRAND ================= */}
 
       <div className="sidebar-logo">
 
@@ -87,60 +87,10 @@ function Sidebar() {
             {item.icon}
 
             <span>{item.name}</span>
-
           </NavLink>
         ))}
 
       </nav>
-
-      {/* ================= FOOTER ================= */}
-
-      <div className="sidebar-footer">
-
-        <div className="sidebar-widget">
-
-          <span className="widget-label">
-            THIS MONTH
-          </span>
-
-          <h2>₹18,420</h2>
-
-          <p>
-            Saved{" "}
-            <span className="positive">
-              +12%
-            </span>
-          </p>
-
-        </div>
-
-        <div className="sidebar-divider" />
-
-        <button className="account-button">
-
-          <div className="account-avatar">
-            M
-          </div>
-
-          <div>
-
-            <strong>Mayank</strong>
-
-            <span>Settings</span>
-
-          </div>
-
-        </button>
-
-        <button className="sidebar-action-btn">
-
-          <FaSignOutAlt />
-
-          Logout
-
-        </button>
-
-      </div>
 
     </aside>
   );

@@ -3,22 +3,30 @@ import "../components/Analytics/Analytics.css";
 import DashboardSkeleton from "../components/Dashboard/DashboardSkeleton";
 import AppShell from "../components/layout/AppShell/AppShell.jsx";
 
-import { DEFAULT_LIABILITIES } from "../constants/financeConstants";
+import { useAuth } from "../context/AuthContext";
 import { useDashboard } from "../hooks/useDashboard";
 
 import ActivityTimeline from "../components/Analytics/ActivityTimeline.jsx";
 import AIFinancialCoach from "../components/Analytics/AIFinancialCoach.jsx";
-import AISuggestions from "../components/Analytics/AISuggestions.jsx";
 import AnalyticsFooter from "../components/Analytics/AnalyticsFooter.jsx";
 import AnalyticsHeader from "../components/Analytics/AnalyticsHeader.jsx";
 import FinancialHealth from "../components/Analytics/FinancialHealth.jsx";
-import InsightCards from "../components/Analytics/InsightCards.jsx";
 import InvestmentOverview from "../components/Analytics/InvestmentOverview.jsx";
 import SavingsGoals from "../components/Analytics/SavingsGoals.jsx";
 import SpendingOverview from "../components/Analytics/SpendingOverview.jsx";
 
 function Analytics() {
-  const { dashboardData, loading } = useDashboard();
+  const { user } = useAuth();
+
+  const {
+    dashboardData,
+    loading,
+  } = useDashboard();
+
+  const currency =
+    user?.currency ||
+    dashboardData?.user?.currency ||
+    "INR";
 
   const totalSavings =
     dashboardData?.totalSavings || 0;
@@ -29,8 +37,6 @@ function Analytics() {
   const investmentProfit =
     dashboardData?.investmentProfit || 0;
 
-  const liabilities = DEFAULT_LIABILITIES;
-
   if (loading) {
     return (
       <AppShell>
@@ -40,35 +46,61 @@ function Analytics() {
   }
 
   return (
-      <AppShell>
-        <AnalyticsHeader />
-        <InsightCards />
-        <AIFinancialCoach analytics={dashboardData?.analytics}/>
+    <AppShell>
+      <AnalyticsHeader
+        user={user}
+        period={dashboardData?.period}
+      />
 
-        <section className="analytics-main-grid">
-          <FinancialHealth />
-          <SpendingOverview
-            dashboardData={dashboardData}
-          />
-          <SavingsGoals
-            totalSavings={totalSavings}
-          />
-          <InvestmentOverview
-            totalSavings={totalSavings}
-            currentInvestmentValue={currentInvestmentValue}
-            investmentProfit={investmentProfit}
-            liabilities={liabilities}
-          />
-        </section>
+      <AIFinancialCoach
+        user={user}
+        dashboardData={dashboardData}
+      />
 
-        <div className="analytics-bottom-grid">
-          <ActivityTimeline />
-          <AISuggestions />
-        </div>
-        <AnalyticsFooter />
+      <section className="analytics-main-grid">
+        <FinancialHealth
+          dashboardData={dashboardData}
+        />
 
-      </AppShell>
-    );
-  }
+        <SpendingOverview
+          dashboardData={dashboardData}
+          currency={currency}
+        />
+
+        <SavingsGoals
+          totalSavings={totalSavings}
+          totalSavingsTarget={
+            dashboardData?.totalSavingsTarget || 0
+          }
+          currency={currency}
+        />
+
+        <InvestmentOverview
+          totalSavings={totalSavings}
+          currentInvestmentValue={
+            currentInvestmentValue
+          }
+          investmentProfit={
+            investmentProfit
+          }
+          currency={currency}
+        />
+      </section>
+
+      <div className="analytics-bottom-grid">
+        <ActivityTimeline
+          transactions={
+            dashboardData?.recentTransactions || []
+          }
+          currency={currency}
+        />
+      </div>
+
+      <AnalyticsFooter
+        user={user}
+      />
+    </AppShell>
+  );
+}
 
 export default Analytics;

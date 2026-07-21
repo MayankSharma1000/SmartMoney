@@ -3,21 +3,24 @@ import { motion } from "framer-motion";
 import "./DashboardHeader.css";
 
 import {
-  FaArrowTrendUp,
-  FaShieldHeart,
+  FaChartLine,
   FaWallet,
 } from "react-icons/fa6";
 
 function DashboardHeader({
   user,
   dashboardData,
+  currency = "INR",
 }) {
   const hour = new Date().getHours();
 
   let greeting = "Good Evening";
 
-  if (hour < 12) greeting = "Good Morning";
-  else if (hour < 17) greeting = "Good Afternoon";
+  if (hour < 12) {
+    greeting = "Good Morning";
+  } else if (hour < 17) {
+    greeting = "Good Afternoon";
+  }
 
   const today = new Date().toLocaleDateString("en-IN", {
     weekday: "long",
@@ -26,24 +29,28 @@ function DashboardHeader({
     year: "numeric",
   });
 
-  const score = dashboardData?.financialHealthScore ?? 92;
-
-  const currency = user?.currency || "INR";
-
   const formatter = new Intl.NumberFormat("en-IN", {
     style: "currency",
     currency,
     maximumFractionDigits: 0,
   });
 
-  const netWorth =
-    dashboardData?.currentInvestmentValue ?? 0;
+  const name =
+    user?.name?.trim() ||
+    user?.email?.split("@")[0] ||
+    "there";
 
   const totalExpenses =
-    dashboardData?.totalExpenses ?? 0;
+    Number(dashboardData?.totalExpenses) || 0;
 
   const totalSavings =
-    dashboardData?.totalSavings ?? 0;
+    Number(dashboardData?.totalSavings) || 0;
+
+  const investmentValue =
+    Number(dashboardData?.currentInvestmentValue) || 0;
+
+  const netWorth =
+    totalSavings + investmentValue;
 
   return (
     <motion.section
@@ -53,65 +60,40 @@ function DashboardHeader({
       animate="visible"
     >
       <div className="hero-content">
-
-        {/* Left Section */}
-
         <div className="hero-left">
-
           <span className="hero-date">
             {today}
           </span>
 
           <h1>
             {greeting},{" "}
-            <span>{user?.name || "Mayank"}</span>
-            👋
+            <span>{name}</span>
+            {" "}👋
           </h1>
 
           <p>
-            Welcome back. Here's an overview of your financial
-            health and progress for today.
+            Welcome back. Here's a clear overview of
+            your finances today.
           </p>
-
-          <div className="financial-score">
-
-            <FaShieldHeart />
-
-            <span>
-              Financial Score
-            </span>
-
-            <strong>
-              {score}/100
-            </strong>
-
-          </div>
-
         </div>
-
-        {/* Wallet Card */}
 
         <motion.div
           className="wallet-card"
           whileHover={{
-            y: -6,
-            scale: 1.02,
+            y: -4,
           }}
           transition={{
-            duration: 0.25,
+            duration: 0.2,
           }}
         >
-
           <div className="wallet-top">
-
             <div className="wallet-icon">
               <FaWallet />
             </div>
 
             <span>
-              Primary Wallet
+              Net Worth
             </span>
-
           </div>
 
           <h2>
@@ -119,69 +101,52 @@ function DashboardHeader({
           </h2>
 
           <p>
-            Net Worth
+            Savings + Investments
           </p>
 
           <div className="wallet-growth">
-
-            <FaArrowTrendUp />
+            <FaChartLine />
 
             <span>
-              +8.4% this month
+              Based on your current financial data
             </span>
-
           </div>
-
         </motion.div>
-
       </div>
 
-      {/* KPI Cards */}
-
       <div className="hero-kpis">
-
         <div className="hero-kpi">
-
           <span>Expenses</span>
 
           <h3>
             {formatter.format(totalExpenses)}
           </h3>
-
         </div>
 
         <div className="hero-kpi">
-
           <span>Savings</span>
 
           <h3>
             {formatter.format(totalSavings)}
           </h3>
-
         </div>
 
         <div className="hero-kpi">
-
           <span>Investments</span>
+
+          <h3>
+            {formatter.format(investmentValue)}
+          </h3>
+        </div>
+
+        <div className="hero-kpi">
+          <span>Net Worth</span>
 
           <h3>
             {formatter.format(netWorth)}
           </h3>
-
         </div>
-
-        <div className="hero-kpi">
-
-          <span>Health Score</span>
-
-          <h3>
-            {score}/100
-          </h3>
-
-        </div>
-
       </div>
-
     </motion.section>
   );
 }

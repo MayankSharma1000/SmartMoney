@@ -1,47 +1,66 @@
-import React from "react";
 import { Doughnut } from "react-chartjs-2";
 
 function InvestmentOverview({
-  totalSavings,
-  currentInvestmentValue,
-  investmentProfit,
-  liabilities
+  totalSavings = 0,
+  currentInvestmentValue = 0,
+  investmentProfit = 0,
+  currency = "INR",
 }) {
+  const savings =
+    Number(totalSavings) || 0;
+
+  const investmentValue =
+    Number(currentInvestmentValue) || 0;
+
+  const profit =
+    Number(investmentProfit) || 0;
+
   const netWorth =
-    totalSavings +
-    currentInvestmentValue -
-    liabilities;
+    savings + investmentValue;
+
+  const investedCapital =
+    investmentValue - profit;
 
   const roi =
-    currentInvestmentValue > 0
-      ? (
-          (investmentProfit /
-            currentInvestmentValue) *
-          100
-        ).toFixed(2)
+    investedCapital > 0
+      ? (profit / investedCapital) * 100
       : 0;
 
+  const formatter =
+    new Intl.NumberFormat("en-IN", {
+      style: "currency",
+      currency,
+      maximumFractionDigits: 0,
+    });
+
+  const hasFinancialData =
+    savings > 0 ||
+    investmentValue > 0;
+
+  const chartData = [
+    savings,
+    investmentValue,
+  ];
+
+  const hasChartData =
+    chartData.some(
+      (value) => value > 0
+    );
+
   return (
-    <div
-      className="glass-card analytics-card"
-      style={{
-        padding: "32px"
-      }}
-    >
-      <div
-        className="investment-header"
-      >
+    <section className="analytics-card investment-overview-card">
+
+      <div className="investment-header">
         <div>
-          <h2>Investment Portfolio</h2>
+          <h2>
+            Investment Portfolio
+          </h2>
 
           <p>
-            Wealth Tracking & Asset Allocation
+            Portfolio performance and
+            financial asset overview
           </p>
         </div>
-
-        <span className="live-dot">
-          ● Live
-        </span>
       </div>
 
       <div className="portfolio-grid">
@@ -50,24 +69,20 @@ function InvestmentOverview({
           <p>Portfolio Value</p>
 
           <h2>
-            ₹
-            {currentInvestmentValue.toLocaleString(
-              "en-IN"
+            {formatter.format(
+              investmentValue
             )}
           </h2>
         </div>
 
         <div className="portfolio-stat">
-          <p>Total Profit</p>
+          <p>Profit / Loss</p>
 
-          <h2
-            style={{
-              color:"#22c55e"
-            }}
-          >
-            ₹
-            {investmentProfit.toLocaleString(
-              "en-IN"
+          <h2>
+            {profit > 0 ? "+" : ""}
+
+            {formatter.format(
+              profit
             )}
           </h2>
         </div>
@@ -76,161 +91,132 @@ function InvestmentOverview({
           <p>ROI</p>
 
           <h2>
-            {roi}%
+            {roi.toFixed(2)}%
           </h2>
         </div>
 
       </div>
 
-      <div
-        className="networth-card"
-      >
+      {!hasFinancialData ? (
 
-        <div className="networth-left">
-
-          <h3>Net Worth</h3>
-
-          <h1>
-            ₹
-            {netWorth.toLocaleString(
-              "en-IN"
-            )}
-          </h1>
-
-          <div className="asset-row">
-
-            <span>
-              Savings
-            </span>
-
-            <strong>
-              ₹
-              {totalSavings.toLocaleString(
-                "en-IN"
-              )}
-            </strong>
-
-          </div>
-
-          <div className="asset-row">
-
-            <span>
-              Investments
-            </span>
-
-            <strong>
-              ₹
-              {currentInvestmentValue.toLocaleString(
-                "en-IN"
-              )}
-            </strong>
-
-          </div>
-
-          <div className="asset-row">
-
-            <span>
-              Liabilities
-            </span>
-
-            <strong
-              style={{
-                color:"#ef4444"
-              }}
-            >
-              ₹
-              {liabilities.toLocaleString(
-                "en-IN"
-              )}
-            </strong>
-
-          </div>
-
-        </div>
-
-        <div
-          style={{
-            width:"260px",
-            height:"260px"
-          }}
-        >
-          <Doughnut
-
-            data={{
-              labels:[
-                "Savings",
-                "Investments",
-                "Liabilities"
-              ],
-
-              datasets:[
-                {
-
-                  data:[
-                    totalSavings,
-                    currentInvestmentValue,
-                    liabilities
-                  ],
-
-                  backgroundColor:[
-                    "#22c55e",
-                    "#3b82f6",
-                    "#ef4444"
-                  ],
-
-                  borderWidth:0
-
-                }
-              ]
-            }}
-
-            options={{
-              cutout:"72%",
-
-              plugins:{
-                legend:{
-                  position:"bottom"
-                }
-              }
-            }}
-
-          />
-        </div>
-
-      </div>
-
-      <div className="projection-grid">
-
-        <div>
-          <p>Today</p>
+        <div className="analytics-empty-state">
 
           <h3>
-            ₹
-            {netWorth.toLocaleString("en-IN")}
+            No portfolio data yet
           </h3>
+
+          <p>
+            Add investments or savings
+            to start building your
+            financial overview.
+          </p>
+
         </div>
 
-        <div>
-          <p>3 Months</p>
+      ) : (
 
-          <h3>₹1.55L</h3>
+        <div className="networth-card">
+
+          <div className="networth-left">
+
+            <h3>
+              Financial Assets
+            </h3>
+
+            <h1>
+              {formatter.format(
+                netWorth
+              )}
+            </h1>
+
+            <div className="asset-row">
+
+              <span>
+                Savings
+              </span>
+
+              <strong>
+                {formatter.format(
+                  savings
+                )}
+              </strong>
+
+            </div>
+
+            <div className="asset-row">
+
+              <span>
+                Investments
+              </span>
+
+              <strong>
+                {formatter.format(
+                  investmentValue
+                )}
+              </strong>
+
+            </div>
+
+          </div>
+
+          {hasChartData && (
+
+            <div
+              className="portfolio-chart"
+              style={{
+                width: "260px",
+                height: "260px",
+              }}
+            >
+
+              <Doughnut
+                data={{
+                  labels: [
+                    "Savings",
+                    "Investments",
+                  ],
+
+                  datasets: [
+                    {
+                      data:
+                        chartData,
+
+                      backgroundColor: [
+                        "#22c55e",
+                        "#3b82f6",
+                      ],
+
+                      borderWidth: 0,
+                    },
+                  ],
+                }}
+
+                options={{
+                  responsive: true,
+
+                  maintainAspectRatio:
+                    false,
+
+                  cutout: "72%",
+
+                  plugins: {
+                    legend: {
+                      position:
+                        "bottom",
+                    },
+                  },
+                }}
+              />
+
+            </div>
+
+          )}
+
         </div>
 
-        <div>
-          <p>6 Months</p>
+      )}
 
-          <h3>₹1.92L</h3>
-        </div>
-
-        <div>
-          <p>1 Year</p>
-
-          <h3>₹2.65L</h3>
-        </div>
-
-      </div>
-
-    </div>
+    </section>
   );
 }
 

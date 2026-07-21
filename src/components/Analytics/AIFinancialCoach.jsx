@@ -1,177 +1,92 @@
-import React from "react";
-import Button from "../ui/Button/Button";
-
-function AIFinancialCoach({ analytics }) {
-
-  const prediction = analytics?.prediction || {};
-
-  const insights = analytics?.insights || [];
+function AIFinancialCoach({
+  user,
+  dashboardData,
+}) {
+  const insights =
+    dashboardData?.insights || [];
 
   const health =
-    analytics?.financialHealthScore || 0;
+    dashboardData?.financialHealthScore || 0;
 
   const healthLabel =
-    analytics?.financialHealthLabel || "Unknown";
+    dashboardData?.financialHealthLabel ||
+    "Not enough data";
+
+  const name =
+    user?.name?.trim() || "there";
+
+  const hasFinancialActivity =
+    (dashboardData?.expenseCount || 0) > 0 ||
+    (dashboardData?.savingsGoalCount || 0) > 0 ||
+    (dashboardData?.investmentCount || 0) > 0;
 
   return (
-
     <section className="analytics-card ai-coach">
-
       <div className="coach-top">
-
         <div>
-
           <span className="coach-tag">
-
-            AI FINANCIAL COACH
-
+            SMART FINANCIAL INSIGHTS
           </span>
 
           <h2>
-
-            Good Evening, Mayank 👋
-
+            Financial overview for {name}
           </h2>
 
           <p>
-
-            Based on your latest spending,
-            savings and investment activity.
-
+            Insights generated from your
+            recorded spending, savings and
+            investment data.
           </p>
-
         </div>
 
         <div className="coach-score">
-
           <span>
-
             {healthLabel}
-
           </span>
 
           <h1>
-
             {health}
-
           </h1>
 
           <small>
-
             /100
-
           </small>
-
         </div>
-
-      </div>
-
-      <div className="coach-middle">
-
-        <div>
-
-          <p>
-
-            Predicted Savings
-
-          </p>
-
-          <h1>
-
-            ₹{prediction.predictedSavings?.toLocaleString("en-IN") || 0}
-
-          </h1>
-
-          <span>
-
-            Expected Next Month
-
-          </span>
-
-        </div>
-
-        <div>
-
-          <p>
-
-            Emergency Fund
-
-          </p>
-
-          <h1>
-
-            {prediction.monthsRemaining ?? "--"}
-
-          </h1>
-
-          <span>
-
-            Months Remaining
-
-          </span>
-
-        </div>
-
       </div>
 
       <div className="coach-suggestions">
-
         {insights.length > 0 ? (
+          insights.map(
+            (item, index) => (
+              <div key={`${item.title}-${index}`}>
+                <strong>
+                  {item.title}
+                </strong>
 
-          insights.map((item, index) => (
-
-            <div key={index}>
-
-              <strong>
-
-                {item.title}
-
-              </strong>
-
-              <p>
-
-                {item.message}
-
-              </p>
-
-            </div>
-
-          ))
-
+                <p>
+                  {item.message}
+                </p>
+              </div>
+            )
+          )
         ) : (
-
           <div>
-
             <strong>
-
-              No Insights Yet
-
+              {hasFinancialActivity
+                ? "No Additional Insights"
+                : "No Financial Activity Yet"}
             </strong>
 
             <p>
-
-              Add more expenses, savings and
-              investments to receive
-              personalized AI recommendations.
-
+              {hasFinancialActivity
+                ? "Continue tracking your finances to build a more complete financial picture."
+                : "Add expenses, savings goals or investments to begin generating personalized financial insights."}
             </p>
-
           </div>
-
         )}
-
       </div>
-
-      <Button className="coach-button">
-
-        Generate Full AI Report →
-
-      </Button>
-
     </section>
-
   );
-
 }
 
 export default AIFinancialCoach;

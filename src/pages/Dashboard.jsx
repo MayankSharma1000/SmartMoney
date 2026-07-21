@@ -11,9 +11,12 @@ import BudgetProgress from "../components/Dashboard/widgets/BudgetProgress";
 import InvestmentSummary from "../components/Dashboard/widgets/InvestmentSummary";
 import SavingsProgress from "../components/Dashboard/widgets/SavingsProgress";
 
+import { useAuth } from "../context/AuthContext";
 import { useFinancialReport } from "../hooks/useFinancialReport";
 
 function Dashboard() {
+  const { user } = useAuth();
+
   const {
     dashboardData,
     budget,
@@ -24,10 +27,7 @@ function Dashboard() {
     loading,
   } = useFinancialReport();
 
-  const user = {
-    name: "Mayank",
-    currency: "INR",
-  };
+  const currency = user?.currency || "INR";
 
   const handleExport = async () => {
     try {
@@ -44,21 +44,22 @@ function Dashboard() {
   if (loading) {
     return (
       <AppShell>
-        <DashboardHeader user={user} />
+        <DashboardHeader
+          user={user}
+          currency={currency}
+        />
       </AppShell>
     );
   }
 
   return (
     <AppShell>
-
-      {/* Hero */}
       <DashboardHeader
         user={user}
+        currency={currency}
         dashboardData={dashboardData}
       />
 
-      {/* Quick Actions */}
       <Section
         title="Quick Actions"
         subtitle="Create, manage and export your financial data."
@@ -69,42 +70,38 @@ function Dashboard() {
         />
       </Section>
 
-      {/* Financial Control Center */}
       <Section
         title="Financial Control Center"
-        subtitle="Monitor your budget, savings, investments and AI insights."
+        subtitle="Monitor your budget, savings, investments and financial insights."
       >
         <div className="financial-control-center">
-
           <BudgetProgress
-            monthlyBudget={
-              budget?.monthlyBudget || 0
+            monthlyBudget={budget?.monthlyBudget || 0}
+            spent={budgetStats?.spent || 0}
+            remaining={budgetStats?.remaining || 0}
+            percentageUsed={budgetStats?.percentageUsed || 0}
+            currency={currency}
+          />
+
+          <SavingsProgress
+            currency={currency}
+          />
+
+          <InvestmentSummary
+            currency={currency}
+            portfolioValue={
+              dashboardData?.currentInvestmentValue || 0
             }
-            spent={
-              budgetStats?.spent || 0
-            }
-            remaining={
-              budgetStats?.remaining || 0
-            }
-            percentageUsed={
-              budgetStats?.percentageUsed || 0
+            investedAmount={
+              dashboardData?.totalInvested || 0
             }
           />
 
-          <SavingsProgress />
-
-          <InvestmentSummary />
-
-          <AIInsights
-            insights={insights}
-          />
-
+          <AIInsights insights={insights} />
         </div>
       </Section>
 
-      {/* Workspace */}
       <div className="dashboard-workspace">
-
         <div className="workspace-left">
           <Section
             title="Financial Analytics"
@@ -112,6 +109,7 @@ function Dashboard() {
           >
             <ChartsSection
               dashboardData={dashboardData}
+              currency={currency}
             />
           </Section>
         </div>
@@ -121,12 +119,12 @@ function Dashboard() {
             title="Recent Transactions"
             subtitle="Latest activity across all accounts."
           >
-            <RecentTransactions />
+            <RecentTransactions
+              currency={currency}
+            />
           </Section>
         </div>
-
       </div>
-
     </AppShell>
   );
 }

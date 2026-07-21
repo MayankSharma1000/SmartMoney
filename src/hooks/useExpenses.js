@@ -21,7 +21,7 @@ export const useExpenses = () => {
           data.data?.expenses || []
         );
       } catch (error) {
-        console.log(error);
+        console.error(error);
       } finally {
         setLoading(false);
       }

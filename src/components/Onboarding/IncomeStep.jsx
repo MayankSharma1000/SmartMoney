@@ -1,41 +1,136 @@
-import React from "react";
-import { FaMoneyBillWave } from "react-icons/fa";
+import {
+  FaDollarSign,
+  FaEuroSign,
+  FaMoneyBillWave,
+  FaPoundSign,
+  FaRupeeSign,
+} from "react-icons/fa";
+
 import Button from "../ui/Button/Button";
 import StepCard from "./StepCard";
 
+const currencies = [
+  {
+    code: "INR",
+    name: "Indian Rupee",
+    symbol: "₹",
+    icon: <FaRupeeSign />,
+  },
+  {
+    code: "USD",
+    name: "US Dollar",
+    symbol: "$",
+    icon: <FaDollarSign />,
+  },
+  {
+    code: "EUR",
+    name: "Euro",
+    symbol: "€",
+    icon: <FaEuroSign />,
+  },
+  {
+    code: "GBP",
+    name: "British Pound",
+    symbol: "£",
+    icon: <FaPoundSign />,
+  },
+];
+
 function IncomeStep({
   value,
+  currency,
   onChange,
+  onCurrencyChange,
   onNext,
-  onBack
+  onBack,
 }) {
-  const isValid = Number(value) > 0;
+  const selectedCurrency =
+    currencies.find(
+      (item) => item.code === currency
+    ) || currencies[0];
+
+  const isValid =
+    Number(value) > 0 && Boolean(currency);
 
   return (
     <StepCard>
+
       <div className="step-content">
 
         <div className="step-icon">
           <FaMoneyBillWave />
         </div>
 
-        <h1>Monthly Income</h1>
+        <h1>Income & Currency</h1>
 
         <p>
-          Your monthly income helps us calculate your savings
-          rate, financial health score and budget recommendations.
+          Tell us your monthly income and preferred
+          currency so SmartMoney can personalize your
+          financial dashboard.
         </p>
 
-        <div className="income-input">
+        <div className="currency-selection">
 
-          <span>₹</span>
+          <label>
+            Preferred Currency
+          </label>
 
-          <input
-            type="number"
-            placeholder="50,000"
-            value={value}
-            onChange={(e) => onChange(e.target.value)}
-          />
+          <div className="currency-grid">
+
+            {currencies.map((item) => (
+              <button
+                key={item.code}
+                type="button"
+                className={`currency-card ${
+                  currency === item.code
+                    ? "active"
+                    : ""
+                }`}
+                onClick={() =>
+                  onCurrencyChange(item.code)
+                }
+              >
+                <div className="currency-symbol">
+                  {item.icon}
+                </div>
+
+                <div>
+                  <strong>{item.code}</strong>
+                  <span>{item.name}</span>
+                </div>
+              </button>
+            ))}
+
+          </div>
+
+        </div>
+
+        <div className="income-section">
+
+          <label htmlFor="monthly-income">
+            Monthly Income
+          </label>
+
+          <div className="income-input">
+
+            <span>
+              {selectedCurrency.symbol}
+            </span>
+
+            <input
+              id="monthly-income"
+              type="number"
+              min="0"
+              step="1"
+              inputMode="decimal"
+              placeholder="Enter monthly income"
+              value={value}
+              onChange={(event) =>
+                onChange(event.target.value)
+              }
+            />
+
+          </div>
 
         </div>
 
@@ -68,6 +163,7 @@ function IncomeStep({
         </div>
 
       </div>
+
     </StepCard>
   );
 }

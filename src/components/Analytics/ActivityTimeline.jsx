@@ -1,103 +1,82 @@
-import React from "react";
 
-function ActivityTimeline() {
+function ActivityTimeline({
+  activities = [],
+  currency = "INR",
+}) {
+  const formatter = new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency,
+    maximumFractionDigits: 0,
+  });
 
-  const activities = [
-
-    {
-      title: "Added Expense",
-      subtitle: "Starbucks Coffee",
-      amount: "- ₹420",
-      time: "10 mins ago",
-      color: "#ef4444"
-    },
-
-    {
-      title: "Salary Credited",
-      subtitle: "Monthly Salary",
-      amount: "+ ₹48,000",
-      time: "2 hours ago",
-      color: "#22c55e"
-    },
-
-    {
-      title: "Investment Added",
-      subtitle: "Nifty 50 Index",
-      amount: "+ ₹5,000",
-      time: "Yesterday",
-      color: "#3b82f6"
-    },
-
-    {
-      title: "Savings Updated",
-      subtitle: "Emergency Fund",
-      amount: "+ ₹2,000",
-      time: "Yesterday",
-      color: "#8b5cf6"
-    }
-
-  ];
+  const hasActivities =
+    Array.isArray(activities) &&
+    activities.length > 0;
 
   return (
-
-    <section className="analytics-card glass-card activity-card">
-
+    <section className="analytics-card activity-card">
       <div className="activity-header">
+        <div>
+          <h2>Recent Activity</h2>
 
-        <h2>Recent Activity</h2>
-
-        <span>Live</span>
-
+          <p>
+            Your latest recorded financial activity.
+          </p>
+        </div>
       </div>
 
-      <div className="activity-list">
+      {!hasActivities ? (
+        <div className="analytics-empty-state">
+          <h3>No recent activity</h3>
 
-        {activities.map((item,index)=>(
+          <p>
+            Your latest expenses, savings and
+            investments will appear here.
+          </p>
+        </div>
+      ) : (
+        <div className="activity-list">
+          {activities.map((item, index) => {
+            const amount =
+              Number(item?.amount) || 0;
 
-          <div
-            key={index}
-            className="activity-item"
-          >
-
-            <div
-              className="activity-dot"
-              style={{
-                background:item.color
-              }}
-            />
-
-            <div className="activity-content">
-
-              <h4>{item.title}</h4>
-
-              <p>{item.subtitle}</p>
-
-            </div>
-
-            <div className="activity-right">
-
-              <strong
-                style={{
-                  color:item.color
-                }}
+            return (
+              <div
+                key={item?._id || index}
+                className="activity-item"
               >
-                {item.amount}
-              </strong>
+                <div className="activity-content">
+                  <h4>
+                    {item?.title ||
+                      "Financial Activity"}
+                  </h4>
 
-              <span>{item.time}</span>
+                  {item?.subtitle && (
+                    <p>
+                      {item.subtitle}
+                    </p>
+                  )}
+                </div>
 
-            </div>
+                <div className="activity-right">
+                  <strong>
+                    {amount > 0 ? "+" : ""}
+                    {formatter.format(amount)}
+                  </strong>
 
-          </div>
-
-        ))}
-
-      </div>
-
+                  {item?.time && (
+                    <span>
+                      {item.time}
+                    </span>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
     </section>
-
   );
-
 }
 
 export default ActivityTimeline;

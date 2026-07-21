@@ -1,275 +1,169 @@
 /* =======================================================
-   SIDEBAR
+   SMARTMONEY SIDEBAR
 ======================================================= */
 
-.sidebar{
+.sidebar {
+    position: fixed;
 
-    position:fixed;
+    top: 0;
+    left: 0;
 
-    top:0;
+    width: 260px;
+    height: 100vh;
 
-    left:0;
+    padding: 26px 18px;
 
-    width:260px;
+    display: flex;
+    flex-direction: column;
 
-    height:100vh;
+    background: rgba(5, 8, 22, 0.94);
 
-    background: rgba(5,8,22,.94);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
 
-    backdrop-filter:blur(24px);
+    border-right: 1px solid rgba(255, 255, 255, 0.06);
 
-    border-right:1px solid rgba(255,255,255,.06);
+    z-index: 1000;
 
-    display:flex;
-
-    flex-direction:column;
-
-    justify-content:space-between;
-
-    padding:26px 18px;
-
-    z-index:1000;
-
-    transition:.35s ease;
-
+    transition: 0.35s ease;
 }
 
 /* =======================================================
-   LOGO
+   BRAND
 ======================================================= */
 
-.sidebar-logo{
+.sidebar-logo {
+    display: flex;
 
-    display:flex;
+    align-items: center;
 
-    align-items:center;
+    gap: 14px;
 
-    gap:14px;
-
-    margin-bottom:38px;
-
+    margin-bottom: 30px;
 }
 
-.sidebar-logo-icon{
+.sidebar-logo-icon {
+    width: 52px;
+    height: 52px;
 
-    width:52px;
-    height:52px;
+    flex-shrink: 0;
 
-    border-radius:16px;
+    display: flex;
 
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    align-items: center;
+    justify-content: center;
 
-    font-size:22px;
+    border-radius: 16px;
 
-    color:white;
+    font-size: 22px;
 
-    background:
-    linear-gradient(
-    135deg,
-    #24C8FF,
-    #3B82F6
+    color: #ffffff;
+
+    background: linear-gradient(
+        135deg,
+        #24c8ff,
+        #3b82f6
     );
 
     box-shadow:
-    0 15px 35px rgba(36,200,255,.25);
+        0 15px 35px rgba(36, 200, 255, 0.25);
 }
 
-.sidebar-logo h2{
+.sidebar-logo h2 {
+    margin: 0;
 
-    font-size:1.35rem;
+    color: #ffffff;
 
-    font-weight:800;
+    font-size: 1.35rem;
+    font-weight: 800;
 
-    color:white;
-
-    letter-spacing:.4px;
-
+    letter-spacing: 0.4px;
 }
 
-.sidebar-logo p{
+.sidebar-logo p {
+    margin: 4px 0 0;
 
-    color:#7f94b5;
+    color: #7f94b5;
 
-    font-size:.86rem;
-
-    margin-top:4px;
-
+    font-size: 0.86rem;
 }
 
 /* =======================================================
    NAVIGATION
 ======================================================= */
 
-.sidebar-nav{
+.sidebar-nav {
+    display: flex;
 
-    display:flex;
+    flex-direction: column;
 
-    flex-direction:column;
-
-    gap:8px;
-
+    gap: 8px;
 }
 
-.sidebar-link{
+.sidebar-link {
+    display: flex;
 
-    display:flex;
+    align-items: center;
 
-    align-items:center;
+    gap: 14px;
 
-    gap:14px;
+    padding: 13px 16px;
 
-    padding:13px 16px;
+    border: 1px solid transparent;
+    border-radius: 14px;
 
-    border-radius:14px;
+    color: #98a2c7;
 
-    color:#98a2c7;
+    text-decoration: none;
 
-    text-decoration:none;
+    font-size: 15px;
+    font-weight: 500;
 
-    transition:.25s;
-
-    font-size:15px;
-
-    font-weight:500;
-
+    transition:
+        background 0.25s ease,
+        color 0.25s ease,
+        transform 0.25s ease,
+        border-color 0.25s ease;
 }
 
-.sidebar-link svg{
-    font-size:17px;
+.sidebar-link svg {
+    flex-shrink: 0;
+
+    font-size: 17px;
 }
 
-.sidebar-link:hover{
-    background:rgba(36,200,255,.08);
-    color:white;
-    transform:translateX(5px);
+.sidebar-link:hover {
+    color: #ffffff;
+
+    background: rgba(36, 200, 255, 0.08);
+
+    transform: translateX(5px);
 }
 
-.sidebar-link.active{
-    color:white;
-    background:
-    linear-gradient(
+.sidebar-link.active {
+    color: #ffffff;
+
+    background: linear-gradient(
         90deg,
-        rgba(59,130,246,.20),
-        rgba(96,165,250,.08)
+        rgba(59, 130, 246, 0.20),
+        rgba(96, 165, 250, 0.08)
     );
 
-    border:1px solid rgba(59,130,246,.25);
-    box-shadow: inset 4px 0 #24C8FF;}
+    border-color: rgba(59, 130, 246, 0.25);
 
-/* =======================================================
-        ACTION BUTTONS
-======================================================= */
-
-.sidebar-actions{
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:10px;
-
-}
-
-.sidebar-action-btn{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:14px;
-
-    width:100%;
-
-    padding:14px 16px;
-
-    border:none;
-
-    border-radius:16px;
-
-    background:transparent;
-
-    color:#9AA8C7;
-
-    transition:.25s;
-
-}
-
-.sidebar-action-btn:hover{
-
-    background:rgba(36,200,255,.08);
-
-    color:white;
-
-}
-
-.sidebar-action-btn.danger:hover{
-
-    background:rgba(239,68,68,.12);
-
-    color:#EF4444;
-
-}
-
-/* =======================================================
-   PUSH FOOTER DOWN
-======================================================= */
-
-.sidebar-footer{
-
-    margin-top:auto;
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:18px;
-
-}
-
-/* =======================================================
-   PREMIUM CARD
-======================================================= */
-
-.premium-content p{
-
-    margin-top:5px;
-
-    color:#c8cbd7;
-
-    font-size:12px;
-
-    line-height:1.4;
-
-}
-
-/* =======================================================
-   PROFILE
-======================================================= */
-
-.profile-arrow{
-
-    color:#7782a8;
-
-    font-size:13px;
-
+    box-shadow: inset 4px 0 #24c8ff;
 }
 
 /* =======================================================
    SCROLLBAR
 ======================================================= */
 
-.sidebar::-webkit-scrollbar{
-
-    width:5px;
-
+.sidebar::-webkit-scrollbar {
+    width: 5px;
 }
 
-.sidebar::-webkit-scrollbar-thumb{
+.sidebar::-webkit-scrollbar-thumb {
+    background: #2b3452;
 
-    background:#2b3452;
-
-    border-radius:10px;
-
+    border-radius: 10px;
 }

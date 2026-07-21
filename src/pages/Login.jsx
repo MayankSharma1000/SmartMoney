@@ -85,9 +85,12 @@ function Login() {
           transition={{ delay: 0.2 }}
         >
           <div>
-            <span>Monthly Savings</span>
-            <h2>₹12,450</h2>
-            <p>+18.4% better than last month</p>
+            <span>Financial Overview</span>
+            <h2>Track. Save. Grow.</h2>
+            <p>
+              Understand your spending and build
+              better financial habits.
+            </p>
           </div>
 
           <div className="mini-chart">
