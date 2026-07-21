@@ -134,18 +134,17 @@ function MonthlyOverview({ monthlyChart = [] }) {
       <div className="chart-title">
         <div>
           <h3>
-            Weekly Spending Trend
+            Monthly Spending Trend
           </h3>
 
           <p>
-            Current month spending
-            movement
+            Track how your expenses changed throughout the month.
           </p>
         </div>
 
         <span>
           {monthlyChart.length
-            ? "Live Data"
+            ? "Updated Today"
             : "No Data"}
         </span>
       </div>

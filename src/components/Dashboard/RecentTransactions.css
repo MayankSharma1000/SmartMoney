@@ -60,25 +60,16 @@
 }
 
 .transaction-item{
-
+    cursor:pointer;
     display:flex;
-
     justify-content:space-between;
-
     align-items:center;
-
     padding:20px;
-
     border-radius:18px;
-
     margin-bottom:14px;
-
     background:#111111;
-
     border:1px solid rgba(255,255,255,.04);
-
     transition:.3s ease;
-
 }
 
 .transaction-item:hover{

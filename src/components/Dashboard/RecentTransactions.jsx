@@ -14,7 +14,7 @@ function RecentTransactions({ transactions = [] }) {
         </div>
 
         <button className="view-all-btn">
-          View All
+        See History →
         </button>
 
       </div>

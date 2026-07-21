@@ -1,0 +1,18 @@
+.budget-card {
+}
+
+.budget-icon {
+    background: linear-gradient(
+        135deg,
+        #3b82f6,
+        #2563eb
+    );
+}
+
+.budget-progress-fill {
+    background: linear-gradient(
+        90deg,
+        #22c55e,
+        #3b82f6
+    );
+}

@@ -1,83 +1,149 @@
 import Card from "@/components/ui/Card";
+
+import "@/styles/dashboard/financial-widget.css";
+import "./InvestmentSummary.css";
+
 import { FaArrowTrendUp } from "react-icons/fa6";
 
 function InvestmentSummary() {
-  const portfolioValue = 142800;
-  const investedAmount = 130350;
-  const profit = 12450;
-  const returns = 9.6;
 
-  return (
-    <Card elevated className="budget-card">
-      <div className="budget-header">
-        <div className="budget-icon">
-          <FaArrowTrendUp />
-        </div>
+    const portfolioValue = 142800;
+    const investedAmount = 130350;
+    const profit = 12450;
+    const returns = 9.6;
 
-        <div>
-          <h3>Investment Portfolio</h3>
+    const progress = Math.min(
+        returns * 10,
+        100
+    );
 
-          <p className="budget-subtitle">
-            Long-term wealth growth
-          </p>
-        </div>
-      </div>
+    return (
 
-      <div className="budget-main-value">
-        ₹{portfolioValue.toLocaleString("en-IN")}
-      </div>
+        <Card
+            elevated
+            className="financial-widget investment-card"
+        >
 
-      <div className="budget-progress">
-        <div
-          className="budget-progress-fill"
-          style={{
-            width: `${Math.min(
-              returns * 10,
-              100
-            )}%`
-          }}
-        />
-      </div>
+            <div className="widget-header">
 
-      <div className="budget-stats">
-        <div className="budget-stat">
-          <span className="budget-label">
-            Invested
-          </span>
+                <div className="investment-icon">
 
-          <strong>
-            ₹{investedAmount.toLocaleString(
-              "en-IN"
-            )}
-          </strong>
-        </div>
+                    <FaArrowTrendUp />
 
-        <div className="budget-stat">
-          <span className="budget-label">
-            Profit
-          </span>
+                </div>
 
-          <strong
-            style={{
-              color: "var(--success)"
-            }}
-          >
-            +₹{profit.toLocaleString("en-IN")}
-          </strong>
-        </div>
-      </div>
+                <div className="widget-heading">
 
-      <div className="budget-footer">
-        <span>
-          Annual Return
-        </span>
+                    <h3 className="widget-title">
 
-        <span className="budget-percent">
-          {returns}%
-        </span>
-      </div>
-    </Card>
-  );
+                        Investment Portfolio
+
+                    </h3>
+
+                    <p className="widget-subtitle">
+
+                        Long-term wealth growth
+
+                    </p>
+
+                    <span className="widget-pill success">
+
+                        Growing
+
+                    </span>
+
+                </div>
+
+            </div>
+
+            <div className="widget-value">
+
+                ₹{portfolioValue.toLocaleString("en-IN")}
+
+            </div>
+
+            <div className="widget-progress-wrapper">
+
+                <div className="widget-progress">
+
+                    <div
+                        className="investment-progress-fill"
+                        style={{
+                            width: `${progress}%`
+                        }}
+                    />
+
+                </div>
+
+                <div className="widget-progress-info">
+
+                    <span>
+
+                        {returns}% Return
+
+                    </span>
+
+                    <span>
+
+                        Positive Growth
+
+                    </span>
+
+                </div>
+
+            </div>
+
+            <div className="widget-metrics">
+
+                <div className="widget-metric">
+
+                    <span className="widget-metric-label">
+
+                        Invested
+
+                    </span>
+
+                    <strong className="widget-metric-value">
+
+                        ₹{investedAmount.toLocaleString("en-IN")}
+
+                    </strong>
+
+                </div>
+
+                <div className="widget-metric">
+
+                    <span className="widget-metric-label">
+
+                        Profit
+
+                    </span>
+
+                    <strong
+                        className="widget-metric-value"
+                        style={{
+                            color:"var(--success)"
+                        }}
+                    >
+
+                        +₹{profit.toLocaleString("en-IN")}
+
+                    </strong>
+
+                </div>
+
+            </div>
+
+            <div className="widget-footer">
+
+                📈 Long-term investment is performing well.
+
+            </div>
+
+        </Card>
+
+    );
+
 }
 
 export default InvestmentSummary;

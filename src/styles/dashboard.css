@@ -1,8 +1,5 @@
 @import "./dashboard/dashboard-hero.css";
 @import "./dashboard/dashboard-metrics.css";
-@import "./dashboard/dashboard-actions.css";
 @import "./dashboard/dashboard-workspace.css";
 @import "./dashboard/dashboard-overview.css";
 @import "./dashboard/dashboard-charts.css";
-@import "./dashboard/dashboard-transactions.css";
-@import "./dashboard/dashboard-responsive.css";

@@ -1,17 +1,16 @@
-import React from "react";
 import { NavLink } from "react-router-dom";
 import "../../../styles/Sidebar.css";
 
+import { FaArrowTrendUp } from "react-icons/fa6";
+
 import {
-  FaWallet,
-  FaChartPie,
-  FaReceipt,
-  FaPiggyBank,
-  FaChartLine,
   FaCalendarAlt,
+  FaChartPie,
   FaCog,
+  FaPiggyBank,
+  FaReceipt,
   FaSignOutAlt,
-  FaTrashAlt
+  FaWallet,
 } from "react-icons/fa";
 
 function Sidebar() {
@@ -19,38 +18,38 @@ function Sidebar() {
     {
       name: "Dashboard",
       path: "/dashboard",
-      icon: <FaChartPie />
+      icon: <FaChartPie />,
     },
     {
       name: "Expenses",
       path: "/expenses",
-      icon: <FaReceipt />
+      icon: <FaReceipt />,
     },
     {
       name: "Analytics",
       path: "/analytics",
-      icon: <FaChartLine />
+      icon: <FaChartPie />,
     },
     {
       name: "Savings",
       path: "/savings",
-      icon: <FaPiggyBank />
+      icon: <FaPiggyBank />,
     },
     {
       name: "Investments",
       path: "/investments",
-      icon: <FaChartLine />
+      icon: <FaArrowTrendUp />,
     },
     {
       name: "Recurring",
       path: "/recurring",
-      icon: <FaCalendarAlt />
+      icon: <FaCalendarAlt />,
     },
     {
       name: "Settings",
       path: "/settings",
-      icon: <FaCog />
-    }
+      icon: <FaCog />,
+    },
   ];
 
   return (
@@ -94,7 +93,8 @@ function Sidebar() {
 
       </nav>
 
-      {/* ================= SIDEBAR FOOTER ================= */}
+      {/* ================= FOOTER ================= */}
+
       <div className="sidebar-footer">
 
         <div className="sidebar-widget">
@@ -103,12 +103,10 @@ function Sidebar() {
             THIS MONTH
           </span>
 
-          <h2>
-            ₹18,420
-          </h2>
+          <h2>₹18,420</h2>
 
           <p>
-            Saved
+            Saved{" "}
             <span className="positive">
               +12%
             </span>
@@ -121,12 +119,12 @@ function Sidebar() {
         <button className="account-button">
 
           <div className="account-avatar">
-            MS
+            M
           </div>
 
           <div>
 
-            <strong>My Account</strong>
+            <strong>Mayank</strong>
 
             <span>Settings</span>
 

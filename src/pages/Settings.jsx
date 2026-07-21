@@ -1,8 +1,13 @@
+import { useState } from "react";
+
 import AppShell from "@/components/layout/AppShell/AppShell";
 import Navbar from "@/components/Navbar/Navbar";
 import SettingsSection from "@/components/Settings/SettingsSection";
 
 import Button from "@/components/ui/Button";
+
+import { useFinancialReport } from "../hooks/useFinancialReport";
+
 import "@/styles/pages/settings.css";
 
 import {
@@ -10,16 +15,47 @@ import {
   FaGlobe,
   FaPalette,
   FaShieldAlt,
-  FaSignOutAlt
+  FaSignOutAlt,
 } from "react-icons/fa";
 
 function Settings() {
+  const {
+    exportPDF,
+    exportExcel,
+    loading,
+  } = useFinancialReport();
+
+  const [exporting, setExporting] =
+    useState(false);
+
+  const handleExportData = async () => {
+    if (loading || exporting) {
+      return;
+    }
+
+    try {
+      setExporting(true);
+
+      exportPDF();
+
+      await exportExcel();
+    } catch (error) {
+      console.error(
+        "Failed to export application data:",
+        error
+      );
+    } finally {
+      setExporting(false);
+    }
+  };
+
   return (
     <AppShell>
       <Navbar />
 
       <section className="page-header">
         <h1>Settings</h1>
+
         <p>
           Manage your profile, preferences and application settings.
         </p>
@@ -62,7 +98,9 @@ function Settings() {
             <FaGlobe /> Currency
           </span>
 
-          <span>Indian Rupee (₹)</span>
+          <span>
+            Indian Rupee (₹)
+          </span>
         </div>
 
         <div className="settings-row">
@@ -76,10 +114,19 @@ function Settings() {
         title="Data"
         description="Manage your application data"
       >
-        <Button>
+        <Button
+          onClick={handleExportData}
+          disabled={
+            loading || exporting
+          }
+        >
           <FaDatabase />
 
-          Export Data
+          {exporting
+            ? "Exporting..."
+            : loading
+            ? "Preparing Data..."
+            : "Export Data"}
         </Button>
       </SettingsSection>
 
@@ -99,6 +146,7 @@ function Settings() {
           Logout
         </Button>
       </SettingsSection>
+
     </AppShell>
   );
 }

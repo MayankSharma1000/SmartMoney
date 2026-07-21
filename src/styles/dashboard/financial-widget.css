@@ -1,0 +1,233 @@
+/* =========================================================
+   Financial Widget Design System
+   Shared across Budget, Savings, Investment & AI
+========================================================= */
+
+/* ---------- Root ---------- */
+
+.financial-widget{
+    display:flex;
+    flex-direction:column;
+    height:100%;
+    padding:.25rem;
+    gap:1.8rem;
+}
+
+/* ---------- Header ---------- */
+
+.widget-header{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:1rem;
+}
+
+.widget-icon{
+
+    width:60px;
+    height:60px;
+
+    border-radius:20px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    flex-shrink:0;
+
+    color:white;
+
+    font-size:1.4rem;
+
+    box-shadow:
+        0 10px 25px rgba(0,0,0,.18);
+
+    transition:.3s;
+}
+
+.widget-heading{
+    display:flex;
+    flex-direction:column;
+    gap:.45rem;
+    flex:1;
+}
+
+.widget-title{
+    margin:0;
+    font-size:1.08rem;
+    font-weight:700;
+    letter-spacing:-0.2px;
+}
+
+.widget-subtitle{
+    margin-top:.15rem;
+    color:var(--text-secondary);
+    font-size:.82rem;
+}
+
+/* ---------- Value ---------- */
+
+.widget-value{
+    font-size:3rem;
+    font-weight:800;
+    line-height:1;
+    letter-spacing:-2px;
+}
+
+/* ---------- Pills ---------- */
+
+.widget-pill{
+
+    width:fit-content;
+
+    padding:.45rem .95rem;
+
+    border-radius:999px;
+
+    font-size:.78rem;
+
+    font-weight:700;
+}
+
+.widget-pill.success{
+
+    color:#22c55e;
+
+    background:rgba(34,197,94,.14);
+}
+
+.widget-pill.warning{
+
+    color:#f59e0b;
+
+    background:rgba(245,158,11,.14);
+}
+
+.widget-pill.danger{
+
+    color:#ef4444;
+
+    background:rgba(239,68,68,.14);
+}
+
+/* ---------- Progress ---------- */
+
+.widget-progress{
+
+    width:100%;
+
+    height:10px;
+
+    overflow:hidden;
+
+    border-radius:999px;
+
+    background:rgba(255,255,255,.08);
+}
+
+.widget-progress-fill{
+
+    height:100%;
+
+    border-radius:inherit;
+
+    transition:.8s ease;
+}
+
+.widget-progress-info{
+
+    margin-top:.75rem;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    font-size:.84rem;
+
+    color:var(--text-secondary);
+}
+
+/* ---------- Metrics ---------- */
+
+.widget-metric{
+    padding:1rem;
+    border-radius:18px;
+    background:rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.06);
+    display:flex;
+    flex-direction:column;
+    gap:.55rem;
+    transition:.25s;
+}
+
+.widget-metric:hover{
+    transform:translateY(-2px);
+    border-color:rgba(255,255,255,.12);
+    background:rgba(255,255,255,.06);
+}
+
+.widget-metric{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:.45rem;
+}
+
+.widget-metric-label{
+
+    font-size:.82rem;
+
+    color:var(--text-secondary);
+}
+
+.widget-metric-value{
+
+    font-size:1.35rem;
+
+    font-weight:700;
+}
+
+/* ---------- Footer ---------- */
+
+.widget-footer{
+    margin-top:auto;
+    padding-top:1rem;
+    border-top:1px solid rgba(255,255,255,.08);
+    color:var(--text-secondary);
+    font-size:.82rem;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+/* ---------- Hover ---------- */
+
+.financial-widget:hover .widget-icon{
+    transform:
+        translateY(-2px)
+        rotate(-6deg)
+        scale(1.04);
+}
+
+.financial-widget:hover .widget-progress-fill{
+
+    filter:brightness(1.1);
+}
+
+/* ---------- Responsive ---------- */
+
+@media(max-width:768px){
+
+    .widget-value{
+
+        font-size:2.3rem;
+    }
+
+    .widget-metrics{
+
+        grid-template-columns:1fr;
+    }
+
+}

@@ -1,0 +1,59 @@
+.ai-card{
+}
+
+.ai-icon{
+
+    background:linear-gradient(
+        135deg,
+        #f59e0b,
+        #f97316
+    );
+
+}
+
+.insights-list{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:.9rem;
+
+}
+
+.insight-card{
+
+    padding:1rem;
+
+    border-radius:16px;
+
+    background:rgba(255,255,255,.04);
+
+    border:1px solid rgba(255,255,255,.06);
+
+    line-height:1.5;
+
+    transition:.25s;
+}
+
+.insight-card:hover{
+
+    background:rgba(255,255,255,.06);
+
+    transform:translateY(-2px);
+
+}
+
+.empty-widget{
+
+    padding:1rem;
+
+    border-radius:16px;
+
+    text-align:center;
+
+    color:var(--text-secondary);
+
+    background:rgba(255,255,255,.03);
+
+}

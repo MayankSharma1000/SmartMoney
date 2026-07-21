@@ -5,6 +5,8 @@ import {
   FaPlus,
 } from "react-icons/fa";
 
+import { useNavigate } from "react-router-dom";
+
 import ActionCard from "@/components/ui/ActionCard";
 
 import "./QuickActions.css";
@@ -15,28 +17,62 @@ const actions = [
     subtitle: "Record spending",
     icon: <FaPlus />,
     color: "blue",
+    type: "expense",
   },
   {
     title: "Add Savings",
     subtitle: "Grow wealth",
     icon: <FaPiggyBank />,
     color: "green",
+    type: "savings",
   },
   {
     title: "Invest",
     subtitle: "Portfolio",
     icon: <FaChartLine />,
     color: "purple",
+    type: "investment",
   },
   {
     title: "Export",
     subtitle: "PDF & Excel",
     icon: <FaFileExport />,
     color: "orange",
+    type: "export",
   },
 ];
 
-function QuickActions() {
+function QuickActions({
+  onExport,
+  exportLoading = false,
+}) {
+  const navigate = useNavigate();
+
+  const handleAction = (type) => {
+    switch (type) {
+      case "expense":
+        navigate("/expenses");
+        break;
+
+      case "savings":
+        navigate("/savings");
+        break;
+
+      case "investment":
+        navigate("/investments");
+        break;
+
+      case "export":
+        if (!exportLoading && onExport) {
+          onExport();
+        }
+        break;
+
+      default:
+        break;
+    }
+  };
+
   return (
     <div className="quick-actions-bar">
       {actions.map((action) => (
@@ -44,11 +80,15 @@ function QuickActions() {
           key={action.title}
           icon={action.icon}
           title={action.title}
-          subtitle={action.subtitle}
+          subtitle={
+            action.type === "export" && exportLoading
+              ? "Preparing report..."
+              : action.subtitle
+          }
           color={action.color}
-          onClick={() => {
-            console.log(`${action.title} clicked`);
-          }}
+          onClick={() =>
+            handleAction(action.type)
+          }
         />
       ))}
     </div>

@@ -1,19 +1,19 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   FaHeadset,
-  FaPaperPlane,
   FaInfoCircle,
+  FaPaperPlane,
   FaSignOutAlt
 } from "react-icons/fa";
 
-import Button from "../components/ui/Button/Button";
-import Sidebar from "../components/Sidebar/Sidebar.jsx";
-import Navbar from "../components/Navbar/Navbar.jsx";
 import DashboardSkeleton from "../components/Dashboard/DashboardSkeleton";
+import Sidebar from "../components/layout/Sidebar/Sidebar.jsx";
+import Navbar from "../components/Navbar/Navbar.jsx";
+import Button from "../components/ui/Button/Button";
 import { useAuth } from "../context/AuthContext.jsx";
 import {
-  submitFeedback,
-  getMyFeedback
+  getMyFeedback,
+  submitFeedback
 } from "../services/feedbackService.js";
 
 function Support() {
@@ -70,10 +70,10 @@ function Support() {
     return (
       <div className="app-layout">
         <Sidebar />
-  
+
         <main className="main-content">
           <Navbar />
-  
+
           <DashboardSkeleton />
         </main>
       </div>
@@ -125,7 +125,7 @@ function Support() {
                   sending ||
                   !feedback.trim()
                 }
-              >                
+              >
                   <FaPaperPlane />
                 {sending ? "Sending..." : "Send Feedback"}
               </Button>
@@ -173,7 +173,7 @@ function Support() {
             <div className="empty-widget">
             <h3>No Feedback Yet</h3>
             <p> Your submitted feedback will appear here. </p>
-            </div>          
+            </div>
                 ) : (
             <div className="feedback-list">
               {feedbackList.map((item) => (

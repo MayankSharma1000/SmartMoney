@@ -1,65 +1,90 @@
 import Card from "@/components/ui/Card";
+
+import "@/styles/dashboard/financial-widget.css";
+import "./AIInsights.css";
+
 import { FaLightbulb } from "react-icons/fa";
 
-function AIInsights({ insights }) {
-  return (
-    <Card
-      elevated
-      className="budget-card"
-    >
+function AIInsights({ insights = [] }) {
 
-      <div className="budget-header">
+    return (
 
-        <div className="budget-icon">
+        <Card
+            elevated
+            className="financial-widget ai-card"
+        >
 
-          <FaLightbulb />
+            <div className="widget-header">
 
-        </div>
+                <div className="ai-icon">
 
-        <div>
+                    <FaLightbulb />
 
-          <h3>Smart Insights</h3>
+                </div>
 
-          <p className="budget-subtitle">
+                <div className="widget-heading">
 
-            AI-powered financial observations
+                    <h3 className="widget-title">
 
-          </p>
+                        Smart Insights
 
-        </div>
+                    </h3>
 
-      </div>
+                    <p className="widget-subtitle">
 
-      <div className="insights-list">
+                        AI-powered financial observations
 
-        {insights.length===0 ? (
+                    </p>
 
-          <div className="empty-widget">
+                    <span className="widget-pill success">
 
-            Add more transactions to generate insights.
+                        Live
 
-          </div>
+                    </span>
 
-        ) : (
-
-          insights.map((insight,index)=>(
-
-            <div
-              key={index}
-              className="insight-card"
-            >
-
-              💡 {insight}
+                </div>
 
             </div>
 
-          ))
+            <div className="insights-list">
 
-        )}
+                {insights.length === 0 ? (
 
-      </div>
-    </Card>
-  );
+                    <div className="empty-widget">
+
+                        Add more transactions to generate AI insights.
+
+                    </div>
+
+                ) : (
+
+                    insights.slice(0,3).map((insight,index)=>(
+
+                        <div
+                            key={index}
+                            className="insight-card"
+                        >
+
+                            💡 {insight}
+
+                        </div>
+
+                    ))
+
+                )}
+
+            </div>
+
+            <div className="widget-footer">
+
+                AI updates automatically as new transactions are added.
+
+            </div>
+
+        </Card>
+
+    );
+
 }
 
 export default AIInsights;

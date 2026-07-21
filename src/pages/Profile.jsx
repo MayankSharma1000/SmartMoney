@@ -13,7 +13,7 @@ import {
 } from "react-icons/fa";
 
 import Button from "../components/ui/Button/Button";
-import Sidebar from "../components/Sidebar/Sidebar.jsx";
+import Sidebar from "../components/layout/Sidebar/Sidebar.jsx";
 import Navbar from "../components/Navbar/Navbar.jsx";
 import DashboardSkeleton from "../components/Dashboard/DashboardSkeleton";
 
@@ -41,11 +41,11 @@ function Profile() {
       const savedProfile = JSON.parse(
         localStorage.getItem("financeProfile")
       );
-  
+
       if (savedProfile) {
         setProfileData(savedProfile);
       }
-  
+
     } catch {
       localStorage.removeItem("financeProfile");
     }
@@ -66,38 +66,38 @@ function Profile() {
   const monthlyIncome = Number(profileData.monthlyIncome || 0);
 
   const monthlyBudget = budget?.monthlyBudget || 0;
-  
+
   const budgetUsage = React.useMemo(() => {
-  
+
     if (!monthlyBudget) return 0;
-  
+
     return Math.round(
       ((dashboardData?.totalExpenses || 0) /
         monthlyBudget) * 100
     );
-  
+
   }, [dashboardData, monthlyBudget]);
 
   if (loading) {
 
     return (
-  
+
       <div className="app-layout">
-  
+
         <Sidebar />
-  
+
         <main className="main-content">
-  
+
           <Navbar />
-  
+
           <DashboardSkeleton />
-  
+
         </main>
-  
+
       </div>
-  
+
     );
-  
+
   }
 
   return (

@@ -1,4 +1,3 @@
-import "./InvestmentForm.css";
 
 function InvestmentForm({
 

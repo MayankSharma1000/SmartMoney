@@ -26,11 +26,9 @@ function DashboardHeader({
     year: "numeric",
   });
 
-  const score =
-    dashboardData?.financialHealthScore ?? 92;
+  const score = dashboardData?.financialHealthScore ?? 92;
 
-  const currency =
-    user?.currency || "INR";
+  const currency = user?.currency || "INR";
 
   const formatter = new Intl.NumberFormat("en-IN", {
     style: "currency",
@@ -39,7 +37,13 @@ function DashboardHeader({
   });
 
   const netWorth =
-    dashboardData?.currentInvestmentValue || 0;
+    dashboardData?.currentInvestmentValue ?? 0;
+
+  const totalExpenses =
+    dashboardData?.totalExpenses ?? 0;
+
+  const totalSavings =
+    dashboardData?.totalSavings ?? 0;
 
   return (
     <motion.section
@@ -50,6 +54,8 @@ function DashboardHeader({
     >
       <div className="hero-content">
 
+        {/* Left Section */}
+
         <div className="hero-left">
 
           <span className="hero-date">
@@ -58,15 +64,13 @@ function DashboardHeader({
 
           <h1>
             {greeting},{" "}
-            <span>
-              {user?.name || "Mayank"}
-            </span>
+            <span>{user?.name || "Mayank"}</span>
             👋
           </h1>
 
           <p>
-            Welcome back.
-            Your finances are looking healthier today.
+            Welcome back. Here's an overview of your financial
+            health and progress for today.
           </p>
 
           <div className="financial-score">
@@ -85,7 +89,10 @@ function DashboardHeader({
 
         </div>
 
+        {/* Wallet Card */}
+
         <motion.div
+          className="wallet-card"
           whileHover={{
             y: -6,
             scale: 1.02,
@@ -93,8 +100,8 @@ function DashboardHeader({
           transition={{
             duration: 0.25,
           }}
-          className="wallet-card"
         >
+
           <div className="wallet-top">
 
             <div className="wallet-icon">
@@ -112,7 +119,7 @@ function DashboardHeader({
           </h2>
 
           <p>
-            {currency}
+            Net Worth
           </p>
 
           <div className="wallet-growth">
@@ -129,46 +136,48 @@ function DashboardHeader({
 
       </div>
 
+      {/* KPI Cards */}
+
       <div className="hero-kpis">
 
-      <div className="hero-kpi">
+        <div className="hero-kpi">
+
           <span>Expenses</span>
+
           <h3>
-            {new Intl.NumberFormat("en-IN", {
-              style: "currency",
-              currency,
-              maximumFractionDigits: 0,
-            }).format(dashboardData?.totalExpenses || 0)}
+            {formatter.format(totalExpenses)}
           </h3>
+
         </div>
 
         <div className="hero-kpi">
+
           <span>Savings</span>
+
           <h3>
-            {new Intl.NumberFormat("en-IN", {
-              style: "currency",
-              currency,
-              maximumFractionDigits: 0,
-            }).format(dashboardData?.totalSavings || 0)}
+            {formatter.format(totalSavings)}
           </h3>
+
         </div>
 
         <div className="hero-kpi">
+
           <span>Investments</span>
+
           <h3>
-            {new Intl.NumberFormat("en-IN", {
-              style: "currency",
-              currency,
-              maximumFractionDigits: 0,
-            }).format(dashboardData?.currentInvestmentValue || 0)}
+            {formatter.format(netWorth)}
           </h3>
+
         </div>
 
         <div className="hero-kpi">
+
           <span>Health Score</span>
+
           <h3>
-            {dashboardData?.financialHealthScore || 0}/100
+            {score}/100
           </h3>
+
         </div>
 
       </div>
