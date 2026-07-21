@@ -77,14 +77,27 @@ const updateSavingsGoal = asyncHandler(async (req, res) => {
       });
     }
 
-    const updatedGoal = await Savings.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      {
-        new: true,
-        runValidators: true
+    const allowedFields = [
+      "title",
+      "targetAmount",
+      "currentAmount",
+      "targetDate",
+      "category",
+      "notes"
+    ];
+
+    allowedFields.forEach((field) => {
+      if (req.body[field] !== undefined) {
+        goal[field] = req.body[field];
       }
-    );
+    });
+
+    goal.isCompleted =
+      Number(goal.currentAmount) >=
+      Number(goal.targetAmount);
+
+    const updatedGoal =
+      await goal.save();
 
     return ApiResponse.success(
       res,

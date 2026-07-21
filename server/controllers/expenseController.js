@@ -64,26 +64,44 @@ const getExpenses = asyncHandler(async (req, res) => {
 /* ========================= */
 
 const updateExpense = asyncHandler(async (req, res) => {
-    const expense = await Expense.findOne({
-      _id: req.params.id,
-      user: req.user._id
+    const allowedFields = [
+      "title",
+      "category",
+      "amount",
+      "date",
+      "note",
+      "paymentMethod"
+    ];
+
+    const updates = {};
+
+    allowedFields.forEach((field) => {
+      if (req.body[field] !== undefined) {
+        updates[field] = req.body[field];
+      }
     });
 
-    if (!expense) {
+    const updatedExpense =
+      await Expense.findOneAndUpdate(
+        {
+          _id: req.params.id,
+          user: req.user._id
+        },
+        {
+          $set: updates
+        },
+        {
+          new: true,
+          runValidators: true
+        }
+      );
+
+    if (!updatedExpense) {
       return res.status(404).json({
         success: false,
         message: "Expense not found"
       });
     }
-
-    const updatedExpense = await Expense.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      {
-        new: true,
-        runValidators: true
-      }
-    );
 
     return ApiResponse.success(
       res,

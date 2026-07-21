@@ -67,26 +67,45 @@ const getInvestments = asyncHandler(async (req, res) => {
 /* ========================= */
 
 const updateInvestment = asyncHandler(async (req, res) => {
-    const investment = await Investment.findOne({
-      _id: req.params.id,
-      user: req.user._id
+    const allowedFields = [
+      "name",
+      "type",
+      "investedAmount",
+      "currentValue",
+      "purchaseDate",
+      "platform",
+      "notes"
+    ];
+
+    const updates = {};
+
+    allowedFields.forEach((field) => {
+      if (req.body[field] !== undefined) {
+        updates[field] = req.body[field];
+      }
     });
 
-    if (!investment) {
+    const updatedInvestment =
+      await Investment.findOneAndUpdate(
+        {
+          _id: req.params.id,
+          user: req.user._id
+        },
+        {
+          $set: updates
+        },
+        {
+          new: true,
+          runValidators: true
+        }
+      );
+
+    if (!updatedInvestment) {
       return res.status(404).json({
         success: false,
         message: "Investment not found"
       });
     }
-
-    const updatedInvestment = await Investment.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      {
-        new: true,
-        runValidators: true
-      }
-    );
 
     return ApiResponse.success(
       res,
