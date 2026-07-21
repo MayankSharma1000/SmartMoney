@@ -27,6 +27,69 @@ const createRecurringExpense = asyncHandler(async (req, res) => {
       });
     }
 
+    const validCategories = [
+      "Bills",
+      "Rent",
+      "EMI",
+      "Insurance",
+      "Subscription",
+      "Utilities",
+      "Internet",
+      "Education",
+      "Health",
+      "Other"
+    ];
+
+    const validFrequencies = [
+      "Weekly",
+      "Monthly",
+      "Quarterly",
+      "Yearly"
+    ];
+
+    const validPaymentMethods = [
+      "Cash",
+      "UPI",
+      "Credit Card",
+      "Debit Card",
+      "Net Banking",
+      "Auto Debit",
+      "Other"
+    ];
+
+    if (
+      category !== undefined &&
+      !validCategories.includes(category)
+    ) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Please enter a valid recurring expense category"
+      });
+    }
+
+    if (
+      frequency !== undefined &&
+      !validFrequencies.includes(frequency)
+    ) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Please enter a valid recurring expense frequency"
+      });
+    }
+
+    if (
+      paymentMethod !== undefined &&
+      !validPaymentMethods.includes(paymentMethod)
+    ) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Please enter a valid payment method"
+      });
+    }
+
     const normalizedNextDueDate =
       new Date(nextDueDate);
 
