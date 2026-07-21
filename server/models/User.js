@@ -29,12 +29,6 @@ const userSchema = new mongoose.Schema(
       select: false
     },
 
-    savingsTarget: {
-      type: Number,
-      default: 0,
-      min: 0
-    },
-
     profilePicture: {
       type: String,
       default: ""

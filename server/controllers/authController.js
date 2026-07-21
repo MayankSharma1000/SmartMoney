@@ -18,8 +18,6 @@ const buildUserResponse = (user) => ({
     user.currency || "INR",
   employmentType:
     user.employmentType || null,
-  savingsTarget:
-    user.savingsTarget || 0,
   onboardingCompleted:
     Boolean(user.onboardingCompleted),
   role:

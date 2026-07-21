@@ -108,7 +108,7 @@ function Profile() {
 
   const savingsTarget =
     Number(
-      user?.savingsTarget || 0
+      dashboardData?.totalSavingsTarget || 0
     );
 
   const savingsTargetProgress =
