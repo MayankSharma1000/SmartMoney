@@ -72,9 +72,7 @@
     --z-sidebar: 500;
     --z-navbar: 700;
     --z-modal: 1000;
-    --z-toast: 1200;
-
-    --focus-ring: 0 0 0 4px rgba(59,130,246,.22);
+--focus-ring: 0 0 0 4px rgba(59,130,246,.22);
 
     --transition-fast: .18s ease;
     --transition: .25s ease;

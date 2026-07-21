@@ -64,8 +64,7 @@ export const colors = {
     navbar: 100,
     sidebar: 200,
     modal: 1000,
-    toast: 1500
-  };
+};
   
   export const breakpoints = {
     mobile: "640px",
