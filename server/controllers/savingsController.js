@@ -135,25 +135,79 @@ const updateSavingsGoal = asyncHandler(async (req, res) => {
       });
     }
 
-    const allowedFields = [
-      "title",
-      "targetAmount",
-      "currentAmount",
-      "targetDate",
-      "category",
-      "notes"
-    ];
+    /*
+     * Validate monetary fields before mutating
+     * the Mongoose document.
+     *
+     * Both values must be evaluated together because
+     * either one may change the relationship:
+     *
+     * currentAmount <= targetAmount
+     */
 
-    allowedFields.forEach((field) => {
-      if (req.body[field] !== undefined) {
-        goal[field] = req.body[field];
+    let normalizedTargetAmount =
+      Number(goal.targetAmount);
+
+    let normalizedCurrentAmount =
+      Number(goal.currentAmount);
+
+    if (
+      req.body.targetAmount !== undefined
+    ) {
+      normalizedTargetAmount =
+        Number(req.body.targetAmount);
+
+      if (
+        !Number.isFinite(
+          normalizedTargetAmount
+        ) ||
+        normalizedTargetAmount < 1
+      ) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "Please enter a valid target amount"
+        });
       }
-    });
+    }
+
+    if (
+      req.body.currentAmount !== undefined
+    ) {
+      normalizedCurrentAmount =
+        Number(req.body.currentAmount);
+
+      if (
+        !Number.isFinite(
+          normalizedCurrentAmount
+        ) ||
+        normalizedCurrentAmount < 0
+      ) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "Current amount must be between 0 and the target amount"
+        });
+      }
+    }
+
+    if (
+      normalizedCurrentAmount >
+      normalizedTargetAmount
+    ) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Current amount must be between 0 and the target amount"
+      });
+    }
+
+    let normalizedTargetDate;
 
     if (
       req.body.targetDate !== undefined
     ) {
-      const normalizedTargetDate =
+      normalizedTargetDate =
         new Date(req.body.targetDate);
 
       if (
@@ -167,14 +221,44 @@ const updateSavingsGoal = asyncHandler(async (req, res) => {
             "Please enter a valid target date"
         });
       }
+    }
 
+    const allowedFields = [
+      "title",
+      "category",
+      "notes"
+    ];
+
+    allowedFields.forEach((field) => {
+      if (req.body[field] !== undefined) {
+        goal[field] = req.body[field];
+      }
+    });
+
+    if (
+      req.body.targetAmount !== undefined
+    ) {
+      goal.targetAmount =
+        normalizedTargetAmount;
+    }
+
+    if (
+      req.body.currentAmount !== undefined
+    ) {
+      goal.currentAmount =
+        normalizedCurrentAmount;
+    }
+
+    if (
+      normalizedTargetDate !== undefined
+    ) {
       goal.targetDate =
         normalizedTargetDate;
     }
 
     goal.isCompleted =
-      Number(goal.currentAmount) >=
-      Number(goal.targetAmount);
+      normalizedCurrentAmount >=
+      normalizedTargetAmount;
 
     const updatedGoal =
       await goal.save();
