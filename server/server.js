@@ -28,8 +28,6 @@ app.use(
   )
 );
 
-app.use("/api/admin", adminRoutes);
-
 /* ========================= */
 /* DATABASE */
 /* ========================= */
@@ -96,6 +94,7 @@ app.use("/api/investments", investmentRoutes);
 app.use("/api/recurring-expenses", recurringExpenseRoutes);
 app.use("/api/ai", aiRoutes);
 app.use("/api/feedback", feedbackRoutes);
+app.use("/api/admin", adminRoutes);
 
 /* ========================= */
 /* SERVER */
