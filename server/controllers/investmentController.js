@@ -53,13 +53,35 @@ const createInvestment = asyncHandler(async (req, res) => {
       });
     }
 
+    let normalizedPurchaseDate;
+
+    if (purchaseDate) {
+      normalizedPurchaseDate =
+        new Date(purchaseDate);
+
+      if (
+        Number.isNaN(
+          normalizedPurchaseDate.getTime()
+        )
+      ) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "Please enter a valid purchase date"
+        });
+      }
+    }
+
     const investment = await Investment.create({
       user: req.user._id,
       name,
       type,
       investedAmount: normalizedInvestedAmount,
       currentValue: normalizedCurrentValue,
-      purchaseDate,
+      ...(normalizedPurchaseDate && {
+        purchaseDate:
+          normalizedPurchaseDate
+      }),
       platform,
       notes
     });
@@ -113,6 +135,26 @@ const updateInvestment = asyncHandler(async (req, res) => {
         updates[field] = req.body[field];
       }
     });
+
+    if (updates.purchaseDate !== undefined) {
+      const normalizedPurchaseDate =
+        new Date(updates.purchaseDate);
+
+      if (
+        Number.isNaN(
+          normalizedPurchaseDate.getTime()
+        )
+      ) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "Please enter a valid purchase date"
+        });
+      }
+
+      updates.purchaseDate =
+        normalizedPurchaseDate;
+    }
 
     const updatedInvestment =
       await Investment.findOneAndUpdate(

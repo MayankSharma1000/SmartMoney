@@ -27,15 +27,32 @@ const createRecurringExpense = asyncHandler(async (req, res) => {
       });
     }
 
-    const recurringExpense = await RecurringExpense.create({
-      user: req.user._id,
-      title,
-      category,
-      amount: recurringAmount,
-      frequency,
-      nextDueDate,
-      paymentMethod
-    });
+    const normalizedNextDueDate =
+      new Date(nextDueDate);
+
+    if (
+      Number.isNaN(
+        normalizedNextDueDate.getTime()
+      )
+    ) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Please enter a valid next due date"
+      });
+    }
+
+    const recurringExpense =
+      await RecurringExpense.create({
+        user: req.user._id,
+        title,
+        category,
+        amount: recurringAmount,
+        frequency,
+        nextDueDate:
+          normalizedNextDueDate,
+        paymentMethod
+      });
 
     return ApiResponse.success(
       res,

@@ -56,12 +56,34 @@ const createSavingsGoal = asyncHandler(async (req, res) => {
       });
     }
 
+    let normalizedTargetDate;
+
+    if (targetDate) {
+      normalizedTargetDate =
+        new Date(targetDate);
+
+      if (
+        Number.isNaN(
+          normalizedTargetDate.getTime()
+        )
+      ) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "Please enter a valid target date"
+        });
+      }
+    }
+
     const goal = await Savings.create({
       user: req.user._id,
       title,
       targetAmount: normalizedTargetAmount,
       currentAmount: normalizedCurrentAmount,
-      targetDate,
+      ...(normalizedTargetDate && {
+        targetDate:
+          normalizedTargetDate
+      }),
       category,
       notes,
       isCompleted:
@@ -127,6 +149,28 @@ const updateSavingsGoal = asyncHandler(async (req, res) => {
         goal[field] = req.body[field];
       }
     });
+
+    if (
+      req.body.targetDate !== undefined
+    ) {
+      const normalizedTargetDate =
+        new Date(req.body.targetDate);
+
+      if (
+        Number.isNaN(
+          normalizedTargetDate.getTime()
+        )
+      ) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "Please enter a valid target date"
+        });
+      }
+
+      goal.targetDate =
+        normalizedTargetDate;
+    }
 
     goal.isCompleted =
       Number(goal.currentAmount) >=

@@ -42,7 +42,12 @@ const recurringExpenseSchema = new mongoose.Schema(
 
     frequency: {
       type: String,
-      enum: ["Monthly", "Weekly", "Yearly"],
+      enum: [
+        "Weekly",
+        "Monthly",
+        "Quarterly",
+        "Yearly"
+      ],
       default: "Monthly"
     },
 

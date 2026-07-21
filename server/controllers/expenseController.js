@@ -35,12 +35,32 @@ const addExpense = asyncHandler(async (req, res) => {
       });
     }
 
+    let normalizedDate;
+
+    if (date) {
+      normalizedDate = new Date(date);
+
+      if (
+        Number.isNaN(
+          normalizedDate.getTime()
+        )
+      ) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "Please enter a valid expense date"
+        });
+      }
+    }
+
     const expense = await Expense.create({
       user: req.user._id,
       title,
       category,
       amount: expenseAmount,
-      date,
+      ...(normalizedDate && {
+        date: normalizedDate
+      }),
       note,
       paymentMethod
     });
@@ -93,6 +113,25 @@ const updateExpense = asyncHandler(async (req, res) => {
         updates[field] = req.body[field];
       }
     });
+
+    if (updates.date !== undefined) {
+      const normalizedDate =
+        new Date(updates.date);
+
+      if (
+        Number.isNaN(
+          normalizedDate.getTime()
+        )
+      ) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "Please enter a valid expense date"
+        });
+      }
+
+      updates.date = normalizedDate;
+    }
 
     const updatedExpense =
       await Expense.findOneAndUpdate(
