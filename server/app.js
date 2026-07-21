@@ -82,7 +82,15 @@ app.get("/", (req, res) => {
 /* ROUTES */
 /* ========================= */
 
-app.use("/api/auth", authLimiter, authRoutes);
+if (process.env.NODE_ENV === "test") {
+  app.use("/api/auth", authRoutes);
+} else {
+  app.use(
+    "/api/auth",
+    authLimiter,
+    authRoutes
+  );
+}
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/budget", budgetRoutes);
 app.use("/api/expenses", expenseRoutes);
