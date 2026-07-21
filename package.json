@@ -1,5 +1,5 @@
 {
-  "name": "smart-expense-tracker",
+  "name": "smartmoney",
   "version": "1.0.0",
   "description": "AI-ready smart expense tracker with authentication, analytics, savings, investments, and theme modes.",
   "main": "server/server.js",
