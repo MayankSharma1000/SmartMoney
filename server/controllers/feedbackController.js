@@ -11,10 +11,22 @@ const createFeedback = asyncHandler(async (req, res) => {
 
   const { message } = req.body;
 
-  if (!message || message.trim().length < 5) {
+  const normalizedMessage =
+    typeof message === "string"
+      ? message.trim()
+      : "";
+
+  if (normalizedMessage.length < 5) {
     return res.status(400).json({
       success: false,
       message: "Feedback must be at least 5 characters long."
+    });
+  }
+
+  if (normalizedMessage.length > 1000) {
+    return res.status(400).json({
+      success: false,
+      message: "Feedback cannot exceed 1000 characters."
     });
   }
 
@@ -22,7 +34,7 @@ const createFeedback = asyncHandler(async (req, res) => {
     user: req.user._id,
     name: req.user.name,
     email: req.user.email,
-    message
+    message: normalizedMessage
   });
 
   return ApiResponse.success(
