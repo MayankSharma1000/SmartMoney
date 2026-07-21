@@ -114,6 +114,25 @@ const updateExpense = asyncHandler(async (req, res) => {
       }
     });
 
+    if (updates.amount !== undefined) {
+      const normalizedAmount =
+        Number(updates.amount);
+
+      if (
+        !Number.isFinite(normalizedAmount) ||
+        normalizedAmount < 0.01
+      ) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "Please enter a valid expense amount"
+        });
+      }
+
+      updates.amount =
+        normalizedAmount;
+    }
+
     if (updates.date !== undefined) {
       const normalizedDate =
         new Date(updates.date);
