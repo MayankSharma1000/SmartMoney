@@ -30,6 +30,29 @@ const setBudget = asyncHandler(async (req, res) => {
         month: "long"
       });
 
+    const validMonths = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December"
+    ];
+
+    if (!validMonths.includes(selectedMonth)) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Please enter a valid budget month"
+      });
+    }
+
     const selectedYear =
       year === undefined ||
       year === null ||
