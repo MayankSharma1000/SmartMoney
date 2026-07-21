@@ -136,6 +136,52 @@ const updateInvestment = asyncHandler(async (req, res) => {
       }
     });
 
+    if (
+      updates.investedAmount !== undefined
+    ) {
+      const normalizedInvestedAmount =
+        Number(updates.investedAmount);
+
+      if (
+        !Number.isFinite(
+          normalizedInvestedAmount
+        ) ||
+        normalizedInvestedAmount < 1
+      ) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "Please enter a valid invested amount"
+        });
+      }
+
+      updates.investedAmount =
+        normalizedInvestedAmount;
+    }
+
+    if (
+      updates.currentValue !== undefined
+    ) {
+      const normalizedCurrentValue =
+        Number(updates.currentValue);
+
+      if (
+        !Number.isFinite(
+          normalizedCurrentValue
+        ) ||
+        normalizedCurrentValue < 0
+      ) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "Please enter a valid current value"
+        });
+      }
+
+      updates.currentValue =
+        normalizedCurrentValue;
+    }
+
     if (updates.purchaseDate !== undefined) {
       const normalizedPurchaseDate =
         new Date(updates.purchaseDate);
