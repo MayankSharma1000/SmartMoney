@@ -1,11 +1,13 @@
 import axios from "axios";
 import { getAuthHeader } from "./authService";
 
-const API_URL = "http://localhost:5500/api/feedback";
+import { API_URL } from "../config/api";
+
+const FEEDBACK_API_URL = `${API_URL}/feedback`;
 
 export const submitFeedback = async (message) => {
   const response = await axios.post(
-    API_URL,
+    FEEDBACK_API_URL,
     { message },
     getAuthHeader()
   );
@@ -14,7 +16,7 @@ export const submitFeedback = async (message) => {
 };
 
 export const getMyFeedback = async () => {
-  const response = await axios.get(API_URL, getAuthHeader());
+  const response = await axios.get(FEEDBACK_API_URL, getAuthHeader());
 
   return response.data;
 };

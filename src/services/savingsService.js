@@ -1,7 +1,9 @@
 import axios from "axios";
 import { getAuthHeader } from "./authService";
 
-const API_URL = "http://localhost:5500/api/savings";
+import { API_URL } from "../config/api";
+
+const SAVINGS_API_URL = `${API_URL}/savings`;
 
 /* ========================= */
 /* GET SAVINGS GOALS */
@@ -9,7 +11,7 @@ const API_URL = "http://localhost:5500/api/savings";
 
 export const getSavingsGoals = async () => {
   const response = await axios.get(
-    API_URL,
+    SAVINGS_API_URL,
     getAuthHeader()
   );
 
@@ -22,7 +24,7 @@ export const getSavingsGoals = async () => {
 
 export const createSavingsGoal = async (goalData) => {
   const response = await axios.post(
-    API_URL,
+    SAVINGS_API_URL,
     goalData,
     getAuthHeader()
   );
@@ -39,7 +41,7 @@ export const updateSavingsGoal = async (
   goalData
 ) => {
   const response = await axios.put(
-    `${API_URL}/${goalId}`,
+    `${SAVINGS_API_URL}/${goalId}`,
     goalData,
     getAuthHeader()
   );
@@ -53,7 +55,7 @@ export const updateSavingsGoal = async (
 
 export const deleteSavingsGoal = async (goalId) => {
   const response = await axios.delete(
-    `${API_URL}/${goalId}`,
+    `${SAVINGS_API_URL}/${goalId}`,
     getAuthHeader()
   );
 

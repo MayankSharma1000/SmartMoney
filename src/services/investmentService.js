@@ -1,7 +1,9 @@
 import axios from "axios";
 import { getAuthHeader } from "./authService";
 
-const API_URL = "http://localhost:5500/api/investments";
+import { API_URL } from "../config/api";
+
+const INVESTMENT_API_URL = `${API_URL}/investments`;
 
 /* ========================= */
 /* GET INVESTMENTS */
@@ -9,7 +11,7 @@ const API_URL = "http://localhost:5500/api/investments";
 
 export const getInvestments = async () => {
   const response = await axios.get(
-    API_URL,
+    INVESTMENT_API_URL,
     getAuthHeader()
   );
 
@@ -22,7 +24,7 @@ export const getInvestments = async () => {
 
 export const createInvestment = async (investmentData) => {
   const response = await axios.post(
-    API_URL,
+    INVESTMENT_API_URL,
     investmentData,
     getAuthHeader()
   );
@@ -39,7 +41,7 @@ export const updateInvestment = async (
   investmentData
 ) => {
   const response = await axios.put(
-    `${API_URL}/${investmentId}`,
+    `${INVESTMENT_API_URL}/${investmentId}`,
     investmentData,
     getAuthHeader()
   );
@@ -53,7 +55,7 @@ export const updateInvestment = async (
 
 export const deleteInvestment = async (investmentId) => {
   const response = await axios.delete(
-    `${API_URL}/${investmentId}`,
+    `${INVESTMENT_API_URL}/${investmentId}`,
     getAuthHeader()
   );
 

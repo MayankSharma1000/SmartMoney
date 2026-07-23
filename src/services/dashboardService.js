@@ -1,7 +1,9 @@
 import axios from "axios";
 import { getAuthHeader } from "./authService";
 
-const API_URL = "http://localhost:5500/api/dashboard";
+import { API_URL } from "../config/api";
+
+const DASHBOARD_API_URL = `${API_URL}/dashboard`;
 
 /* ========================= */
 /* GET DASHBOARD SUMMARY */
@@ -9,7 +11,7 @@ const API_URL = "http://localhost:5500/api/dashboard";
 
 export const getDashboardSummary = async () => {
   const response = await axios.get(
-    `${API_URL}/summary`,
+    `${DASHBOARD_API_URL}/summary`,
     getAuthHeader()
   );
 

@@ -1,12 +1,13 @@
 import axios from "axios";
 import { getAuthHeader } from "./authService";
 
-const API_URL =
-  "http://localhost:5500/api/recurring-expenses";
+import { API_URL } from "../config/api";
+
+const RECURRING_API_URL = `${API_URL}/recurring-expenses`;
 
 export const getRecurringExpenses = async () => {
   const response = await axios.get(
-    API_URL,
+    RECURRING_API_URL,
     getAuthHeader()
   );
 
@@ -17,7 +18,7 @@ export const createRecurringExpense = async (
   recurringExpenseData
 ) => {
   const response = await axios.post(
-    API_URL,
+    RECURRING_API_URL,
     recurringExpenseData,
     getAuthHeader()
   );
@@ -29,7 +30,7 @@ export const deleteRecurringExpense = async (
   id
 ) => {
   const response = await axios.delete(
-    `${API_URL}/${id}`,
+    `${RECURRING_API_URL}/${id}`,
     getAuthHeader()
   );
 

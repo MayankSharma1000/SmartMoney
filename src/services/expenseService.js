@@ -1,14 +1,16 @@
 import axios from "axios";
 import { getAuthHeader } from "./authService";
 
-const API_URL = "http://localhost:5500/api/expenses";
+import { API_URL } from "../config/api";
+
+const EXPENSE_API_URL = `${API_URL}/expenses`;
 
 /* ========================= */
 /* GET EXPENSES */
 /* ========================= */
 
 export const getExpenses = async () => {
-  const response = await axios.get(API_URL, getAuthHeader());
+  const response = await axios.get(EXPENSE_API_URL, getAuthHeader());
   return response.data;
 };
 
@@ -18,7 +20,7 @@ export const getExpenses = async () => {
 
 export const addExpense = async (expenseData) => {
   const response = await axios.post(
-    API_URL,
+    EXPENSE_API_URL,
     expenseData,
     getAuthHeader()
   );
@@ -32,7 +34,7 @@ export const addExpense = async (expenseData) => {
 
 export const updateExpense = async (expenseId, expenseData) => {
   const response = await axios.put(
-    `${API_URL}/${expenseId}`,
+    `${EXPENSE_API_URL}/${expenseId}`,
     expenseData,
     getAuthHeader()
   );
@@ -46,7 +48,7 @@ export const updateExpense = async (expenseId, expenseData) => {
 
 export const deleteExpense = async (expenseId) => {
   const response = await axios.delete(
-    `${API_URL}/${expenseId}`,
+    `${EXPENSE_API_URL}/${expenseId}`,
     getAuthHeader()
   );
 

@@ -1,9 +1,10 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
+import { API_URL } from "../config/api";
 
 const AuthContext = createContext();
 
-const API_URL = "http://localhost:5500/api/auth";
+const AUTH_API_URL = `${API_URL}/auth`;
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
@@ -21,7 +22,7 @@ export function AuthProvider({ children }) {
   }, [token]);
 
   const register = async (formData) => {
-    const { data } = await axios.post(`${API_URL}/register`, formData);
+    const { data } = await axios.post(`${AUTH_API_URL}/register`, formData);
 
     localStorage.setItem("token", data.token);
     localStorage.setItem("user", JSON.stringify(data.user));
@@ -33,7 +34,7 @@ export function AuthProvider({ children }) {
   };
 
   const login = async (formData) => {
-    const { data } = await axios.post(`${API_URL}/login`, formData);
+    const { data } = await axios.post(`${AUTH_API_URL}/login`, formData);
 
     localStorage.setItem("token", data.token);
     localStorage.setItem("user", JSON.stringify(data.user));

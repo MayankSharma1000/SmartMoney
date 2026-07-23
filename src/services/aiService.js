@@ -1,13 +1,14 @@
 import axios from "axios";
 
-const API_URL =
-  "http://localhost:5500/api/ai";
+import { API_URL } from "../config/api";
+
+const AI_API_URL = `${API_URL}/ai`;
 
 export const getFinancialAdvice =
   async (token) => {
     const response =
       await axios.post(
-        `${API_URL}/financial-advice`,
+        `${AI_API_URL}/financial-advice`,
         {},
         {
           headers: {
