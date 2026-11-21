@@ -25,3 +25,13 @@ pnpm-debug.log*
 
 # coverage
 coverage/
+# Database backups
+backup/
+
+# Application logs
+logs/
+server/logs/
+*.log
+
+# macOS metadata
+.DS_Store
